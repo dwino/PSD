@@ -219,7 +219,51 @@ public class HealAnimation : Animation
     }
 }
 
+public class MessageLogAnimation : Animation
+{
+    private string _text;
+    private int _delay;
+    private int _cursorX;
+    private int _cursorY;
+    private int _index;
+    public MessageLogAnimation(Console console, GameUi ui, string text) : base(console, ui)
+    {
+        _text = text;
+        _delay = 15;
+        _cursorX = GameSettings.GAME_WIDTH / 2;
+        _cursorY = GameSettings.GAME_HEIGHT / 2 + 5;
+        _index = 0;
+    }
 
+    public override void Play()
+    {
+
+        if (_stopWatch.ElapsedMilliseconds > _delay)
+        {
+
+            _console.Print(_cursorX, _cursorY, _text.Substring(0, _index));
+
+            if (_index < _text.Length)
+            {
+                _index++;
+                _stopWatch.Restart();
+            }
+
+            if (_stopWatch.ElapsedMilliseconds > 250)
+            {
+                _stopWatch.Stop();
+                IsRunning = false;
+                _console.Clear();
+            }
+        }
+
+    }
+
+    public override void ProcessKeyboard(Keyboard keyboard)
+    {
+        throw new NotImplementedException();
+    }
+}
 
 public class GameScreenIntroAnimation : Animation
 {
@@ -275,7 +319,7 @@ public class GameScreenIntroAnimation : Animation
         {
             if (_stopWatch.ElapsedMilliseconds > 55)
             {
-                if (_console.Cursor.Position.X > GameSettings.GAME_WIDTH - 10 || _introText[index] == '\n')
+                if (_cursorX > GameSettings.GAME_WIDTH - 10 || _introText[index] == '\n')
                 {
                     _cursorX = 5;
                     _cursorY += 2;

@@ -1,7 +1,7 @@
 
 #----------------------------- Global Properties ----------------------------#
 
-/outputDir:bin/Debug/net8.0/Database
+/outputDir:../bin/Debug/net8.0/Content
 /intermediateDir:obj
 /platform:DesktopGL
 /config:
@@ -36,12 +36,6 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:intro.wav
-
-#begin main.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:main.mp3
 
 #begin menu.wav
 /importer:WavImporter

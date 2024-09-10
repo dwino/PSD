@@ -1,3 +1,5 @@
+- Animations only play, no processkeyboard shizzle
+
 - na >play< een hypothetisch scenario met een animatie (animationobject!)
 small animation of first encounter
 

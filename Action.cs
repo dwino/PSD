@@ -76,6 +76,8 @@ public class InterfereAction : Action
             if (_interferer == _game.Player)
             {
                 _game.CurrentInteraction.CurrentAnimation = new AttackAnimation(_ui.Console, _ui, _game.CurrentInteraction);
+                string messageLog = "you hit the " + _game.CurrentInteraction.Other.Glyph.ToString() + " for " + amountWhiteUnbalance + " damage.";
+                _game.CurrentInteraction.MessageLog = new MessageLogAnimation(_ui.Console, _ui, messageLog);
             }
 
 

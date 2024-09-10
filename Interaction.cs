@@ -19,11 +19,14 @@ public class Interaction
         _player = game.Player;
         Other = other;
         Unbalance = 0;
+        CurrentAnimation = null;
+        MessageLog = null;
+
 
     }
 
-    public Animation CurrentAnimation { get; set; }
-
+    public Animation? CurrentAnimation { get; set; }
+    public Animation? MessageLog { get; set; }
     public Entity Other { get; set; }
     public int Unbalance { get; set; }
 
@@ -70,7 +73,7 @@ public class Interaction
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
-        if (CurrentAnimation == null || !CurrentAnimation.IsRunning)
+        if ((CurrentAnimation == null || !CurrentAnimation.IsRunning) && (MessageLog == null || !MessageLog.IsRunning))
         {
             if (keyboard.IsKeyPressed(Keys.Escape))
             {
@@ -107,7 +110,7 @@ public class Interaction
 
     public void Update()
     {
-        if (CurrentAnimation == null || !CurrentAnimation.IsRunning)
+        if ((CurrentAnimation == null || !CurrentAnimation.IsRunning) && (MessageLog == null || !MessageLog.IsRunning))
         {
             if (_player.NextAction != null)
             {
@@ -385,6 +388,12 @@ public class Interaction
         {
             CurrentAnimation.Play();
         }
+
+        if (MessageLog != null && MessageLog.IsRunning)
+        {
+            MessageLog.Play();
+        }
+
 
 
     }

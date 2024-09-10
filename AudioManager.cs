@@ -21,10 +21,10 @@ public static class AudioManager
     public static void Initialize()
     {
         System.Console.WriteLine("Current Directory: " + Environment.CurrentDirectory);
-        System.Console.WriteLine("Content Path: " + Path.Combine(Environment.CurrentDirectory, "net8.0/Database"));
+        System.Console.WriteLine("Content Path: " + Path.Combine(Environment.CurrentDirectory, "net8.0/Content"));
 
         // Initialize the ContentManager with MonoGame services accessed via SadConsole's Game instance
-        contentManager = new ContentManager(Game.Instance.MonoGameInstance.Services, "Database");
+        contentManager = new ContentManager(Game.Instance.MonoGameInstance.Services, "Content");
         LoadContent();
     }
 
