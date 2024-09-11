@@ -1,3 +1,11 @@
+# Game Modes
+- (3) different gamemodes the storyteller switches between (and combines):
+    - 'sanctuary rpg' - mode
+        - 'screens'
+    - 'interactive fiction roguelike' mode
+        - first paradise style
+    - traditional roguelike mode
+
 # Intro screen
 - a scrolling intro screen, with text scrolling back and forth, showing off the storytellers indecisiveness
 (doubts can be conveyed trough erasing pieces of text, also scrolling)
