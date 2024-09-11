@@ -41,8 +41,8 @@ public class FirstEncounterAnimation : Animation
     {
         _game = game;
         _other = new Point(Helper.Rnd.Next(5, GameSettings.GAME_WIDTH - 5), Helper.Rnd.Next(5, GameSettings.GAME_HEIGHT - 5));
-        _otherGlyph = _game.CurrentInteraction.Other.Glyph;
-        _otherColor = _game.CurrentInteraction.Other.Color;
+        _otherGlyph = 'r';//_game.CurrentMode.Other.Glyph;
+        _otherColor = Color.Red;//_game.CurrentMode.Other.Color;
         _player = new Point(Helper.Rnd.Next(5, GameSettings.GAME_WIDTH - 5), Helper.Rnd.Next(5, GameSettings.GAME_HEIGHT - 5));
         _previousPoints = new List<Point>();
     }
@@ -126,8 +126,8 @@ public class FirstEncounterAnimation : Animation
 
 public class AttackAnimation : Animation
 {
-    private Interaction _currentInteraction;
-    public AttackAnimation(Console console, GameUi ui, Interaction currentInteraction) : base(console, ui)
+    private SRPGMode _currentInteraction;
+    public AttackAnimation(Console console, GameUi ui, SRPGMode currentInteraction) : base(console, ui)
     {
         _currentInteraction = currentInteraction;
         AudioManager.HitSFX.CreateInstance().Play();
@@ -160,7 +160,7 @@ public class AttackAnimation : Animation
 public class HealAnimation : Animation
 {
     private Player _player;
-    private Interaction _currentInteraction;
+    private SRPGMode _currentInteraction;
     private Stopwatch _stepStopWatch;
 
     private int x_start;
@@ -168,7 +168,7 @@ public class HealAnimation : Animation
     private int y_start;
     private int y_end;
     private int y;
-    public HealAnimation(Console console, GameUi ui, Player player, Interaction currentInteraction) : base(console, ui)
+    public HealAnimation(Console console, GameUi ui, Player player, SRPGMode currentInteraction) : base(console, ui)
     {
         _player = player;
         _currentInteraction = currentInteraction;

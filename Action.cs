@@ -1,6 +1,7 @@
 using Balance.Ui;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Balance;
@@ -56,12 +57,14 @@ public class BalanceAction : Action
 
 public class InterfereAction : Action
 {
-    public InterfereAction(Entity interferer, Entity interferee, GameUi ui, GameEngine game) : base(ui, game)
+    public InterfereAction(Entity interferer, Entity interferee, SRPGMode mode, GameUi ui, GameEngine game) : base(ui, game)
     {
+        _mode = mode;
         _interferer = interferer;
         _interferee = interferee;
     }
 
+    private SRPGMode _mode;
     private Entity _interferer;
     private Entity _interferee;
 
@@ -70,14 +73,14 @@ public class InterfereAction : Action
         if (_interferer.White > _interferer.WhiteBalance)
         {
             var amountWhiteUnbalance = _interferer.White - _interferer.WhiteBalance;
-            _game.CurrentInteraction.Unbalance += amountWhiteUnbalance;
+            _mode.Unbalance += amountWhiteUnbalance;
             _interferee.Life -= amountWhiteUnbalance;
 
             if (_interferer == _game.Player)
             {
-                _game.CurrentInteraction.CurrentAnimation = new AttackAnimation(_ui.Console, _ui, _game.CurrentInteraction);
-                string messageLog = "you hit the " + _game.CurrentInteraction.Other.Glyph.ToString() + " for " + amountWhiteUnbalance + " damage.";
-                _game.CurrentInteraction.MessageLog = new MessageLogAnimation(_ui.Console, _ui, messageLog);
+                _mode.CurrentAnimation = new AttackAnimation(_ui.Console, _ui, _mode);
+                string messageLog = "you hit the " + _mode.Other.Glyph.ToString() + " for " + amountWhiteUnbalance + " damage.";
+                _mode.MessageLog = new MessageLogAnimation(_ui.Console, _ui, messageLog);
             }
 
 
@@ -87,12 +90,12 @@ public class InterfereAction : Action
             if (_interferer.Life < _interferer.LifeMax)
             {
                 int amountBlackUnbalance = _interferer.Black - _interferer.BlackBalance;
-                _game.CurrentInteraction.Unbalance += amountBlackUnbalance;
+                _mode.Unbalance += amountBlackUnbalance;
                 _interferer.Life += Math.Min(amountBlackUnbalance, _interferer.LifeMax - _interferer.Life);
 
                 if (_interferer == _game.Player)
                 {
-                    _game.CurrentInteraction.CurrentAnimation = new HealAnimation(_ui.Console, _ui, _game.Player, _game.CurrentInteraction);
+                    _mode.CurrentAnimation = new HealAnimation(_ui.Console, _ui, _game.Player, _mode);
                 }
 
             }

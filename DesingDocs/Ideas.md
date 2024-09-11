@@ -1,3 +1,7 @@
+# content
+- visit different roguelike games (nethack, dwarf fortress)
+- visit the storytellers past (TS & TSM, in his childhood room)
+
 # Game Modes
 - (3) different gamemodes the storyteller switches between (and combines):
     - 'sanctuary rpg' - mode

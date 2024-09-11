@@ -1,5 +1,6 @@
 using System;
 using Balance.Ui;
+using Microsoft.Xna.Framework.Input;
 
 namespace Balance;
 
@@ -10,19 +11,22 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        CurrentInteraction = Interaction.GenerateRandomInteraction(_ui, this);
+        Player.Position = (GameSettings.GAME_WIDTH / 2, GameSettings.GAME_HEIGHT / 2 + 1);
+        // CurrentMode = SRPGMode.GenerateRandomInteraction(_ui, this);
+        CurrentMode = new IFREMode(_ui, this);
+
     }
 
     public Player Player { get; set; }
 
-    public Interaction CurrentInteraction { get; set; }
+    public GameMode CurrentMode { get; set; }
 
     internal void Update()
     {
 
-        if (!CurrentInteraction.InteractionEnded())
+        if (!CurrentMode.InteractionEnded())
         {
-            CurrentInteraction.Update();
+            CurrentMode.Update();
 
         }
         else
@@ -31,7 +35,7 @@ public class GameEngine
             Player.Black = Player.BlackBalance;
             Player.White = Player.WhiteBalance;
 
-            CurrentInteraction = Interaction.GenerateRandomInteraction(_ui, this);
+            CurrentMode = SRPGMode.GenerateRandomInteraction(_ui, this);
 
         }
     }

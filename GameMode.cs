@@ -3,26 +3,133 @@ using System.Text;
 using Balance.Ui;
 using Figgle;
 using SadConsole.Input;
+using SadConsole.Readers;
 
 namespace Balance;
 
-public class Interaction
+public abstract class GameMode
 {
-    GameUi _ui;
-    GameEngine _game;
-    private Player _player;
+    protected GameUi _ui;
+    protected GameEngine _game;
+    protected Player _player;
 
-    public Interaction(Entity other, GameUi ui, GameEngine game)
+    protected GameMode(GameUi ui, GameEngine game)
     {
         _ui = ui;
         _game = game;
         _player = game.Player;
+    }
+    public abstract bool InteractionEnded();
+
+
+    public abstract void ProcessKeyboard(Keyboard keyboard);
+    public abstract void Update();
+    public abstract void Draw();
+
+
+}
+
+public class IFREMode : GameMode
+{
+    private Map _map;
+    public IFREMode(GameUi ui, GameEngine game) : base(ui, game)
+    {
+        _map = Map.LoadMap("cryo.xp");
+
+    }
+    public override bool InteractionEnded() { return false; }
+
+
+    public override void ProcessKeyboard(Keyboard keyboard)
+    {
+        if (keyboard.IsKeyPressed(Keys.Escape))
+        {
+            Game.Instance.MonoGameInstance.Exit();
+        }
+        if (keyboard.IsKeyPressed(Keys.Left))
+        {
+            var newPosition = _player.Position + (-1, 0);
+
+            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
+            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
+
+
+            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
+            {
+                _player.Position = newPosition;
+            }
+        }
+        if (keyboard.IsKeyPressed(Keys.Right))
+        {
+            var newPosition = _player.Position + (+1, 0);
+
+            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
+            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
+
+
+            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
+            {
+                _player.Position = newPosition;
+            }
+        }
+        if (keyboard.IsKeyPressed(Keys.Up))
+        {
+            var newPosition = _player.Position + (0, -1);
+
+            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
+            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
+
+
+            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
+            {
+                _player.Position = newPosition;
+            }
+        }
+        if (keyboard.IsKeyPressed(Keys.Down))
+        {
+            var newPosition = _player.Position + (0, 1);
+
+            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
+            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
+
+
+            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
+            {
+                _player.Position = newPosition;
+            }
+        }
+        if (keyboard.IsKeyPressed(Keys.Escape))
+        {
+            Game.Instance.MonoGameInstance.Exit();
+        }
+    }
+    public override void Update() { }
+    public override void Draw()
+    {
+        int x = (GameSettings.GAME_WIDTH / 2) - (_map.Width / 2);
+        int y = GameSettings.GAME_HEIGHT / 2 - _map.Height / 2;
+
+        _map.RPImg.ToCellSurface()[0].Copy(_ui.Console.Surface, x, y);
+
+        _ui.Console.Print(_player.Position.X, _player.Position.Y, _player.Glyph.ToString(), Color.White);
+
+    }
+
+
+}
+
+
+
+public class SRPGMode : GameMode
+{
+
+
+    public SRPGMode(Entity other, GameUi ui, GameEngine game) : base(ui, game)
+    {
         Other = other;
         Unbalance = 0;
         CurrentAnimation = null;
         MessageLog = null;
-
-
     }
 
     public Animation? CurrentAnimation { get; set; }
@@ -30,17 +137,17 @@ public class Interaction
     public Entity Other { get; set; }
     public int Unbalance { get; set; }
 
-    public bool InteractionEnded()
+    public override bool InteractionEnded()
     {
         return _player.Life <= 0 || Other.Life <= 0;
     }
 
     public void SetOthersNextAction()
     {
-        Other.NextAction = new InterfereAction(Other, _player, _ui, _game);
+        Other.NextAction = new InterfereAction(Other, _player, this, _ui, _game);
     }
 
-    public static Interaction GenerateRandomInteraction(GameUi ui, GameEngine game)
+    public static SRPGMode GenerateRandomInteraction(GameUi ui, GameEngine game)
     {
         var life = Helper.Rnd.Next(20, 80);
         var black = Helper.Rnd.Next(0 + life / 10, life / 2 - life / 10);
@@ -52,10 +159,10 @@ public class Interaction
 
         var other = new Entity(life, black, blackBalance, white, whiteBalance, color, glyph);
 
-        return new Interaction(other, ui, game);
+        return new SRPGMode(other, ui, game);
 
     }
-    public static Interaction GenerateRandomInteraction(GameUi ui, GameEngine game, char glyph)
+    public static SRPGMode GenerateRandomInteraction(GameUi ui, GameEngine game, char glyph)
     {
         var life = Helper.Rnd.Next(20, 80);
         var black = Helper.Rnd.Next(0 + life / 10, life / 2 - life / 10);
@@ -67,11 +174,11 @@ public class Interaction
 
         var other = new Entity(life, black, blackBalance, white, whiteBalance, color, glyph);
 
-        return new Interaction(other, ui, game);
+        return new SRPGMode(other, ui, game);
 
     }
 
-    public void ProcessKeyboard(Keyboard keyboard)
+    public override void ProcessKeyboard(Keyboard keyboard)
     {
         if ((CurrentAnimation == null || !CurrentAnimation.IsRunning) && (MessageLog == null || !MessageLog.IsRunning))
         {
@@ -101,14 +208,14 @@ public class Interaction
             }
             else if (keyboard.IsKeyPressed(Keys.A))
             {
-                var interfereAction = new InterfereAction(_player, Other, _ui, _game);
+                var interfereAction = new InterfereAction(_player, Other, this, _ui, _game);
                 _player.NextAction = interfereAction;
 
             }
         }
     }
 
-    public void Update()
+    public override void Update()
     {
         if ((CurrentAnimation == null || !CurrentAnimation.IsRunning) && (MessageLog == null || !MessageLog.IsRunning))
         {
@@ -138,7 +245,7 @@ public class Interaction
         }
     }
 
-    public void Draw()
+    public override void Draw()
     {
         var _console = _ui.Console;
         _console.Clear();
@@ -149,19 +256,19 @@ public class Interaction
         int x_other = 0;
         int y_other = 1;
         int x_figlet_other_offset = 5;
-        Helper.DrawFiglet(x_other, y_other, _game.CurrentInteraction.Other.Glyph, _game.CurrentInteraction.Other.Color, _console, x_figlet_other_offset);
+        Helper.DrawFiglet(x_other, y_other, Other.Glyph, Other.Color, _console, x_figlet_other_offset);
 
         x_other += GameSettings.GAME_WIDTH / 2;
         ////GLYPH
         y_other = GameSettings.GAME_HEIGHT / 2 - 1;
-        _console.Print(x_other, y_other, _game.CurrentInteraction.Other.Glyph.ToString(), _game.CurrentInteraction.Other.Color);
+        _console.Print(x_other, y_other, Other.Glyph.ToString(), Other.Color);
 
         ////LIFE
         x_other += 5;
-        string lifeInfo = "life: " + _game.CurrentInteraction.Other.Life + "/" + _game.CurrentInteraction.Other.LifeMax;
+        string lifeInfo = "life: " + Other.Life + "/" + Other.LifeMax;
         _console.Print(x_other, y_other, lifeInfo, Color.Red);
 
-        int mappedRange = Helper.Map(0, _game.CurrentInteraction.Other.LifeMax, 0, lifeInfo.Length, _game.CurrentInteraction.Other.Life);
+        int mappedRange = Helper.Map(0, Other.LifeMax, 0, lifeInfo.Length, Other.Life);
 
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < mappedRange; i++)
@@ -192,9 +299,9 @@ public class Interaction
 
         stringBuilder.Clear();
 
-        stringBuilder.Append("white: " + _game.CurrentInteraction.Other.White + "(" + _game.CurrentInteraction.Other.WhiteBalance + ")");
+        stringBuilder.Append("white: " + Other.White + "(" + Other.WhiteBalance + ")");
         stringBuilder.Append("          ");
-        stringBuilder.Append("black: " + _game.CurrentInteraction.Other.Black + "(" + _game.CurrentInteraction.Other.BlackBalance + ")");
+        stringBuilder.Append("black: " + Other.Black + "(" + Other.BlackBalance + ")");
 
         if (stringBuilder.Length % 2 == 0)
         {
@@ -209,7 +316,7 @@ public class Interaction
 
         _console.Print(x_other, y_other, whiteAndBlackAmount);
 
-        int whiteAmount = Helper.Map(0, _game.CurrentInteraction.Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.CurrentInteraction.Other.White);
+        int whiteAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.White);
 
         for (int x = x_other + midpoint - whiteAmount; x < x_other + midpoint; x++)
         {
@@ -217,7 +324,7 @@ public class Interaction
 
         }
 
-        int blackAmount = Helper.Map(0, _game.CurrentInteraction.Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.CurrentInteraction.Other.Black);
+        int blackAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.Black);
 
         for (int x = x_other + midpoint; x < x_other + midpoint + blackAmount; x++)
         {
@@ -226,9 +333,9 @@ public class Interaction
         }
 
 
-        if (_game.CurrentInteraction.Other.White < _game.CurrentInteraction.Other.WhiteBalance)
+        if (Other.White < Other.WhiteBalance)
         {
-            int idealWhiteAmount = Helper.Map(0, _game.CurrentInteraction.Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.CurrentInteraction.Other.WhiteBalance);
+            int idealWhiteAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.WhiteBalance);
 
             for (int x = x_other + midpoint - idealWhiteAmount; x < x_other + midpoint - whiteAmount; x++)
             {
@@ -239,7 +346,7 @@ public class Interaction
         }
         else
         {
-            int idealBlackAmount = Helper.Map(0, _game.CurrentInteraction.Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.CurrentInteraction.Other.BlackBalance);
+            int idealBlackAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.BlackBalance);
 
             for (int x = x_other + midpoint + blackAmount; x < x_other + midpoint + idealBlackAmount; x++)
             {

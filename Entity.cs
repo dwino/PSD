@@ -16,6 +16,7 @@ public class Entity
         WhiteBalance = whiteBalance;
         Color = color;
         Glyph = glyph;
+        Position = (-1, -1);
 
         NextAction = null;
 
@@ -31,6 +32,8 @@ public class Entity
 
     public Color Color { get; set; }
     public char Glyph { get; set; }
+
+    public Point Position { get; set; }
 
     public Action? NextAction { get; set; }
 
