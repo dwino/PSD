@@ -34,7 +34,7 @@ public class IFREMode : GameMode
     private Map _map;
     public IFREMode(GameUi ui, GameEngine game) : base(ui, game)
     {
-        _map = Map.LoadMap("cryo.xp");
+        _map = Map.LoadMap("Content/Maps/cryo.xp");
 
     }
     public override bool InteractionEnded() { return false; }

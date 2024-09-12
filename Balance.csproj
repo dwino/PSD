@@ -12,10 +12,10 @@
   </PropertyGroup>
 
  <ItemGroup>
-    <None Update="Screens/IntroScreen.txt">
+    <None Update="Content/Audio/Xnb/*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Screens/GameScreen.txt">
+    <None Update="Content/ScreenText/*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Content/Maps/*">

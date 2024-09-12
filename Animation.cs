@@ -276,7 +276,7 @@ public class GameScreenIntroAnimation : Animation
     public GameScreenIntroAnimation(Console console, GameUi ui) : base(console, ui)
     {
         StringBuilder stringBuilder = new StringBuilder();
-        using (StreamReader reader = new StreamReader("Screens/GameScreen.txt"))
+        using (StreamReader reader = new StreamReader("Content/ScreenText/GameScreen.txt"))
         {
             string line;
             while ((line = reader.ReadLine()) != null)

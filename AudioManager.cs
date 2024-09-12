@@ -24,7 +24,7 @@ public static class AudioManager
         System.Console.WriteLine("Content Path: " + Path.Combine(Environment.CurrentDirectory, "net8.0/Content"));
 
         // Initialize the ContentManager with MonoGame services accessed via SadConsole's Game instance
-        contentManager = new ContentManager(Game.Instance.MonoGameInstance.Services, "Content");
+        contentManager = new ContentManager(Game.Instance.MonoGameInstance.Services, "Content/Audio");
         LoadContent();
     }
 
@@ -32,14 +32,12 @@ public static class AudioManager
     {
         try
         {
-            IntroMusic = contentManager?.Load<Song>("intro");
-            MenuMusic = contentManager?.Load<Song>("menu");
-            CombatInteractionMusic = contentManager?.Load<Song>("combatinteraction");
+            IntroMusic = contentManager?.Load<Song>("Xnb/intro");
+            MenuMusic = contentManager?.Load<Song>("Xnb/menu");
+            CombatInteractionMusic = contentManager?.Load<Song>("Xnb/combatinteraction");
 
-            HitSFX = contentManager?.Load<SoundEffect>("hit");
-            HealSFX = contentManager?.Load<SoundEffect>("heal");
-
-
+            HitSFX = contentManager?.Load<SoundEffect>("Xnb/hit");
+            HealSFX = contentManager?.Load<SoundEffect>("Xnb/heal");
 
         }
         catch (Exception ex)

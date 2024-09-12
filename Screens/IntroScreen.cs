@@ -10,7 +10,7 @@ public class IntroScreen
 {
     public IntroScreen(Console console, GameUi ui)
     {
-        string sourceFile = "Screens/IntroScreen" + Helper.Rnd.Next(0, 2) + ".txt";
+        string sourceFile = "Content/ScreenText/IntroScreen" + Helper.Rnd.Next(0, 2) + ".txt";
         StringBuilder stringBuilder = new StringBuilder();
         using (StreamReader reader = new StreamReader(sourceFile))
         {
