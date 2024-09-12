@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Balance.Ui;
 using Figgle;
+using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
 using SadConsole.Readers;
 
@@ -71,6 +72,15 @@ public class IFREMode : GameMode
         {
             Game.Instance.MonoGameInstance.Exit();
         }
+        if (keyboard.IsKeyPressed(Keys.J))
+        {
+            MediaPlayer.Play(AudioManager.SpaceEngine);
+        }
+        if (keyboard.IsKeyPressed(Keys.K))
+        {
+            MediaPlayer.Stop();
+        }
+
     }
     public override void Update()
     {

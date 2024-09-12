@@ -304,7 +304,7 @@ public class GameScreenIntroAnimation : Animation
         else if (keyboard.IsKeyPressed(Keys.A))
         {
             MediaPlayer.Stop();
-            MediaPlayer.Play(AudioManager.CombatInteractionMusic);
+            MediaPlayer.Play(AudioManager.LeavingHome);
             MediaPlayer.IsRepeating = true;
             IsRunning = false;
             _console.Clear();
