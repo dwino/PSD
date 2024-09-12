@@ -1,7 +1,4 @@
 using Balance.Ui;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Balance;
@@ -139,6 +136,33 @@ public class ShiftBlackToWhiteAction : Action
             int amount = 1;
             _entity.Black -= amount;
             _entity.White += amount;
+        }
+    }
+}
+
+public class MoveByAction : Action
+{
+    private Point _offset;
+    private Map _map;
+    public MoveByAction(GameUi ui, GameEngine game, Map map, Point offset) : base(ui, game)
+    {
+        _offset = offset;
+        _map = map;
+    }
+
+    public override void Execute()
+    {
+        var newPosition = _game.Player.Position + _offset;
+
+        if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(newPosition.X, newPosition.Y) == '1')
+        {
+            _game.Player.Position = newPosition;
+        }
+
+        if (newPosition == _map.TravelNode.PositionCurrentMap)
+        {
+            _game.Player.Position = _map.TravelNode.PositionTravelToMap;
+
         }
     }
 }

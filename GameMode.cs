@@ -35,6 +35,7 @@ public class IFREMode : GameMode
     public IFREMode(GameUi ui, GameEngine game) : base(ui, game)
     {
         _map = Map.LoadMap("Content/Maps/cryo.xp");
+        game.Player.Position = _map.StartingPosition;
 
     }
     public override bool InteractionEnded() { return false; }
@@ -48,82 +49,50 @@ public class IFREMode : GameMode
         }
         if (keyboard.IsKeyPressed(Keys.Left))
         {
-            var newPosition = _player.Position + (-1, 0);
-
-            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
-            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
-
-
-            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
-            {
-                _player.Position = newPosition;
-            }
+            var moveByAction = new MoveByAction(_ui, _game, _map, (-1, 0));
+            _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Right))
         {
-            var newPosition = _player.Position + (+1, 0);
-
-            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
-            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
-
-
-            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
-            {
-                _player.Position = newPosition;
-            }
+            var moveByAction = new MoveByAction(_ui, _game, _map, (1, 0));
+            _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Up))
         {
-            var newPosition = _player.Position + (0, -1);
-
-            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
-            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
-
-
-            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
-            {
-                _player.Position = newPosition;
-            }
+            var moveByAction = new MoveByAction(_ui, _game, _map, (0, -1));
+            _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Down))
         {
-            var newPosition = _player.Position + (0, 1);
-
-            var transformX = newPosition.X - (GameSettings.GAME_WIDTH / 2) + (_map.RPImg.Width / 2);
-            var transformY = newPosition.Y - (GameSettings.GAME_HEIGHT / 2) + (_map.RPImg.Height / 2);
-
-
-            if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(transformX, transformY) == '1')
-            {
-                _player.Position = newPosition;
-            }
+            var moveByAction = new MoveByAction(_ui, _game, _map, (0, 1));
+            _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
             Game.Instance.MonoGameInstance.Exit();
         }
     }
-    public override void Update() { }
+    public override void Update()
+    {
+        if (_player.NextAction != null)
+        {
+            _player.NextAction.Execute();
+            _player.NextAction = null;
+        }
+    }
     public override void Draw()
     {
-        int x = (GameSettings.GAME_WIDTH / 2) - (_map.Width / 2);
-        int y = GameSettings.GAME_HEIGHT / 2 - _map.Height / 2;
+        _map.Draw(_ui.Console);
 
-        _map.RPImg.ToCellSurface()[0].Copy(_ui.Console.Surface, x, y);
+        int x = _player.Position.X + (GameSettings.GAME_WIDTH / 2) - (_map.Width / 2);
+        int y = _player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (_map.Height / 2);
 
-        _ui.Console.Print(_player.Position.X, _player.Position.Y, _player.Glyph.ToString(), Color.White);
+        _ui.Console.Print(x, y, _player.Glyph.ToString(), Color.White);
 
     }
-
-
 }
-
-
-
 public class SRPGMode : GameMode
 {
-
-
     public SRPGMode(Entity other, GameUi ui, GameEngine game) : base(ui, game)
     {
         Other = other;

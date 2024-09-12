@@ -11,7 +11,6 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        Player.Position = (GameSettings.GAME_WIDTH / 2, GameSettings.GAME_HEIGHT / 2 + 1);
         // CurrentMode = SRPGMode.GenerateRandomInteraction(_ui, this);
         CurrentMode = new IFREMode(_ui, this);
 
