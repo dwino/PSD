@@ -276,7 +276,7 @@ public class GameScreenIntroAnimation : Animation
     public GameScreenIntroAnimation(Console console, GameUi ui) : base(console, ui)
     {
         StringBuilder stringBuilder = new StringBuilder();
-        using (StreamReader reader = new StreamReader("Content/ScreenText/GameScreen.txt"))
+        using (StreamReader reader = new StreamReader("Content/ScreenText/GameScreen_SSBalance.txt"))
         {
             string line;
             while ((line = reader.ReadLine()) != null)
@@ -345,10 +345,15 @@ public class GameScreenIntroAnimation : Animation
         }
         else if (!_stopWatch.IsRunning)
         {
-            string continueText = "press A to start slaying monsters";
+            string continueText = "press A to get up";
             var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
             var y = GameSettings.GAME_HEIGHT / 2 - 1;
             _console.Print(x, y, continueText);
+
+            // string continueText = "press A to start slaying monsters";
+            // var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
+            // var y = GameSettings.GAME_HEIGHT / 2 - 1;
+            // _console.Print(x, y, continueText);
         }
 
     }

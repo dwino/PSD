@@ -35,7 +35,7 @@ public class IFREMode : GameMode
     private Map _map;
     public IFREMode(GameUi ui, GameEngine game) : base(ui, game)
     {
-        _map = Map.LoadMap("Content/Maps/cryo.xp");
+        _map = new EngineRoomMap();
         game.Player.Position = _map.StartingPosition;
 
     }

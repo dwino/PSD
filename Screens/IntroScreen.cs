@@ -10,7 +10,7 @@ public class IntroScreen
 {
     public IntroScreen(Console console, GameUi ui)
     {
-        string sourceFile = "Content/ScreenText/IntroScreen" + Helper.Rnd.Next(0, 2) + ".txt";
+        string sourceFile = "Content/ScreenText/IntroScreen" + "_SSBalance" + ".txt";
         StringBuilder stringBuilder = new StringBuilder();
         using (StreamReader reader = new StreamReader(sourceFile))
         {
@@ -97,14 +97,17 @@ public class IntroScreen
                     MediaPlayer.Play(AudioManager.MenuMusic);
                     MediaPlayer.IsRepeating = true;
                     _gameUi.Console.Clear();
+
+                    _gameUi.ActiveScreen = ScreensEnum.GameMenuScreen;
+
                 }
             }
         }
-        else if (!_stopWatch.IsRunning)
-        {
-            _console.Print(Helper.Rnd.Next(5, GameSettings.GAME_WIDTH - "It's Definitely AboutBalance".Length - 5),
-                            Helper.Rnd.Next(5, GameSettings.GAME_HEIGHT - 5), "It's Definately About Balance");
-        }
+        // else if (!_stopWatch.IsRunning)
+        // {
+        //     _console.Print(Helper.Rnd.Next(5, GameSettings.GAME_WIDTH - "It's Definitely AboutBalance".Length - 5),
+        //                     Helper.Rnd.Next(5, GameSettings.GAME_HEIGHT - 5), "It's Definately About Balance");
+        // }
 
 
     }

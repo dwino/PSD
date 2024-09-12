@@ -18,7 +18,8 @@ internal class GameScreen
         _console = console;
 
         _introAnimation = new GameScreenIntroAnimation(console, ui);
-        CurrentAnimation = new FirstEncounterAnimation(console, ui, _game);
+        //CurrentAnimation = new FirstEncounterAnimation(console, ui, _game);
+        CurrentAnimation = null;
     }
 
     public void ProcessKeyboard(Keyboard keyboard)
