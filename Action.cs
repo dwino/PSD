@@ -161,8 +161,14 @@ public class MoveByAction : Action
 
         if (newPosition == _map.TravelNode.PositionCurrentMap)
         {
-            _game.Player.Position = _map.TravelNode.PositionTravelToMap;
+            //TODO : DIT HOORT HIER EIGENLIJK NIET
+            var ifreModeHandle = ((IFREMode)_game.CurrentMode);
+            ifreModeHandle.Map = _map.GetMap(_map.TravelNode.TravelToMap);
+            _game.Player.Position = ifreModeHandle.Map.StartingPosition;
+
+            _ui.Console.Clear();
 
         }
+
     }
 }

@@ -5,6 +5,19 @@ namespace Balance;
 
 public abstract class Map
 {
+    protected Dictionary<string, Func<Map>> mapDict = new Dictionary<string, Func<Map>>(){
+        {"sleepingPod", ()=> new SleepingPodMap()},
+        {"cryo",() => new EngineRoomMap()},
+    };
+    public Map GetMap(string xpMapString)
+    {
+        // Dark Magic, dont change
+        Func<Map> func;
+        return mapDict.TryGetValue(xpMapString, out func)
+            ? func() // invoking the delegate creates the instance of the brand object
+            : null;  // brandName was not in the dictionary
+    }
+
     protected int _xOffset;
     protected int _yOffset;
     protected CellSurface _visibleMap;
@@ -13,12 +26,14 @@ public abstract class Map
 
     protected Map(string xpMapString) : base()
     {
-        var path = "Content/Maps/" + xpMapString;
+        var path = "Content/Maps/" + xpMapString + ".xp";
         RPImg = SadConsole.Readers.REXPaintImage.Load(new FileStream(path, FileMode.Open));
 
         _visibleMap = (CellSurface?)RPImg.ToCellSurface()[0]!;
         _walkableMap = (CellSurface?)RPImg.ToCellSurface()[1]!;
         _interactionMap = (CellSurface?)RPImg.ToCellSurface()[2]!;
+
+        LoadInteractionMap();
 
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
@@ -41,18 +56,40 @@ public abstract class Map
                 }
                 if (_interactionMap.GetGlyph(x, y) == '=')
                 {
-                    TravelNode = new TravelNode(this, (x, y), this, (0, 0));
+                    TravelNode = new TravelNode(this, (x, y));
                 }
                 LoadSpecificInteractionMap(x, y);
             }
         }
+
+        CompleteTravelNode();
     }
 
     public abstract void LoadSpecificInteractionMap(int x, int y);
+    public abstract void CompleteTravelNode();
 
     public virtual void Draw(Console console)
     {
         _visibleMap.Copy(console.Surface, _xOffset, _yOffset);
+    }
+}
+
+public class SleepingPodMap : Map
+{
+    public SleepingPodMap() : base("sleepingPod")
+    {
+    }
+
+    public override void LoadSpecificInteractionMap(int x, int y)
+    {
+    }
+
+    public override void CompleteTravelNode()
+    {
+        TravelNode.TravelToMap = "cryo";
+        // var tmpMap = GetMap(TravelNode.TravelToMap);
+        // TravelNode.PositionTravelToMap = tmpMap.StartingPosition;
+
     }
 }
 
@@ -61,18 +98,13 @@ public class EngineRoomMap : Map
     private Stopwatch _stopwatch;
     private Stopwatch _stopwatch1;
 
-    public EngineRoomMap() : base("cryo.xp")
+    public EngineRoomMap() : base("cryo")
     {
         _stopwatch = new Stopwatch();
         _stopwatch.Start();
-
-        LoadInteractionMap();
-
         _stopwatch1 = new Stopwatch();
         _stopwatch1.Start(); int x = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
-        int y = GameSettings.GAME_HEIGHT / 2 - Height / 2;
     }
-
 
     public Point AnimationPosition1 { get; set; }
     public Point AnimationPosition2 { get; set; }
@@ -93,6 +125,13 @@ public class EngineRoomMap : Map
             AnimationPosition3 = (x, y);
         }
 
+    }
+    // TODO JE KAN DIT ABSTRACT MAKEN
+    public override void CompleteTravelNode()
+    {
+        TravelNode.TravelToMap = "sleepingPod";
+        // var tmpMap = GetMap(TravelNode.TravelToMap);
+        // TravelNode.PositionTravelToMap = tmpMap.StartingPosition;
     }
 
     public override void Draw(Console console)

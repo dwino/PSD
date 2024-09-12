@@ -32,13 +32,14 @@ public abstract class GameMode
 
 public class IFREMode : GameMode
 {
-    private Map _map;
     public IFREMode(GameUi ui, GameEngine game) : base(ui, game)
     {
-        _map = new EngineRoomMap();
-        game.Player.Position = _map.StartingPosition;
+        Map = new EngineRoomMap();
+        game.Player.Position = Map.StartingPosition;
 
     }
+    public Map Map { get; set; }
+
     public override bool InteractionEnded() { return false; }
 
 
@@ -50,22 +51,22 @@ public class IFREMode : GameMode
         }
         if (keyboard.IsKeyPressed(Keys.Left))
         {
-            var moveByAction = new MoveByAction(_ui, _game, _map, (-1, 0));
+            var moveByAction = new MoveByAction(_ui, _game, Map, (-1, 0));
             _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Right))
         {
-            var moveByAction = new MoveByAction(_ui, _game, _map, (1, 0));
+            var moveByAction = new MoveByAction(_ui, _game, Map, (1, 0));
             _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Up))
         {
-            var moveByAction = new MoveByAction(_ui, _game, _map, (0, -1));
+            var moveByAction = new MoveByAction(_ui, _game, Map, (0, -1));
             _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Down))
         {
-            var moveByAction = new MoveByAction(_ui, _game, _map, (0, 1));
+            var moveByAction = new MoveByAction(_ui, _game, Map, (0, 1));
             _player.NextAction = moveByAction;
         }
         if (keyboard.IsKeyPressed(Keys.Escape))
@@ -92,10 +93,10 @@ public class IFREMode : GameMode
     }
     public override void Draw()
     {
-        _map.Draw(_ui.Console);
+        Map.Draw(_ui.Console);
 
-        int x = _player.Position.X + (GameSettings.GAME_WIDTH / 2) - (_map.Width / 2);
-        int y = _player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (_map.Height / 2);
+        int x = _player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
+        int y = _player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
 
         _ui.Console.Print(x, y, _player.Glyph.ToString(), Color.White);
 

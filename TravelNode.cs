@@ -4,18 +4,17 @@ namespace Balance;
 
 public class TravelNode
 {
-    public TravelNode(Map currentMap, Point posCurrentMap, Map travelToMap, Point posTravelToMap)
+    public TravelNode(Map currentMap, Point posCurrentMap)
     {
         CurrentMap = currentMap;
         PositionCurrentMap = posCurrentMap;
-        TravelToMap = travelToMap;
-        PositionTravelToMap = posTravelToMap;
-
+        TravelToMap = "";
+        PositionTravelToMap = (0, 0);
     }
 
     public Map CurrentMap { get; set; }
     public Point PositionCurrentMap { get; set; }
-    public Map TravelToMap { get; set; }
+    public string TravelToMap { get; set; }
     public Point PositionTravelToMap { get; set; }
 
 
