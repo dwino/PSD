@@ -5,6 +5,7 @@ namespace Balance;
 
 public class Helper
 {
+
     public static int Map(int a1, int a2, int b1, int b2, int s) => b1 + (s - a1) * (b2 - b1) / (a2 - a1);
 
     public static Random Rnd { get; set; } = new Random();

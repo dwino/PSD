@@ -34,7 +34,7 @@ public class IFREMode : GameMode
 {
     public IFREMode(GameUi ui, GameEngine game) : base(ui, game)
     {
-        Map = new EngineRoomMap();
+        Map = new SleepingPodMap();
         game.Player.Position = Map.StartingPosition;
 
     }

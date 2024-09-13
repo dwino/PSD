@@ -8,7 +8,28 @@ public abstract class Map
     protected Dictionary<string, Func<Map>> mapDict = new Dictionary<string, Func<Map>>(){
         {"sleepingPod", ()=> new SleepingPodMap()},
         {"cryo",() => new EngineRoomMap()},
+        {"corridor",() => new CorridorMap()},
+        {"cafeteria",() => new CafeteriaMap()},
+
     };
+
+    public static Dictionary<string, Dictionary<Point, (string, Point)>> InterMapDict
+                            = new Dictionary<string, Dictionary<Point, (string, Point)>>(){
+                                {"cryo", new Dictionary<Point, (string, Point)>(){
+                                    {(24,6), ("corridor", (1,1))},
+                                }},
+                                {"sleepingPod", new Dictionary<Point, (string, Point)>(){
+                                    {(3,3), ("corridor", (1,10))},
+                                }},
+                                {"corridor", new Dictionary<Point, (string, Point)>(){
+                                    {(0,1), ("cryo", (23,6))},
+                                    {(0,10), ("sleepingPod", (2,3))},
+                                    {(11,9), ("cafeteria", (1,14))},
+
+                                }},{"cafeteria", new Dictionary<Point, (string, Point)>(){
+                                    {(0,14), ("corridor", (10,9))},
+                                }},
+                            };
     public Map GetMap(string xpMapString)
     {
         // Dark Magic, dont change
@@ -78,6 +99,17 @@ public class SleepingPodMap : Map
     }
 
 
+}
+
+public class CorridorMap : Map
+{
+    public CorridorMap() : base("corridor")
+    {
+    }
+
+    public override void LoadSpecificInteractionMap(int x, int y)
+    {
+    }
 }
 
 public class EngineRoomMap : Map
@@ -153,6 +185,17 @@ public class EngineRoomMap : Map
         }
     }
 
+
+}
+public class CafeteriaMap : Map
+{
+    public CafeteriaMap() : base("cafeteria")
+    {
+    }
+
+    public override void LoadSpecificInteractionMap(int x, int y)
+    {
+    }
 }
 
 
