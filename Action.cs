@@ -159,12 +159,19 @@ public class MoveByAction : Action
             _game.Player.Position = newPosition;
         }
 
-        if (newPosition == _map.TravelNode.PositionCurrentMap)
+        var interMapHandle = TravelNode.InterMapDict[_map.XpMapString];
+
+        if (interMapHandle.ContainsKey(newPosition))
         {
             //TODO : DIT HOORT HIER EIGENLIJK NIET
-            var ifreModeHandle = ((IFREMode)_game.CurrentMode);
-            ifreModeHandle.Map = _map.GetMap(_map.TravelNode.TravelToMap);
-            _game.Player.Position = ifreModeHandle.Map.StartingPosition;
+            // var ifreModeHandle = ((IFREMode)_game.CurrentMode);
+            // ifreModeHandle.Map = _map.GetMap(_map.TravelNode.TravelToMap);
+            // _game.Player.Position = ifreModeHandle.Map.StartingPosition;
+
+            var ifreModeHandle = (IFREMode)_game.CurrentMode;
+            var interMapTuple = interMapHandle[newPosition];
+            ifreModeHandle.Map = _map.GetMap(interMapTuple.Item1);
+            _game.Player.Position = interMapTuple.Item2;
 
             _ui.Console.Clear();
 

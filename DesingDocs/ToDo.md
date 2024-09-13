@@ -1,3 +1,5 @@
+- the bidirectional links of travelnods you can do in a dictionary of <xpMapstring, Dictionary<point, xpMapstring>>
+
 - Animations only play, no processkeyboard shizzle
 
 - na >play< een hypothetisch scenario met een animatie (animationobject!)

@@ -4,18 +4,13 @@ namespace Balance;
 
 public class TravelNode
 {
-    public TravelNode(Map currentMap, Point posCurrentMap)
-    {
-        CurrentMap = currentMap;
-        PositionCurrentMap = posCurrentMap;
-        TravelToMap = "";
-        PositionTravelToMap = (0, 0);
-    }
-
-    public Map CurrentMap { get; set; }
-    public Point PositionCurrentMap { get; set; }
-    public string TravelToMap { get; set; }
-    public Point PositionTravelToMap { get; set; }
-
-
+    public static Dictionary<string, Dictionary<Point, (string, Point)>> InterMapDict
+                            = new Dictionary<string, Dictionary<Point, (string, Point)>>(){
+                                {"cryo", new Dictionary<Point, (string, Point)>(){
+                                    {(24,6), ("sleepingPod", (2,3))},
+                                }},
+                                {"sleepingPod", new Dictionary<Point, (string, Point)>(){
+                                    {(3,3), ("cryo", (23,6))},
+                                }},
+                            };
 }
