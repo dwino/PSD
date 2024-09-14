@@ -35,20 +35,34 @@ public class MoveByAction : Action
         if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(newPosition.X, newPosition.Y) == '1')
         {
             _game.Player.Position = newPosition;
+
+            var interMapHandle = Map.InterMapDict[_map.XpMapString];
+
+            if (interMapHandle.ContainsKey(newPosition))
+            {
+                var interMapTuple = interMapHandle[newPosition];
+                _game.Map = _map.GetMap(interMapTuple.Item1);
+                _game.Player.Position = interMapTuple.Item2;
+
+                _ui.Console.Clear();
+            }
+
+            _map.AvailableInteractions.Clear();
+            foreach (var interaction in _map.Interactions)
+            {
+                if (interaction.IsAvailable(_game))
+                {
+                    _map.AvailableInteractions.Add(interaction);
+                }
+            }
+            if (_map.AvailableInteractions.Count > 0)
+            {
+                _map.CurrentInteractionIndex = 0;
+            }
+            else
+            {
+                _map.CurrentInteractionIndex = -1;
+            }
         }
-
-        var interMapHandle = Map.InterMapDict[_map.XpMapString];
-
-        if (interMapHandle.ContainsKey(newPosition))
-        {
-
-            var interMapTuple = interMapHandle[newPosition];
-            _game.Map = _map.GetMap(interMapTuple.Item1);
-            _game.Player.Position = interMapTuple.Item2;
-
-            _ui.Console.Clear();
-
-        }
-
     }
 }

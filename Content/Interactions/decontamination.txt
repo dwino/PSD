@@ -1,0 +1,13 @@
+[node]
+id:0
+requiredFlags:hazmatSuit~1
+Decontaminating...
+[options]
+Exit Chamber...~-1
+
+[node]
+id:1
+hazmat suit required!
+[options]
+Leave...~-1
+

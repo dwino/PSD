@@ -5,6 +5,70 @@ namespace Balance;
 
 public class Helper
 {
+    public static Interaction LoadInteraction(Map map, string name, Point position)
+    {
+        var sr = new StreamReader(Path.Combine("Content", "Interactions", name + ".txt"));
+
+        var interactionNodeList = new List<InteractionNode>();
+        var line = sr.ReadLine();
+
+        while (line != null)
+        {
+            if (line.Contains("[node]"))
+            {
+                line = sr.ReadLine();
+                var nodeid = Int32.Parse(line.Split(':')[1]);
+                var nodeText = sr.ReadLine();
+                var removeFlags = new List<string>();
+                var addFlags = new List<string>();
+                var nodeOptions = new List<InteractionOption>();
+
+                line = sr.ReadLine();
+                if (line.Contains("[flags]"))
+                {
+                    line = sr.ReadLine();
+                    var removeFlagsString = line.Split(':')[1].Split(",");
+
+                    foreach (var flag in removeFlagsString)
+                    {
+                        addFlags.Add(flag.Trim());
+                    }
+
+                    line = sr.ReadLine();
+                    var addFlagsString = line.Split(':')[1].Split(",");
+
+                    foreach (var flag in addFlagsString)
+                    {
+                        addFlags.Add(flag.Trim());
+                    }
+
+
+                    line = sr.ReadLine();
+
+                }
+                if (line.Contains("[options]"))
+                {
+                    line = sr.ReadLine();
+                    while (!String.IsNullOrWhiteSpace(line))
+                    {
+                        var optionText = line.Split('~')[0];
+                        int destinationNodeId = Int32.Parse(line.Split('~')[1]);
+
+                        var nodeOption = new InteractionOption(optionText, destinationNodeId);
+                        nodeOptions.Add(nodeOption);
+                        line = sr.ReadLine();
+                    }
+                }
+
+
+                interactionNodeList.Add(new InteractionNode(nodeid, nodeText, nodeOptions, removeFlags, addFlags));
+            }
+
+            line = sr.ReadLine();
+        }
+
+        return new Interaction(map, name, position, interactionNodeList);
+    }
 
     public static int MapRange(int a1, int a2, int b1, int b2, int s) => b1 + (s - a1) * (b2 - b1) / (a2 - a1);
 

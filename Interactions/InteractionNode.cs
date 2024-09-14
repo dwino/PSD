@@ -8,6 +8,7 @@ public class InteractionNode
         NodeID = nodeID;
         Text = text;
         InteractionOptions = interactionOptions;
+        CurrentOptionIndex = -1;
         RemoveFlags = removeFlags;
         AddFlags = addFlags;
     }
@@ -20,6 +21,21 @@ public class InteractionNode
     public List<string> AddFlags { get; set; }
 
     public List<InteractionOption> InteractionOptions;
+    public int CurrentOptionIndex { get; set; }
+    public InteractionOption CurrentOption
+    {
+        get
+        {
+            if (CurrentOptionIndex != -1 && CurrentOptionIndex < InteractionOptions.Count)
+            {
+                return InteractionOptions[CurrentOptionIndex];
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
 
 
 }

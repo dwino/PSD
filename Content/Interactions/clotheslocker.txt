@@ -1,0 +1,25 @@
+[node]
+id:0
+A locker with hazmat suits on one side, regular clothes on the other.
+[options]
+Put on hazmat suit...~1
+Put on regular clothes...~2
+close locker...~-1
+
+[node]
+id:1
+You put on a hazmat suit.
+[flags]
+remove-flags:regularClothes,
+add-flags:hazmatSuit,
+[options]
+close locker...~-1
+
+[node]
+id:2
+You put on a regular clothes.
+[flags]
+remove-flags:hazmatSuit,
+add-flags:regularClothes,
+[options]
+close locker...~-1

@@ -59,13 +59,35 @@ public abstract class Map
 
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
+
+        Interactions = new List<Interaction>();
+        AvailableInteractions = new List<Interaction>();
+        CurrentInteractionIndex = -1;
+
     }
     public string XpMapString { get; set; }
     public int Width => RPImg.Width;
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
     public Point StartingPosition { get; set; }
-    public List<Interaction> CurrentAvailableInteractions { get; set; }
+    public List<Interaction> Interactions { get; set; }
+    public List<Interaction> AvailableInteractions { get; set; }
+    public int CurrentInteractionIndex { get; set; }
+    public Interaction CurrentInteraction
+    {
+        get
+        {
+            if (CurrentInteractionIndex != -1 && CurrentInteractionIndex < AvailableInteractions.Count)
+            {
+                return AvailableInteractions[CurrentInteractionIndex];
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
 
     public void LoadInteractionMap()
     {
@@ -86,6 +108,22 @@ public abstract class Map
     public virtual void Draw(Console console)
     {
         _visibleMap.Copy(console.Surface, _xOffset, _yOffset);
+
+        for (int i = 0; i < AvailableInteractions.Count; i++)
+        {
+            var availableInteraction = Interactions[i];
+
+            string interactionOption = i + " - " + availableInteraction.Name;
+            Color color = Color.White;
+            if (i == CurrentInteractionIndex)
+            {
+                interactionOption = ">" + interactionOption;
+                color = new Color(0, 217, 0);
+            }
+            int y = i + 1;
+            int x = GameSettings.GAME_WIDTH - 2 - interactionOption.Length;
+            console.Print(x, y, interactionOption, color);
+        }
     }
 }
 
@@ -93,13 +131,13 @@ public class SleepingPodMap : Map
 {
     public SleepingPodMap() : base("sleepingPod")
     {
+        var bedInteraction = Helper.LoadInteraction(this, "Anouk", (1, 1));
+        Interactions.Add(bedInteraction);
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
     {
     }
-
-
 }
 
 public class CorridorMap : Map
