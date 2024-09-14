@@ -103,13 +103,5 @@ public class IntroScreen
                 }
             }
         }
-        // else if (!_stopWatch.IsRunning)
-        // {
-        //     _console.Print(Helper.Rnd.Next(5, GameSettings.GAME_WIDTH - "It's Definitely AboutBalance".Length - 5),
-        //                     Helper.Rnd.Next(5, GameSettings.GAME_HEIGHT - 5), "It's Definately About Balance");
-        // }
-
-
     }
-
 }

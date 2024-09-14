@@ -32,9 +32,9 @@ internal class GameScreen
         {
             CurrentAnimation.ProcessKeyboard(keyboard);
         }
-        else if (_game.CurrentMode != null)
+        else
         {
-            _game.CurrentMode.ProcessKeyboard(keyboard);
+            _game.ProcessKeyboard(keyboard);
         }
     }
     public void DrawGameScreen()
@@ -50,7 +50,7 @@ internal class GameScreen
         }
         else
         {
-            _game.CurrentMode.Draw();
+            _game.Draw();
         }
 
     }

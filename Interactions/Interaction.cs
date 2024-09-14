@@ -57,8 +57,7 @@ public class Interaction : IEvent
 
     public void WhenClosedLoadMap(GameEngine _game, GameUi _ui)
     {
-        var ifreModeHandle = (IFREMode)_game.CurrentMode;
-        ifreModeHandle.Map = _map.GetMap(ExitXpMapString);
+        _game.Map = _map.GetMap(ExitXpMapString);
         _game.Player.Position = ExitPosition;
 
         _ui.Console.Clear();
