@@ -6,7 +6,18 @@ namespace Balance;
 public class Helper
 {
 
-    public static int Map(int a1, int a2, int b1, int b2, int s) => b1 + (s - a1) * (b2 - b1) / (a2 - a1);
+    public static int MapRange(int a1, int a2, int b1, int b2, int s) => b1 + (s - a1) * (b2 - b1) / (a2 - a1);
+
+    public static double Distance(Point pt1, Point pt2)
+    {
+        var x = Math.Abs(pt1.X - pt2.X);
+        var y = Math.Abs(pt1.Y - pt2.Y);
+
+        var xPow = Math.Pow(x, 2);
+        var yPow = Math.Pow(y, 2);
+
+        return Math.Sqrt(xPow + yPow);
+    }
 
     public static Random Rnd { get; set; } = new Random();
 

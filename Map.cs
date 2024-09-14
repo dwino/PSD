@@ -65,6 +65,7 @@ public abstract class Map
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
     public Point StartingPosition { get; set; }
+    public List<Interaction> CurrentAvailableInteractions { get; set; }
 
     public void LoadInteractionMap()
     {

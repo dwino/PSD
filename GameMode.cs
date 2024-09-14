@@ -248,7 +248,7 @@ public class SRPGMode : GameMode
         string lifeInfo = "life: " + Other.Life + "/" + Other.LifeMax;
         _console.Print(x_other, y_other, lifeInfo, Color.Red);
 
-        int mappedRange = Helper.Map(0, Other.LifeMax, 0, lifeInfo.Length, Other.Life);
+        int mappedRange = Helper.MapRange(0, Other.LifeMax, 0, lifeInfo.Length, Other.Life);
 
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < mappedRange; i++)
@@ -296,7 +296,7 @@ public class SRPGMode : GameMode
 
         _console.Print(x_other, y_other, whiteAndBlackAmount);
 
-        int whiteAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.White);
+        int whiteAmount = Helper.MapRange(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.White);
 
         for (int x = x_other + midpoint - whiteAmount; x < x_other + midpoint; x++)
         {
@@ -304,7 +304,7 @@ public class SRPGMode : GameMode
 
         }
 
-        int blackAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.Black);
+        int blackAmount = Helper.MapRange(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.Black);
 
         for (int x = x_other + midpoint; x < x_other + midpoint + blackAmount; x++)
         {
@@ -315,7 +315,7 @@ public class SRPGMode : GameMode
 
         if (Other.White < Other.WhiteBalance)
         {
-            int idealWhiteAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.WhiteBalance);
+            int idealWhiteAmount = Helper.MapRange(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.WhiteBalance);
 
             for (int x = x_other + midpoint - idealWhiteAmount; x < x_other + midpoint - whiteAmount; x++)
             {
@@ -326,7 +326,7 @@ public class SRPGMode : GameMode
         }
         else
         {
-            int idealBlackAmount = Helper.Map(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.BlackBalance);
+            int idealBlackAmount = Helper.MapRange(0, Other.LifeMax, 0, whiteAndBlackAmount.Length / 2, Other.BlackBalance);
 
             for (int x = x_other + midpoint + blackAmount; x < x_other + midpoint + idealBlackAmount; x++)
             {
@@ -355,7 +355,7 @@ public class SRPGMode : GameMode
         lifeInfo = "life: " + _game.Player.Life + "/" + _game.Player.LifeMax;
         _console.Print(x_other, y_other, lifeInfo, Color.Red);
 
-        mappedRange = Helper.Map(0, _game.Player.LifeMax, 0, lifeInfo.Length, _game.Player.Life);
+        mappedRange = Helper.MapRange(0, _game.Player.LifeMax, 0, lifeInfo.Length, _game.Player.Life);
 
         stringBuilder = new StringBuilder();
         for (int i = 0; i < mappedRange; i++)
@@ -401,7 +401,7 @@ public class SRPGMode : GameMode
 
         _console.Print(x_other, y_other, whiteAndBlackAmount);
 
-        whiteAmount = Helper.Map(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.White);
+        whiteAmount = Helper.MapRange(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.White);
 
         for (int x = x_other + midpoint - whiteAmount; x < x_other + midpoint; x++)
         {
@@ -409,7 +409,7 @@ public class SRPGMode : GameMode
 
         }
 
-        blackAmount = Helper.Map(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.Black);
+        blackAmount = Helper.MapRange(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.Black);
 
         for (int x = x_other + midpoint; x < x_other + midpoint + blackAmount; x++)
         {
@@ -420,7 +420,7 @@ public class SRPGMode : GameMode
 
         if (_game.Player.White < _game.Player.WhiteBalance)
         {
-            int idealWhiteAmount = Helper.Map(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.WhiteBalance);
+            int idealWhiteAmount = Helper.MapRange(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.WhiteBalance);
 
             for (int x = x_other + midpoint - idealWhiteAmount; x < x_other + midpoint - whiteAmount; x++)
             {
@@ -431,7 +431,7 @@ public class SRPGMode : GameMode
         }
         else
         {
-            int idealBlackAmount = Helper.Map(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.BlackBalance);
+            int idealBlackAmount = Helper.MapRange(0, _game.Player.LifeMax, 0, whiteAndBlackAmount.Length / 2, _game.Player.BlackBalance);
 
             for (int x = x_other + midpoint + blackAmount; x < x_other + midpoint + idealBlackAmount; x++)
             {
@@ -446,7 +446,7 @@ public class SRPGMode : GameMode
         var unbalanceInfo = "unbalance: " + Unbalance + "/" + 100;
         _console.Print(x_other, y_other, unbalanceInfo, Color.Blue);
 
-        mappedRange = Helper.Map(0, 100, 0, unbalanceInfo.Length, Unbalance);
+        mappedRange = Helper.MapRange(0, 100, 0, unbalanceInfo.Length, Unbalance);
 
         stringBuilder = new StringBuilder();
         for (int i = 0; i < mappedRange; i++)

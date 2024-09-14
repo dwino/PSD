@@ -21,6 +21,9 @@
     <Content Include="Content/Maps/*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>  
+    <Content Include="fonts/*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content> 
   </ItemGroup>
 
   <ItemGroup>
