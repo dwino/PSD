@@ -131,7 +131,7 @@ public class SleepingPodMap : Map
 {
     public SleepingPodMap() : base("sleepingPod")
     {
-        var bedInteraction = Helper.LoadInteraction(this, "Anouk", (1, 1));
+        var bedInteraction = Helper.LoadInteraction(this, "Anouk", (1, 2));
         Interactions.Add(bedInteraction);
     }
 

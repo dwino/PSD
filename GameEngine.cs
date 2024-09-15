@@ -2,6 +2,7 @@ using System;
 using Balance.Ui;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
+using Yarn.Compiler;
 
 namespace Balance;
 
@@ -14,10 +15,12 @@ public class GameEngine
         Player = new Player();
         Map = new SleepingPodMap();
         Player.Position = Map.StartingPosition;
+        DialogRunner = new DialogRunner("Content/Yarn/test.yarn", "Start", _ui);
     }
 
     public Player Player { get; set; }
     public Map Map { get; set; }
+    public DialogRunner DialogRunner { get; set; }
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
@@ -86,7 +89,8 @@ public class GameEngine
                 var currentInteraction = Map.CurrentInteraction;
                 if (currentInteraction != null)
                 {
-                    currentInteraction.IsActive = true;
+                    //currentInteraction.IsActive = true;
+                    DialogRunner.ContinueDialog();
                 }
             }
 
@@ -147,5 +151,6 @@ public class GameEngine
         {
             Map.CurrentInteraction.Draw(_ui.Console);
         }
+        DialogRunner.Draw(_ui.Console);
     }
 }
