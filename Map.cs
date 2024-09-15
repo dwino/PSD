@@ -60,8 +60,8 @@ public abstract class Map
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
 
-        Interactions = new List<Interaction>();
-        AvailableInteractions = new List<Interaction>();
+        Interactions = new List<DialogRunner>();
+        AvailableInteractions = new List<DialogRunner>();
         CurrentInteractionIndex = -1;
 
     }
@@ -70,10 +70,10 @@ public abstract class Map
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
     public Point StartingPosition { get; set; }
-    public List<Interaction> Interactions { get; set; }
-    public List<Interaction> AvailableInteractions { get; set; }
+    public List<DialogRunner> Interactions { get; set; }
+    public List<DialogRunner> AvailableInteractions { get; set; }
     public int CurrentInteractionIndex { get; set; }
-    public Interaction CurrentInteraction
+    public DialogRunner CurrentInteraction
     {
         get
         {
@@ -131,7 +131,7 @@ public class SleepingPodMap : Map
 {
     public SleepingPodMap() : base("sleepingPod")
     {
-        var bedInteraction = Helper.LoadInteraction(this, "Anouk", (1, 2));
+        var bedInteraction = new DialogRunner("Anouk", (1, 2), "Start");//Helper.LoadInteraction(this, "Anouk", (1, 2));
         Interactions.Add(bedInteraction);
     }
 
@@ -230,6 +230,8 @@ public class CafeteriaMap : Map
 {
     public CafeteriaMap() : base("cafeteria")
     {
+        var table = new DialogRunner("Anouk", (1, 1), "Start");//Helper.LoadInteraction(this, "Anouk", (1, 2));
+        Interactions.Add(table);
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)

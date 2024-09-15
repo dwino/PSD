@@ -1,0 +1,20 @@
+title: Start
+---
+Anouk: hallo Liefste, alles goed?
+    -> Ja Poepjes, met jou
+        <<jump KoekjesDiefOndervraagd>>
+    -> Heb jij de koekjes gestolen??
+        Anouk: Euhmm...
+        Anouk: Ik had honger Liefste!
+===
+
+title: KoekjesDiefOndervraagd
+---
+Anouk: Ja, alleen jammer dat alle koekjes op zijn.
+    -> Heb jij de koekjes gestolen??
+        Anouk: Euhmm...
+        Anouk: Ik had honger Liefste!
+    
+===
+
+

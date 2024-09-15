@@ -11,15 +11,19 @@ public class DialogRunner
 {
     private int _x;
     private int _y;
-    private GameUi _ui;
-    private bool _optionRequired;
-    public DialogRunner(string file, string startNode, GameUi ui)
+    private int _minDistToPlayer;
+
+    public DialogRunner(string name, Point position, string startNode, int minDistToPlayer = 1)
     {
         _x = 1;
         _y = 1;
-        _ui = ui;
-        _optionRequired = false;
-        string[] sourceFiles = { file };
+        _minDistToPlayer = minDistToPlayer;
+        Name = name;
+        IsActive = false;
+        OptionRequired = false;
+        Position = position;
+
+        string[] sourceFiles = { "Content/Yarn/" + name + ".yarn" };
         var compilationJob = CompilationJob.CreateFromFiles(sourceFiles);
         CompilationResult = Compiler.Compile(compilationJob);
         Program = CompilationResult.Program;
@@ -43,6 +47,10 @@ public class DialogRunner
         OptionsToDraw = new List<string>();
 
     }
+    public string Name { get; set; }
+    public bool IsActive { get; set; }
+    public bool OptionRequired { get; set; }
+    public Point Position { get; set; }
     public CompilationResult CompilationResult { get; set; }
     public Yarn.Program Program { get; set; }
     public Dialogue Dialogue { get; set; }
@@ -50,6 +58,13 @@ public class DialogRunner
     public List<String> LinesToDraw { get; set; }
     public List<String> OptionsToDraw { get; set; }
 
+    public bool IsAvailable(GameEngine game)
+    {
+
+        var distanceToPlayer = Helper.Distance(game.Player.Position, this.Position);
+
+        return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+    }
 
     public string TextForLine(string lineID)
     {
@@ -68,35 +83,24 @@ public class DialogRunner
 
     void OptionsHandler(Yarn.OptionSet options)
     {
-        _optionRequired = true;
+        OptionRequired = true;
         SelectedOptionIndex = 0;
 
         int count = 0;
         foreach (var option in options.Options)
         {
-            OptionsToDraw.Add($"{count}: {TextForLine(option.Line.ID)}");
+            OptionsToDraw.Add(TextForLine(option.Line.ID));
             count += 1;
         }
+    }
 
-        // //Console.WriteLine("Select an option to continue");
-
-        // int number;
-        // while (int.TryParse(System.Console.ReadLine(), out number) == false)
-        // {
-        //     System.Console.WriteLine($"Select an option between 0 and {options.Options.Length - 1} to continue");
-        // }
-
-        // // rather than just trapping every possibility we
-        // // just mash it into shape
-        // number %= options.Options.Length;
-
-        // if (number < 0)
-        // {
-        //     number *= -1;
-        // }
-
-
-        // Dialogue.SetSelectedOption(number);
+    public void SetSelectedOption()
+    {
+        Dialogue.SetSelectedOption(SelectedOptionIndex);
+        LinesToDraw.Clear();
+        OptionsToDraw.Clear();
+        OptionRequired = false;
+        ContinueDialog();
     }
 
     public void NodeCompleteHandler(string completedNodeName)
@@ -105,11 +109,12 @@ public class DialogRunner
 
     public void DialogueCompleteHandler()
     {
+        IsActive = false;
     }
 
     public void ContinueDialog()
     {
-        if (!_optionRequired)
+        if (!OptionRequired)
         {
             Dialogue.Continue();
         }
@@ -143,5 +148,7 @@ public class DialogRunner
         }
 
     }
+
+
 }
 

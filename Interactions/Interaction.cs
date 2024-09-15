@@ -81,7 +81,7 @@ public class Interaction : IEvent
 
     public void WhenAvailable()
     {
-        _map.Interactions.Add(this);
+        //_map.Interactions.Add(this);
     }
 
     public void WhenClosedLoadMap(GameEngine _game, GameUi _ui)

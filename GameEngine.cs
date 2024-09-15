@@ -15,12 +15,10 @@ public class GameEngine
         Player = new Player();
         Map = new SleepingPodMap();
         Player.Position = Map.StartingPosition;
-        DialogRunner = new DialogRunner("Content/Yarn/test.yarn", "Start", _ui);
     }
 
     public Player Player { get; set; }
     public Map Map { get; set; }
-    public DialogRunner DialogRunner { get; set; }
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
@@ -30,45 +28,48 @@ public class GameEngine
         }
         if (Map.CurrentInteraction != null && Map.CurrentInteractionIndex != -1 && Map.CurrentInteraction.IsActive)
         {
-            if (keyboard.IsKeyPressed(Keys.Tab) || keyboard.IsKeyPressed(Keys.Down))  //L1 / UP
+            if (Map.CurrentInteraction.OptionRequired)
             {
-                if (Map.CurrentInteraction.CurrentNode.InteractionOptions.Count > 0)
+                if (keyboard.IsKeyPressed(Keys.Tab) || keyboard.IsKeyPressed(Keys.Down))  //L1 / UP
                 {
-                    Map.CurrentInteraction.CurrentNode.CurrentOptionIndex++;
-                    if (Map.CurrentInteraction.CurrentNode.CurrentOptionIndex
-                        >= Map.CurrentInteraction.CurrentNode.InteractionOptions.Count)
+                    if (Map.CurrentInteraction.IsActive)
                     {
-                        Map.CurrentInteraction.CurrentNode.CurrentOptionIndex = 0;
+                        Map.CurrentInteraction.SelectedOptionIndex++;
+                        if (Map.CurrentInteraction.SelectedOptionIndex
+                            >= Map.CurrentInteraction.OptionsToDraw.Count)
+                        {
+                            Map.CurrentInteraction.SelectedOptionIndex = 0;
+                        }
+                    }
+                }
+                if (keyboard.IsKeyPressed(Keys.Up))  //L1 / DOWN
+                {
+                    if (Map.CurrentInteraction.OptionsToDraw.Count > 0)
+                    {
+                        Map.CurrentInteraction.SelectedOptionIndex--;
+                        if (Map.CurrentInteraction.SelectedOptionIndex < 0)
+                        {
+                            Map.CurrentInteraction.SelectedOptionIndex = Map.CurrentInteraction.OptionsToDraw.Count - 1;
+                        }
+                    }
+                }
+                if (keyboard.IsKeyPressed(Keys.A))
+                {
+                    if (Map.CurrentInteraction.SelectedOptionIndex >= 0
+                    && Map.CurrentInteraction.SelectedOptionIndex < Map.CurrentInteraction.OptionsToDraw.Count)
+                    {
+                        Map.CurrentInteraction.SetSelectedOption();
                     }
                 }
             }
-            if (keyboard.IsKeyPressed(Keys.Tab) || keyboard.IsKeyPressed(Keys.Up))  //L1 / DOWN
+            else
             {
-                if (Map.CurrentInteraction.CurrentNode.InteractionOptions.Count > 0)
+                if (keyboard.IsKeyPressed(Keys.A))
                 {
-                    Map.CurrentInteraction.CurrentNode.CurrentOptionIndex--;
-                    if (Map.CurrentInteraction.CurrentNode.CurrentOptionIndex < 0)
-                    {
-                        Map.CurrentInteraction.CurrentNode.CurrentOptionIndex = Map.CurrentInteraction.CurrentNode.InteractionOptions.Count - 1;
-                    }
+                    Map.CurrentInteraction.ContinueDialog();
                 }
             }
-            if (keyboard.IsKeyPressed(Keys.A))
-            {
-                var currentInteractionNodeOption = Map.CurrentInteraction.CurrentNode.CurrentOption;
-                if (currentInteractionNodeOption != null)
-                {
-                    Map.CurrentInteraction.CurrentNodeIndex = currentInteractionNodeOption.DestinationNodeID;
-                    if (Map.CurrentInteraction.CurrentNodeIndex == -1)
-                    {
-                        Map.CurrentInteraction.IsActive = false;
-                    }
-                    else
-                    {
-                        Map.CurrentInteraction.CurrentNode.CurrentOptionIndex = 0;
-                    }
-                }
-            }
+
 
         }
         else
@@ -89,8 +90,8 @@ public class GameEngine
                 var currentInteraction = Map.CurrentInteraction;
                 if (currentInteraction != null)
                 {
-                    //currentInteraction.IsActive = true;
-                    DialogRunner.ContinueDialog();
+                    currentInteraction.IsActive = true;
+                    Map.CurrentInteraction.ContinueDialog();
                 }
             }
 
@@ -151,6 +152,5 @@ public class GameEngine
         {
             Map.CurrentInteraction.Draw(_ui.Console);
         }
-        DialogRunner.Draw(_ui.Console);
     }
 }
