@@ -1,0 +1,9 @@
+{
+  "$type": "SadConsole.SadFont, SadConsole",
+  "FilePath": "cp437_20x20.png",
+  "GlyphHeight": 20,
+  "GlyphPadding": 0,
+  "GlyphWidth": 20,
+  "Name": "cp437_20",
+  "SolidGlyphIndex": 219
+}

@@ -1,0 +1,38 @@
+title: Start
+---
+>: Performing preliminary systems check...
+>: All systems functioning withing normal parameters.
+>: Review specific system?
+    -> Exit
+        <<jump Exit>>
+    -> Engine Status
+        <<jump engine>>
+    
+    
+===
+
+title: engine
+---
+>: Engine status:
+>: select suboption
+    -> Exit
+        <<jump Exit>>
+    -> Back
+        <<jump Start>>
+    -> Review temperature system
+        Temperature Ok
+        <<jump engine>>
+    -> Review ventilation system
+        Ventialtion Ok
+        <<jump engine>>
+    -> Review watercooling system
+        Watercooling Ok
+        <<jump engine>>
+===
+
+title: Exit
+---
+>: Exiting...
+
+===
+

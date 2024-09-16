@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Media;
 using SadConsole.Readers;
+using SadConsole.Renderers;
 
 namespace Balance;
 
@@ -10,6 +12,7 @@ public abstract class Map
         {"Cryo1",() => new Cryo1()},
         {"Cryo2",() => new Cryo2()},
         {"Cryo3",() => new Cryo3()},
+        {"EngineObservationRoom",() => new EngineObservationRoom()},
         {"EngineRoom",() => new EngineRoom()},
         {"FacilitiesCorridor",() => new FacilitiesCorridor()},
         {"Hydroponics",() => new Hydroponics()},
@@ -52,8 +55,12 @@ public abstract class Map
                                 {"Cryo3", new Dictionary<Point, (string, Point)>(){
                                     {(9,0), ("SecurityZone3", (7,6))},
                                 }},
-                                {"EngineRoom", new Dictionary<Point, (string, Point)>(){
+                                {"EngineObservationRoom", new Dictionary<Point, (string, Point)>(){
                                     {(10,9), ("Security", (1,9))},
+                                    {(6,9), ("EngineRoom", (3,9))},
+                                }},
+                                {"EngineRoom", new Dictionary<Point, (string, Point)>(){
+                                    {(4,9), ("EngineObservationRoom", (7,9))},
                                 }},
                                 {"FacilitiesCorridor", new Dictionary<Point, (string, Point)>(){
                                     {(1,6), ("Cafeteria", (6,1))},
@@ -106,7 +113,7 @@ public abstract class Map
                                     {(6,5), ("Room6", (1,3))},
                                 }},
                                 {"Security", new Dictionary<Point, (string, Point)>(){
-                                    {(0,9), ("EngineRoom", (9,9))},
+                                    {(0,9), ("EngineObservationRoom", (9,9))},
                                     {(9,9), ("MainCorridor", (1,9))},
                                 }},
                                 {"SecurityZone1", new Dictionary<Point, (string, Point)>(){
@@ -206,7 +213,6 @@ public abstract class Map
         }
     }
 
-
     public void LoadInteractionMap()
     {
         for (int x = 0; x < Width; x++)
@@ -272,8 +278,171 @@ public class Cryo2 : Map
 }
 public class Cryo3 : Map
 {
+    private Stopwatch _stopwatch;
+    private Stopwatch _stopwatch1;
+    private Stopwatch _stopwatch2;
+
+
+    private int _tint;
+    private int _tintOffset;
+    private int _tint1;
+    private int _tintOffset1;
+
     public Cryo3() : base("Cryo3")
     {
+        _stopwatch = new Stopwatch();
+        _stopwatch.Start();
+        _stopwatch1 = new Stopwatch();
+        _stopwatch1.Start();
+        _stopwatch2 = new Stopwatch();
+        _stopwatch2.Start();
+
+
+        _tint = 128;
+        _tintOffset = 3;
+        _tint1 = 128;
+        _tintOffset1 = 12;
+    }
+
+    public Point AnimationPosition_a { get; set; }
+    public Point AnimationPosition_b { get; set; }
+    public Point AnimationPosition_c { get; set; }
+    public Point AnimationPosition_d { get; set; }
+    public Point AnimationPosition_e { get; set; }
+    public Point AnimationPosition_f { get; set; }
+    public Point AnimationPosition_g { get; set; }
+    public Point AnimationPosition_h { get; set; }
+    public Point AnimationPosition_i { get; set; }
+
+    public override void LoadSpecificInteractionMap(int x, int y)
+    {
+        if (_interactionMap.GetGlyph(x, y) == 'a')
+        {
+            AnimationPosition_a = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'b')
+        {
+            AnimationPosition_b = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'c')
+        {
+            AnimationPosition_c = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'd')
+        {
+            AnimationPosition_d = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'e')
+        {
+            AnimationPosition_e = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'f')
+        {
+            AnimationPosition_f = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'g')
+        {
+            AnimationPosition_g = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'h')
+        {
+            AnimationPosition_h = (x, y);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'i')
+        {
+            AnimationPosition_i = (x, y);
+        }
+
+    }
+
+    public override void Draw(Console console)
+    {
+        base.Draw(console);
+
+        if (_stopwatch.ElapsedMilliseconds < Helper.Rnd.Next(500, 2500))
+        {
+            console.SetBackground(AnimationPosition_a.X + _xOffset, AnimationPosition_a.Y + _yOffset, new SadRogue.Primitives.Color(217, 0, 0));
+        }
+        else
+        {
+            console.SetBackground(AnimationPosition_a.X + _xOffset, AnimationPosition_a.Y + _yOffset, new SadRogue.Primitives.Color(25, 25, 25));
+            if (_stopwatch.ElapsedMilliseconds > Helper.Rnd.Next(3000, 4500))
+            {
+                var sfx = AudioManager.MalfunctionSFX.CreateInstance();
+                sfx.Volume = 0.4f;
+                sfx.Play();
+
+                _stopwatch.Restart();
+            }
+        }
+
+        if (_stopwatch2.ElapsedMilliseconds > Helper.Rnd.Next(1000, 2000))
+        {
+            var rnd = Helper.Rnd.Next(3);
+            if (rnd == 0)
+            {
+                _visibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 45);
+            }
+            if (rnd == 1)
+            {
+                _visibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 61);
+            }
+            if (rnd == 2)
+            {
+                _visibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 240);
+            }
+            _stopwatch2.Restart();
+        }
+
+
+        if (_stopwatch1.ElapsedMilliseconds > 5)
+        {
+            console.SetForeground(AnimationPosition_c.X + _xOffset, AnimationPosition_c.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            console.SetForeground(AnimationPosition_d.X + _xOffset, AnimationPosition_d.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            console.SetForeground(AnimationPosition_e.X + _xOffset, AnimationPosition_e.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            console.SetForeground(AnimationPosition_f.X + _xOffset, AnimationPosition_f.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            console.SetForeground(AnimationPosition_g.X + _xOffset, AnimationPosition_g.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            console.SetForeground(AnimationPosition_h.X + _xOffset, AnimationPosition_h.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            //console.SetForeground(AnimationPosition_i.X + _xOffset, AnimationPosition_i.Y + _yOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            _tint += _tintOffset;
+
+            if (_tint >= 255)
+            {
+                _tint = 255;
+                _tintOffset *= -1;
+            }
+            if (_tint <= 0)
+            {
+                _tint = 0;
+                _tintOffset *= -1;
+            }
+            _stopwatch1.Restart();
+        }
+
+        console.SetForeground(AnimationPosition_i.X + _xOffset, AnimationPosition_i.Y + _yOffset, new SadRogue.Primitives.Color(_tint1, 0, 0));
+        _tint1 += _tintOffset1;
+
+        if (_tint1 >= 255)
+        {
+            _tint1 = 255;
+            _tintOffset1 *= -1;
+        }
+        if (_tint1 <= 0)
+        {
+            _tint1 = 0;
+            _tintOffset1 *= -1;
+        }
+
+    }
+}
+public class EngineObservationRoom : Map
+{
+    public EngineObservationRoom() : base("EngineObservationRoom")
+    {
+        MediaPlayer.Stop();
+        MediaPlayer.Play(AudioManager.LeavingHome);
+        MediaPlayer.IsRepeating = true;
+        Interactions.Add(new DialogRunner("EngineRoomComputer", (8, 7), "Start"));
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -284,6 +453,9 @@ public class EngineRoom : Map
 {
     public EngineRoom() : base("EngineRoom")
     {
+        MediaPlayer.Stop();
+        MediaPlayer.Play(AudioManager.SpaceEngine);
+        MediaPlayer.IsRepeating = true;
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)

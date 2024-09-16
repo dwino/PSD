@@ -8,7 +8,7 @@ Builder gameStartup = new Builder()
     .SetScreenSize(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT)
     .SetStartingScreen<GameUi>()
     .IsStartingScreenFocused(true)
-    .ConfigureFonts("fonts/Nagidal24.font")
+    .ConfigureFonts("fonts/cp437_20.font")
     ;
 
 Game.Create(gameStartup);

@@ -15,8 +15,6 @@ public class GameUi : ScreenObject
 
     public GameUi()
     {
-        _game = new GameEngine(this);
-
         AudioManager.Initialize();
 
         Console = new Console(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT, GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT);
@@ -26,6 +24,8 @@ public class GameUi : ScreenObject
         _introScreen = new IntroScreen(Console, this);
 
         _menuScreen = new MainMenuScreen(Console, this);
+
+        _game = new GameEngine(this);
 
         _gameScreen = new GameScreen(_game, this, Console);
 

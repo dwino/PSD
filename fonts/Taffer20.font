@@ -1,0 +1,9 @@
+{
+  "$type": "SadConsole.SadFont, SadConsole",
+  "FilePath": "Taffer_20x20.png",
+  "GlyphHeight": 20,
+  "GlyphPadding": 0,
+  "GlyphWidth": 20,
+  "Name": "Taffer20",
+  "SolidGlyphIndex": 219
+}

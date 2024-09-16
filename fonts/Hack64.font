@@ -1,0 +1,9 @@
+{
+  "$type": "SadConsole.SadFont, SadConsole",
+  "FilePath": "Hack_square_64x64.png",
+  "GlyphHeight": 64,
+  "GlyphPadding": 0,
+  "GlyphWidth": 64,
+  "Name": "Hack64",
+  "SolidGlyphIndex": 219
+}
