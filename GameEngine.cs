@@ -13,8 +13,8 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        Map = new SleepingPodMap();
-        Player.Position = Map.StartingPosition;
+        Map = new YourRoom();
+        Player.Position = (1, 1);
     }
 
     public Player Player { get; set; }

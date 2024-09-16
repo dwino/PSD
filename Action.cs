@@ -36,7 +36,10 @@ public class MoveByAction : Action
         {
             _game.Player.Position = newPosition;
 
-            var interMapHandle = Map.InterMapDict[_map.XpMapString];
+            var interMapDict = Map.InterMapDict;
+            var xpMapString = _map.XpMapString;
+
+            var interMapHandle = interMapDict[xpMapString];
 
             if (interMapHandle.ContainsKey(newPosition))
             {
