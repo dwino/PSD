@@ -162,9 +162,9 @@ public abstract class Map
     {
         // Dark Magic, dont change
         Func<Map> func;
-        return mapDict.TryGetValue(xpMapString, out func)
+        return mapDict.TryGetValue(xpMapString, out func!)
             ? func() // invoking the delegate creates the instance of the brand object
-            : null;  // brandName was not in the dictionary
+            : null!;  // brandName was not in the dictionary
     }
 
     protected int _xOffset;
@@ -210,7 +210,7 @@ public abstract class Map
             }
             else
             {
-                return null;
+                return null!;
             }
         }
     }
@@ -373,7 +373,7 @@ public class Cryo3 : Map
             console.SetBackground(AnimationPosition_a.X + _xOffset, AnimationPosition_a.Y + _yOffset, new SadRogue.Primitives.Color(25, 25, 25));
             if (_stopwatch.ElapsedMilliseconds > Helper.Rnd.Next(3000, 4500))
             {
-                var sfx = AudioManager.MalfunctionSFX.CreateInstance();
+                var sfx = AudioManager.MalfunctionSFX!.CreateInstance();
                 sfx.Volume = 0.4f;
                 sfx.Play();
 
@@ -457,7 +457,7 @@ public class EngineRoom : Map
 
     public EngineRoom() : base("EngineRoom")
     {
-        _engineSFX = AudioManager.SpaceEngineSFX.CreateInstance();
+        _engineSFX = AudioManager.SpaceEngineSFX!.CreateInstance();
 
     }
 
@@ -777,7 +777,7 @@ public class EngineRoomMap : Map
             console.SetBackground(AnimationPosition2.X + _xOffset, AnimationPosition2.Y + _yOffset, new SadRogue.Primitives.Color(25, 25, 25));
             if (_stopwatch.ElapsedMilliseconds > Helper.Rnd.Next(3000, 4500))
             {
-                var sfx = AudioManager.MalfunctionSFX.CreateInstance();
+                var sfx = AudioManager.MalfunctionSFX!.CreateInstance();
                 sfx.Volume = 0.3f;
                 sfx.Play();
 

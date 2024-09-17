@@ -15,7 +15,7 @@ public class IntroScreen
         using (StreamReader reader = new StreamReader(sourceFile))
         {
             string line;
-            while ((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()!) != null)
             {
                 stringBuilder.AppendLine(line);
             }

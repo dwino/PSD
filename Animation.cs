@@ -49,7 +49,7 @@ public class MapTransitionAnimation : Animation
         _color = Color.White;
 
 
-        var doorOpenSFX = AudioManager.DoorOpenSFX.CreateInstance();
+        var doorOpenSFX = AudioManager.DoorOpenSFX!.CreateInstance();
         doorOpenSFX.Volume = 0.2f;
         doorOpenSFX.Play();
     }
@@ -96,7 +96,7 @@ public class MapTransitionAnimation : Animation
         }
         else if (_stopWatch.ElapsedMilliseconds >= 750)
         {
-            var doorCloseSFX = AudioManager.DoorCloseSFX.CreateInstance();
+            var doorCloseSFX = AudioManager.DoorCloseSFX!.CreateInstance();
             doorCloseSFX.Volume = 0.2f;
             doorCloseSFX.Play();
             IsRunning = false;
