@@ -1,8 +1,5 @@
-using System;
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
 using System.Text;
-using Balance.Screens;
 using Balance.Ui;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
@@ -35,43 +32,73 @@ public class MapTransitionAnimation : Animation
     private CellSurface _visibleMap;
     private int _xOffset;
     private int _yOffset;
-    private bool _done;
-    public MapTransitionAnimation(CellSurface visibleMap, Console console, GameUi ui) : base(console, ui)
+    private Player _player;
+    private Point _oldPosition;
+    private Point _offset;
+    private Color _color;
+    public MapTransitionAnimation(CellSurface visibleMap, Player player, Point oldPosition, Point offset, Console console, GameUi ui) : base(console, ui)
     {
         _visibleMap = new CellSurface(visibleMap.Width, visibleMap.Height);
         visibleMap.Copy(_visibleMap);
-
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (_visibleMap.Width / 2);
         _yOffset = (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
 
-        _done = false;
-        AudioManager.DoorOpen.CreateInstance().Play();
-        //TODO Play door opening sound (kenny)
+        _player = player;
+        _oldPosition = oldPosition;
+        _offset = offset;
+        _color = Color.White;
+
+
+        var doorOpenSFX = AudioManager.DoorOpenSFX.CreateInstance();
+        doorOpenSFX.Volume = 0.2f;
+        doorOpenSFX.Play();
     }
 
     public override void Play()
     {
-        if (!_done)
+        int playerX = _oldPosition.X + (GameSettings.GAME_WIDTH / 2) - (_visibleMap.Width / 2);
+        int playerY = _oldPosition.Y + (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
+        if (_stopWatch.ElapsedMilliseconds < 500)
+        {
+            _visibleMap.Copy(_console.Surface, _xOffset, _yOffset);
+
+            if (_stopWatch.ElapsedMilliseconds < 300)
+            {
+                _ui.Console.Print(playerX - _offset.X, playerY - _offset.Y, _player.Glyph.ToString(), _color.GetDark());
+                _ui.Console.Print(playerX, playerY, " ", Color.White.GetDark());
+            }
+            else if (_stopWatch.ElapsedMilliseconds >= 300)
+            {
+                _ui.Console.Print(playerX, playerY, _player.Glyph.ToString(), _color.GetDarker());
+            }
+        }
+        else if (_stopWatch.ElapsedMilliseconds >= 500 && _stopWatch.ElapsedMilliseconds < 750)
         {
             for (int x = 0; x < _visibleMap.Width; x++)
             {
                 for (int y = 0; y < _visibleMap.Height; y++)
                 {
                     var fgColor = _visibleMap.GetForeground(x, y);
-                    var fgNewColor = fgColor.GetDarker();
+                    var fgNewColor = fgColor.GetDark();
                     var bgColor = _visibleMap.GetBackground(x, y);
-                    var bgNewColor = bgColor.GetDarker();
+                    var bgNewColor = bgColor.GetDark();
                     _visibleMap.SetForeground(x, y, fgNewColor);
                     _visibleMap.SetBackground(x, y, bgNewColor);
                 }
-
             }
-        }
-        _visibleMap.Copy(_console.Surface, _xOffset, _yOffset);
-        _done = false;
+            _visibleMap.Copy(_console.Surface, _xOffset, _yOffset);
 
-        if (_stopWatch.ElapsedMilliseconds > 500)
+            _color = _color.GetDarker();
+            _ui.Console.Print(playerX + _offset.X, playerY + _offset.Y, _player.Glyph.ToString(), _color.GetDarkest());
+            _ui.Console.Print(playerX, playerY, " ", Color.White.GetDarkest());
+
+
+        }
+        else if (_stopWatch.ElapsedMilliseconds >= 750)
         {
+            var doorCloseSFX = AudioManager.DoorCloseSFX.CreateInstance();
+            doorCloseSFX.Volume = 0.2f;
+            doorCloseSFX.Play();
             IsRunning = false;
             //TODO Play door closing sound (kenny)
         }
@@ -86,28 +113,30 @@ public class MapTransitionAnimation : Animation
 
 public class GameScreenIntroAnimation : Animation
 {
+    private IntroTextScreen _diaglogRunner;
     private int _cursorX;
     private int _cursorY;
-    private string _introText;
-    private int index = 0;
+    private int _linesIndex;
+    private string _currentLine;
+    private int _currentLineIndex;
+
 
 
     public GameScreenIntroAnimation(Console console, GameUi ui) : base(console, ui)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        using (StreamReader reader = new StreamReader("Content/ScreenText/GameScreen_SSBalance.txt"))
+        _diaglogRunner = new IntroTextScreen("GameScreenIntro");
+        _diaglogRunner.IsActive = true;
+
+        while (_diaglogRunner.IsActive)
         {
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                stringBuilder.AppendLine(line);
-            }
+            _diaglogRunner.ContinueDialog();
         }
-        _introText = stringBuilder.ToString(); ;
         _cursorX = 5;
         _cursorY = 5;
 
-        _console.Cursor.Position = new Point(5, 5);
+        _linesIndex = 0;
+        _currentLine = "";
+        _currentLineIndex = 0;
     }
 
 
@@ -115,8 +144,19 @@ public class GameScreenIntroAnimation : Animation
     {
         if (keyboard.IsKeyPressed(Keys.Z))
         {
-            _console.Cursor.Print(_introText.Substring(index));
-            index = _introText.Length;
+            _cursorX = 5;
+            _cursorY = 5;
+            _console.Clear();
+            foreach (var line in _diaglogRunner.LinesToDraw)
+            {
+                _console.Print(_cursorX, _cursorY, line);
+                _cursorY += 2;
+
+            }
+            string continueText = "press A to get up";
+            var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
+            var y = GameSettings.GAME_HEIGHT / 2 - 1;
+            _console.Print(x, y, continueText);
             _stopWatch.Stop();
         }
 
@@ -134,40 +174,36 @@ public class GameScreenIntroAnimation : Animation
 
     public override void Play()
     {
-        if (index < _introText.Length)
+        if (_linesIndex < _diaglogRunner.LinesToDraw.Count)
         {
-            if (_stopWatch.ElapsedMilliseconds > 55)
-            {
-                if (_cursorX > GameSettings.GAME_WIDTH - 10 || _introText[index] == '\n')
-                {
-                    _cursorX = 5;
-                    _cursorY += 2;
-                    if (_introText[index] == '\n' && index < _introText.Length)
-                    {
-                        index++;
-                    }
-                }
-                if (index < _introText.Length)
-                {
-                    _console.Print(_cursorX, _cursorY, _introText[index].ToString());
-                }
+            _currentLine = _diaglogRunner.LinesToDraw[_linesIndex];
 
-                _cursorX++;
-                index++;
-                _stopWatch.Restart();
-                if (index >= _introText.Length)
+            if (_currentLineIndex < _currentLine.Length)
+            {
+                if (_stopWatch.ElapsedMilliseconds > 55)
                 {
-                    _stopWatch.Stop();
+                    _console.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString());
+
+                    _cursorX++;
+                    _currentLineIndex++;
+                    _stopWatch.Restart();
                 }
             }
-
+            else
+            {
+                _cursorX = 5;
+                _cursorY += 2;
+                _linesIndex++;
+                _currentLineIndex = 0;
+            }
         }
-        else if (!_stopWatch.IsRunning)
+        else
         {
             string continueText = "press A to get up";
             var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
             var y = GameSettings.GAME_HEIGHT / 2 - 1;
             _console.Print(x, y, continueText);
+            _stopWatch.Stop();
         }
     }
 }

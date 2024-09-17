@@ -13,12 +13,26 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        Map = new EngineObservationRoom();
-        Player.Position = (8, 9);
+        Map = new YourRoom();
+        Player.Position = (1, 2);
     }
 
     public Player Player { get; set; }
     public Map Map { get; set; }
+
+    public void ChangeMap(Map newMap)
+    {
+        var oldMap = Map;
+        if (oldMap != null)
+        {
+            oldMap.OnExit();
+        }
+        Map = newMap;
+        if (newMap != null)
+        {
+            newMap.OnEnter();
+        }
+    }
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
@@ -115,16 +129,6 @@ public class GameEngine
             {
                 var moveByAction = new MoveByAction(_ui, this, Map, (0, 1));
                 Player.NextAction = moveByAction;
-            }
-
-
-            if (keyboard.IsKeyPressed(Keys.J))
-            {
-                MediaPlayer.Play(AudioManager.SpaceEngine);
-            }
-            if (keyboard.IsKeyPressed(Keys.K))
-            {
-                MediaPlayer.Stop();
             }
         }
 

@@ -9,14 +9,15 @@ public static class AudioManager
     public static Song? MenuMusic { get; set; }
     public static Song? CombatInteractionMusic { get; set; }
     public static Song? LeavingHome { get; set; }
-    public static Song? SpaceEngine { get; set; }
 
     public static SoundEffect? HitSFX { get; set; }
     public static SoundEffect? HealSFX { get; set; }
     public static SoundEffect? MalfunctionSFX { get; set; }
 
-    public static SoundEffect? DoorOpen { get; set; }
-    public static SoundEffect? DoorClose { get; set; }
+    public static SoundEffect? DoorOpenSFX { get; set; }
+    public static SoundEffect? DoorCloseSFX { get; set; }
+
+    public static SoundEffect? SpaceEngineSFX { get; set; }
 
     private static ContentManager? contentManager;
 
@@ -39,16 +40,15 @@ public static class AudioManager
             MenuMusic = contentManager?.Load<Song>("Xnb/menu");
             CombatInteractionMusic = contentManager?.Load<Song>("Xnb/combatinteraction");
             LeavingHome = contentManager?.Load<Song>("Xnb/Leaving Home");
-            SpaceEngine = contentManager?.Load<Song>("Xnb/space_engine");
 
             HitSFX = contentManager?.Load<SoundEffect>("Xnb/hit");
             HealSFX = contentManager?.Load<SoundEffect>("Xnb/heal");
             MalfunctionSFX = contentManager?.Load<SoundEffect>("Xnb/malfunction");
 
-            DoorOpen = contentManager?.Load<SoundEffect>("Xnb/doorOpen");
-            DoorClose = contentManager?.Load<SoundEffect>("Xnb/doorClose");
+            DoorOpenSFX = contentManager?.Load<SoundEffect>("Xnb/doorOpen");
+            DoorCloseSFX = contentManager?.Load<SoundEffect>("Xnb/doorClose");
 
-
+            SpaceEngineSFX = contentManager?.Load<SoundEffect>("Xnb/space_engine");
 
         }
         catch (Exception ex)

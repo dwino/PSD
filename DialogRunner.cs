@@ -1,28 +1,16 @@
-using System;
-using System.IO;
-using System.Linq;
-using Balance.Ui;
+
 using Yarn;
 using Yarn.Compiler;
 
 namespace Balance;
 
-public class DialogRunner
+public abstract class DialogueRunner
 {
-    private int _x;
-    private int _y;
-    private int _minDistToPlayer;
-
-    public DialogRunner(string name, Point position, string startNode, int minDistToPlayer = 1)
+    protected DialogueRunner(string name, string startNode = "Start")
     {
-        _x = 1;
-        _y = 1;
-        _minDistToPlayer = minDistToPlayer;
         Name = name;
         IsActive = false;
         OptionRequired = false;
-        Position = position;
-
         string[] sourceFiles = { "Content/Yarn/" + name + ".yarn" };
         var compilationJob = CompilationJob.CreateFromFiles(sourceFiles);
         CompilationResult = Compiler.Compile(compilationJob);
@@ -50,7 +38,6 @@ public class DialogRunner
     public string Name { get; set; }
     public bool IsActive { get; set; }
     public bool OptionRequired { get; set; }
-    public Point Position { get; set; }
     public CompilationResult CompilationResult { get; set; }
     public Yarn.Program Program { get; set; }
     public Dialogue Dialogue { get; set; }
@@ -58,13 +45,7 @@ public class DialogRunner
     public List<String> LinesToDraw { get; set; }
     public List<String> OptionsToDraw { get; set; }
 
-    public bool IsAvailable(GameEngine game)
-    {
 
-        var distanceToPlayer = Helper.Distance(game.Player.Position, this.Position);
-
-        return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
-    }
 
     public string TextForLine(string lineID)
     {
@@ -120,7 +101,46 @@ public class DialogRunner
         }
     }
 
-    public void Draw(Console console)
+    public abstract void Draw(Console console);
+}
+
+public class IntroTextScreen : DialogueRunner
+{
+    public IntroTextScreen(string name) : base(name)
+    {
+
+    }
+
+    public override void Draw(Console console)
+    {
+    }
+}
+
+public class MapInteraction : DialogueRunner
+{
+    private int _x;
+    private int _y;
+    private int _minDistToPlayer;
+
+    public MapInteraction(string name, Point position, int minDistToPlayer = 1) : base(name)
+    {
+        _x = 1;
+        _y = 1;
+        _minDistToPlayer = minDistToPlayer;
+
+        Position = position;
+    }
+    public Point Position { get; set; }
+
+    public bool IsAvailable(GameEngine game)
+    {
+
+        var distanceToPlayer = Helper.Distance(game.Player.Position, this.Position);
+
+        return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+    }
+
+    public override void Draw(Console console)
     {
         int i = 1;
         foreach (var line in LinesToDraw)
@@ -148,7 +168,5 @@ public class DialogRunner
         }
 
     }
-
-
 }
 

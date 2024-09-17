@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Text;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Readers;
 using SadConsole.Renderers;
@@ -47,16 +49,16 @@ public abstract class Map
                                     {(6,0), ("FacilitiesCorridor", (1,5))},
                                 }},
                                 {"Cryo1", new Dictionary<Point, (string, Point)>(){
-                                    {(10,1), ("SecurityZone1", (1,1))},
+                                    {(10,1), ("SecurityZone1", (3,1))},
                                 }},
                                 {"Cryo2", new Dictionary<Point, (string, Point)>(){
-                                    {(0,1), ("SecurityZone2", (7,1))},
+                                    {(0,1), ("SecurityZone2", (5,1))},
                                 }},
                                 {"Cryo3", new Dictionary<Point, (string, Point)>(){
-                                    {(9,0), ("SecurityZone3", (7,6))},
+                                    {(9,0), ("SecurityZone3", (7,4))},
                                 }},
                                 {"EngineObservationRoom", new Dictionary<Point, (string, Point)>(){
-                                    {(10,9), ("Security", (1,9))},
+                                    {(10,9), ("Security", (3,9))},
                                     {(6,9), ("EngineRoom", (3,9))},
                                 }},
                                 {"EngineRoom", new Dictionary<Point, (string, Point)>(){
@@ -113,12 +115,12 @@ public abstract class Map
                                     {(6,5), ("Room6", (1,3))},
                                 }},
                                 {"Security", new Dictionary<Point, (string, Point)>(){
-                                    {(0,9), ("EngineObservationRoom", (9,9))},
+                                    {(2,9), ("EngineObservationRoom", (9,9))},
                                     {(9,9), ("MainCorridor", (1,9))},
                                 }},
                                 {"SecurityZone1", new Dictionary<Point, (string, Point)>(){
-                                    {(0,1), ("Cryo1", (9,1))},
-                                    {(8,1), ("SecurityZoneCenter", (1,1))},
+                                    {(2,1), ("Cryo1", (9,1))},
+                                    {(6,1), ("SecurityZoneCenter", (1,1))},
                                 }},
                                 {"SecurityZone2", new Dictionary<Point, (string, Point)>(){
                                     {(8,1), ("Cryo2", (1,1))},
@@ -128,7 +130,7 @@ public abstract class Map
                                 {"SecurityZone3", new Dictionary<Point, (string, Point)>(){
                                     {(7,0), ("SecurityZoneCenter", (1,2))},
                                     {(8,4), ("SecurityZone4", (1,4))},
-                                    {(7,7), ("Cryo3", (9,1))},
+                                    {(7,5), ("Cryo3", (9,1))},
                                 }},
                                 {"SecurityZone4", new Dictionary<Point, (string, Point)>(){
                                     {(0,4), ("SecurityZone3", (7,4))},
@@ -186,8 +188,8 @@ public abstract class Map
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
 
-        Interactions = new List<DialogRunner>();
-        AvailableInteractions = new List<DialogRunner>();
+        Interactions = new List<MapInteraction>();
+        AvailableInteractions = new List<MapInteraction>();
         CurrentInteractionIndex = -1;
 
     }
@@ -195,10 +197,10 @@ public abstract class Map
     public int Width => RPImg.Width;
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
-    public List<DialogRunner> Interactions { get; set; }
-    public List<DialogRunner> AvailableInteractions { get; set; }
+    public List<MapInteraction> Interactions { get; set; }
+    public List<MapInteraction> AvailableInteractions { get; set; }
     public int CurrentInteractionIndex { get; set; }
-    public DialogRunner CurrentInteraction
+    public MapInteraction CurrentInteraction
     {
         get
         {
@@ -224,6 +226,9 @@ public abstract class Map
         }
     }
     public abstract void LoadSpecificInteractionMap(int x, int y);
+
+    public virtual void OnEnter() { }
+    public virtual void OnExit() { }
     public virtual void Draw(Console console)
     {
         VisibleMap.Copy(console.Surface, _xOffset, _yOffset);
@@ -439,10 +444,7 @@ public class EngineObservationRoom : Map
 {
     public EngineObservationRoom() : base("EngineObservationRoom")
     {
-        MediaPlayer.Stop();
-        MediaPlayer.Play(AudioManager.LeavingHome);
-        MediaPlayer.IsRepeating = true;
-        Interactions.Add(new DialogRunner("EngineRoomComputer", (8, 7), "Start"));
+        Interactions.Add(new MapInteraction("EngineRoomComputer", (8, 7)));
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -451,15 +453,36 @@ public class EngineObservationRoom : Map
 }
 public class EngineRoom : Map
 {
+    private SoundEffectInstance _engineSFX;
+
     public EngineRoom() : base("EngineRoom")
     {
-        MediaPlayer.Stop();
-        MediaPlayer.Play(AudioManager.SpaceEngine);
-        MediaPlayer.IsRepeating = true;
+        _engineSFX = AudioManager.SpaceEngineSFX.CreateInstance();
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
     {
+    }
+    public override void OnEnter()
+    {
+        base.OnEnter();
+        MediaPlayer.Pause();
+        _engineSFX.Play();
+        _engineSFX.IsLooped = true;
+    }
+    public override void OnExit()
+    {
+        base.OnExit();
+        MediaPlayer.Resume();
+        _engineSFX.Stop();
+    }
+
+    public override void Draw(Console console)
+    {
+        base.Draw(console);
+
+
     }
 }
 public class FacilitiesCorridor : Map
@@ -687,7 +710,7 @@ public class SleepingPodMap : Map
 {
     public SleepingPodMap() : base("sleepingPod")
     {
-        var bedInteraction = new DialogRunner("Anouk", (1, 2), "Start");//Helper.LoadInteraction(this, "Anouk", (1, 2));
+        var bedInteraction = new MapInteraction("Anouk", (1, 2));//Helper.LoadInteraction(this, "Anouk", (1, 2));
         Interactions.Add(bedInteraction);
     }
 

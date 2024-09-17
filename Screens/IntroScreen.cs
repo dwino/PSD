@@ -44,19 +44,20 @@ public class IntroScreen
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
-        if (keyboard.IsKeyPressed(Keys.Z))
-        {
-            _console.Cursor.Print(_introText.Substring(index));
-            index = _introText.Length;
-            _stopWatch.Stop();
+        // if (keyboard.IsKeyPressed(Keys.Z))
+        // {
+        //     _console.Cursor.Print(_introText.Substring(index));
+        //     index = _introText.Length;
+        //     _stopWatch.Stop();
 
-            MediaPlayer.Stop();
-            MediaPlayer.Play(AudioManager.MenuMusic);
-            MediaPlayer.IsRepeating = true;
-            _gameUi.Console.Clear();
+        //     MediaPlayer.Stop();
+        //     MediaPlayer.Play(AudioManager.MenuMusic);
+        //     MediaPlayer.IsRepeating = true;
+        //     _gameUi.Console.Clear();
 
-        }
-        else if (keyboard.IsKeyPressed(Keys.A))
+        // }
+        //else 
+        if (keyboard.IsKeyPressed(Keys.A))
         {
             MediaPlayer.Stop();
             MediaPlayer.Play(AudioManager.MenuMusic);

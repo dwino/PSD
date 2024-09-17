@@ -43,12 +43,14 @@ public class MoveByAction : Action
 
             if (interMapHandle.ContainsKey(newPosition))
             {
+                var oldPosition = _game.Player.Position;
                 var interMapTuple = interMapHandle[newPosition];
-                _game.Map = _map.GetMap(interMapTuple.Item1);
+                var newMap = _map.GetMap(interMapTuple.Item1);
+                _game.ChangeMap(newMap);
                 _game.Player.Position = interMapTuple.Item2;
 
                 _ui.Console.Clear();
-                _ui.GameScreen.CurrentAnimation = new MapTransitionAnimation(_map.VisibleMap, _ui.Console, _ui);
+                _ui.GameScreen.CurrentAnimation = new MapTransitionAnimation(_map.VisibleMap, _game.Player, oldPosition, _offset, _ui.Console, _ui);
                 _ui.GameScreen.CurrentAnimation.IsRunning = true;
             }
 
