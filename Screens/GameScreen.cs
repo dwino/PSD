@@ -4,13 +4,13 @@ using SadConsole.Input;
 
 namespace Balance.Screens;
 
-internal class GameScreen
+public class GameScreen
 {
     private Console _console;
     private GameEngine _game;
     private GameUi _ui;
     private Animation _introAnimation;
-    private Animation? CurrentAnimation;
+    public Animation? CurrentAnimation { get; set; }
     public GameScreen(GameEngine game, GameUi ui, Console console)
     {
         _game = game;

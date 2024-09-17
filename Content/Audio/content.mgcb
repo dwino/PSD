@@ -19,6 +19,18 @@
 /processorParam:Quality=Best
 /build:combatinteraction.mp3
 
+#begin doorClose.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:doorClose.ogg
+
+#begin doorOpen.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:doorOpen.ogg
+
 #begin heal.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

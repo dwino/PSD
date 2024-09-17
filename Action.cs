@@ -48,6 +48,8 @@ public class MoveByAction : Action
                 _game.Player.Position = interMapTuple.Item2;
 
                 _ui.Console.Clear();
+                _ui.GameScreen.CurrentAnimation = new MapTransitionAnimation(_map.VisibleMap, _ui.Console, _ui);
+                _ui.GameScreen.CurrentAnimation.IsRunning = true;
             }
 
             _map.AvailableInteractions.Clear();
@@ -69,3 +71,4 @@ public class MoveByAction : Action
         }
     }
 }
+

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Text;
 using Balance.Screens;
 using Balance.Ui;
@@ -28,6 +29,61 @@ public abstract class Animation
     public abstract void ProcessKeyboard(Keyboard keyboard);
     public abstract void Play();
 }
+
+public class MapTransitionAnimation : Animation
+{
+    private CellSurface _visibleMap;
+    private int _xOffset;
+    private int _yOffset;
+    private bool _done;
+    public MapTransitionAnimation(CellSurface visibleMap, Console console, GameUi ui) : base(console, ui)
+    {
+        _visibleMap = new CellSurface(visibleMap.Width, visibleMap.Height);
+        visibleMap.Copy(_visibleMap);
+
+        _xOffset = (GameSettings.GAME_WIDTH / 2) - (_visibleMap.Width / 2);
+        _yOffset = (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
+
+        _done = false;
+        AudioManager.DoorOpen.CreateInstance().Play();
+        //TODO Play door opening sound (kenny)
+    }
+
+    public override void Play()
+    {
+        if (!_done)
+        {
+            for (int x = 0; x < _visibleMap.Width; x++)
+            {
+                for (int y = 0; y < _visibleMap.Height; y++)
+                {
+                    var fgColor = _visibleMap.GetForeground(x, y);
+                    var fgNewColor = fgColor.GetDarker();
+                    var bgColor = _visibleMap.GetBackground(x, y);
+                    var bgNewColor = bgColor.GetDarker();
+                    _visibleMap.SetForeground(x, y, fgNewColor);
+                    _visibleMap.SetBackground(x, y, bgNewColor);
+                }
+
+            }
+        }
+        _visibleMap.Copy(_console.Surface, _xOffset, _yOffset);
+        _done = false;
+
+        if (_stopWatch.ElapsedMilliseconds > 500)
+        {
+            IsRunning = false;
+            //TODO Play door closing sound (kenny)
+        }
+    }
+
+
+
+    public override void ProcessKeyboard(Keyboard keyboard)
+    {
+    }
+}
+
 public class GameScreenIntroAnimation : Animation
 {
     private int _cursorX;

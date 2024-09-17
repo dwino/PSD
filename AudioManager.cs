@@ -15,6 +15,9 @@ public static class AudioManager
     public static SoundEffect? HealSFX { get; set; }
     public static SoundEffect? MalfunctionSFX { get; set; }
 
+    public static SoundEffect? DoorOpen { get; set; }
+    public static SoundEffect? DoorClose { get; set; }
+
     private static ContentManager? contentManager;
 
     // Initialize the ContentManager using the correct MonoGame services
@@ -41,6 +44,9 @@ public static class AudioManager
             HitSFX = contentManager?.Load<SoundEffect>("Xnb/hit");
             HealSFX = contentManager?.Load<SoundEffect>("Xnb/heal");
             MalfunctionSFX = contentManager?.Load<SoundEffect>("Xnb/malfunction");
+
+            DoorOpen = contentManager?.Load<SoundEffect>("Xnb/doorOpen");
+            DoorClose = contentManager?.Load<SoundEffect>("Xnb/doorClose");
 
 
 

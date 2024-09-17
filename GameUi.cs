@@ -8,7 +8,7 @@ public class GameUi : ScreenObject
 {
     private IntroScreen _introScreen;
     private MainMenuScreen _menuScreen;
-    private GameScreen _gameScreen;
+    public GameScreen GameScreen { get; set; }
 
     private GameEngine _game;
     public ScreensEnum ActiveScreen { get; set; }
@@ -27,7 +27,7 @@ public class GameUi : ScreenObject
 
         _game = new GameEngine(this);
 
-        _gameScreen = new GameScreen(_game, this, Console);
+        GameScreen = new GameScreen(_game, this, Console);
 
         ActiveScreen = ScreensEnum.IntroScreen;
         MediaPlayer.Play(AudioManager.IntroMusic);
@@ -43,7 +43,7 @@ public class GameUi : ScreenObject
     {
         if (ActiveScreen == ScreensEnum.GameScreen)
         {
-            _gameScreen.ProcessKeyboard(keyboard);
+            GameScreen.ProcessKeyboard(keyboard);
         }
         else if (ActiveScreen == ScreensEnum.GameMenuScreen)
         {
@@ -68,7 +68,7 @@ public class GameUi : ScreenObject
     {
         if (ActiveScreen == ScreensEnum.GameScreen)
         {
-            _gameScreen.DrawGameScreen();
+            GameScreen.DrawGameScreen();
         }
         else if (ActiveScreen == ScreensEnum.GameMenuScreen)
         {

@@ -167,7 +167,7 @@ public abstract class Map
 
     protected int _xOffset;
     protected int _yOffset;
-    protected CellSurface _visibleMap;
+    public CellSurface VisibleMap { get; set; }
     protected CellSurface _walkableMap;
     protected CellSurface _interactionMap;
 
@@ -177,7 +177,7 @@ public abstract class Map
         var path = "Content/Maps/" + xpMapString + ".xp";
         RPImg = SadConsole.Readers.REXPaintImage.Load(new FileStream(path, FileMode.Open));
 
-        _visibleMap = (CellSurface?)RPImg.ToCellSurface()[0]!;
+        VisibleMap = (CellSurface?)RPImg.ToCellSurface()[0]!;
         _walkableMap = (CellSurface?)RPImg.ToCellSurface()[1]!;
         _interactionMap = (CellSurface?)RPImg.ToCellSurface()[2]!;
 
@@ -226,7 +226,7 @@ public abstract class Map
     public abstract void LoadSpecificInteractionMap(int x, int y);
     public virtual void Draw(Console console)
     {
-        _visibleMap.Copy(console.Surface, _xOffset, _yOffset);
+        VisibleMap.Copy(console.Surface, _xOffset, _yOffset);
 
         for (int i = 0; i < AvailableInteractions.Count; i++)
         {
@@ -381,15 +381,15 @@ public class Cryo3 : Map
             var rnd = Helper.Rnd.Next(3);
             if (rnd == 0)
             {
-                _visibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 45);
+                VisibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 45);
             }
             if (rnd == 1)
             {
-                _visibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 61);
+                VisibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 61);
             }
             if (rnd == 2)
             {
-                _visibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 240);
+                VisibleMap.SetGlyph(AnimationPosition_b.X, AnimationPosition_b.Y, 240);
             }
             _stopwatch2.Restart();
         }
