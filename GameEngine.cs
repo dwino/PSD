@@ -105,7 +105,7 @@ public class GameEngine
                 if (currentInteraction != null)
                 {
                     currentInteraction.IsActive = true;
-                    Map.CurrentInteraction.ContinueDialog();
+                    Map.CurrentInteraction!.ContinueDialog();
                 }
             }
 

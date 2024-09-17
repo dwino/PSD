@@ -24,7 +24,7 @@ public abstract class DialogueRunner
             Dialogue.SetNode(startNode);
         }
 
-        Dialogue.LineHandler = LineHandler;
+        Dialogue!.LineHandler = LineHandler;
         Dialogue.CommandHandler = CommandHandler;
         Dialogue.OptionsHandler = OptionsHandler;
         Dialogue.NodeCompleteHandler = NodeCompleteHandler;
@@ -135,7 +135,7 @@ public class MapInteraction : DialogueRunner
     public bool IsAvailable(GameEngine game)
     {
 
-        var distanceToPlayer = Helper.Distance(game.Player.Position, this.Position);
+        var distanceToPlayer = Distance.Manhattan.Calculate(game.Player.Position, this.Position);
 
         return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
     }
