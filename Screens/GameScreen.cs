@@ -9,7 +9,6 @@ public class GameScreen
     private Console _console;
     private GameEngine _game;
     private GameUi _ui;
-    //private Animation _introAnimation;
     public Animation? CurrentAnimation { get; set; }
     public GameScreen(GameEngine game, GameUi ui, Console console)
     {
@@ -22,11 +21,6 @@ public class GameScreen
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
-        // if (_introAnimation.IsRunning)
-        // {
-        //     _introAnimation.ProcessKeyboard(keyboard);
-        // }
-        // else 
         if (CurrentAnimation != null && CurrentAnimation.IsRunning)
         {
             CurrentAnimation.ProcessKeyboard(keyboard);
@@ -38,12 +32,7 @@ public class GameScreen
     }
     public void DrawGameScreen()
     {
-        // if (_introAnimation.IsRunning)
-        // {
-        //     _introAnimation.Play();
 
-        // }
-        // else 
         if (CurrentAnimation != null && CurrentAnimation.IsRunning)
         {
             CurrentAnimation.Play();

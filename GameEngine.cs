@@ -145,16 +145,28 @@ public class GameEngine
     {
         _ui.Console.Clear();
 
-        Map.Draw(_ui.Console);
-
-        int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
-        int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
-
-        _ui.Console.Print(x, y, Player.Glyph.ToString(), Color.White);
-
         if (Map.CurrentInteraction != null && Map.CurrentInteractionIndex != -1 && Map.CurrentInteraction.IsActive)
         {
+            if (Map.CurrentInteraction.IsMapDrawn)
+            {
+                Map.Draw(_ui.Console);
+
+                int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
+                int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
+
+                _ui.Console.Print(x, y, Player.Glyph.ToString(), Color.White);
+            }
+
             Map.CurrentInteraction.Draw(_ui.Console);
+        }
+        else
+        {
+            Map.Draw(_ui.Console);
+
+            int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
+            int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
+
+            _ui.Console.Print(x, y, Player.Glyph.ToString(), Color.White);
         }
     }
 }

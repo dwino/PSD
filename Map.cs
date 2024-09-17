@@ -188,8 +188,8 @@ public abstract class Map
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
 
-        Interactions = new List<MapInteraction>();
-        AvailableInteractions = new List<MapInteraction>();
+        Interactions = new List<DialogueRunner>();
+        AvailableInteractions = new List<DialogueRunner>();
         CurrentInteractionIndex = -1;
 
     }
@@ -197,10 +197,10 @@ public abstract class Map
     public int Width => RPImg.Width;
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
-    public List<MapInteraction> Interactions { get; set; }
-    public List<MapInteraction> AvailableInteractions { get; set; }
+    public List<DialogueRunner> Interactions { get; set; }
+    public List<DialogueRunner> AvailableInteractions { get; set; }
     public int CurrentInteractionIndex { get; set; }
-    public MapInteraction CurrentInteraction
+    public DialogueRunner CurrentInteraction
     {
         get
         {
@@ -444,7 +444,7 @@ public class EngineObservationRoom : Map
 {
     public EngineObservationRoom() : base("EngineObservationRoom")
     {
-        Interactions.Add(new MapInteraction("EngineRoomComputer", (8, 7)));
+        Interactions.Add(new FullScreenInteraction("EngineRoomComputer", (8, 7)));
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -710,7 +710,7 @@ public class SleepingPodMap : Map
 {
     public SleepingPodMap() : base("sleepingPod")
     {
-        var bedInteraction = new MapInteraction("Anouk", (1, 2));//Helper.LoadInteraction(this, "Anouk", (1, 2));
+        var bedInteraction = new MapInteraction("Anouk", (1, 2));
         Interactions.Add(bedInteraction);
     }
 

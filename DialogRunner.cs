@@ -10,6 +10,7 @@ public abstract class DialogueRunner
     {
         Name = name;
         IsActive = false;
+        IsMapDrawn = true;
         OptionRequired = false;
         string[] sourceFiles = { "Content/Yarn/" + name + ".yarn" };
         var compilationJob = CompilationJob.CreateFromFiles(sourceFiles);
@@ -37,6 +38,7 @@ public abstract class DialogueRunner
     }
     public string Name { get; set; }
     public bool IsActive { get; set; }
+    public bool IsMapDrawn { get; set; }
     public bool OptionRequired { get; set; }
     public CompilationResult CompilationResult { get; set; }
     public Yarn.Program Program { get; set; }
@@ -102,17 +104,79 @@ public abstract class DialogueRunner
     }
 
     public abstract void Draw(Console console);
+    public abstract bool IsAvailable(GameEngine game);
+
+
 }
 
 public class IntroTextScreen : DialogueRunner
 {
     public IntroTextScreen(string name) : base(name)
     {
-
     }
 
     public override void Draw(Console console)
     {
+    }
+
+    public override bool IsAvailable(GameEngine game)
+    {
+        return true;
+    }
+
+}
+
+public class FullScreenInteraction : DialogueRunner
+{
+    private int _x;
+    private int _y;
+    private int _minDistToPlayer;
+
+    public FullScreenInteraction(string name, Point position, int minDistToPlayer = 1) : base(name)
+    {
+        IsMapDrawn = false;
+        _x = 1;
+        _y = 1;
+        _minDistToPlayer = minDistToPlayer;
+
+        Position = position;
+    }
+    public Point Position { get; set; }
+
+    public override bool IsAvailable(GameEngine game)
+    {
+        var distanceToPlayer = Distance.Manhattan.Calculate(game.Player.Position, this.Position);
+
+        return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+    }
+
+    public override void Draw(Console console)
+    {
+        int i = 1;
+        foreach (var line in LinesToDraw)
+        {
+            console.Print(_x, _y + i, line);
+            i++;
+        }
+        int j = 0;
+        var color = Color.White;
+        foreach (var option in OptionsToDraw)
+        {
+            if (j == SelectedOptionIndex)
+            {
+                color = new Color(0, 217, 0);
+            }
+            else
+            {
+                color = Color.White;
+            }
+
+            console.Print(_x + 5, _y + i, option, color);
+
+            i++;
+            j++;
+        }
+
     }
 }
 
@@ -132,7 +196,7 @@ public class MapInteraction : DialogueRunner
     }
     public Point Position { get; set; }
 
-    public bool IsAvailable(GameEngine game)
+    public override bool IsAvailable(GameEngine game)
     {
 
         var distanceToPlayer = Distance.Manhattan.Calculate(game.Player.Position, this.Position);
