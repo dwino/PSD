@@ -10,8 +10,8 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        Map = new YourRoom();
-        Player.Position = (1, 2);
+        Map = new EngineObservationRoom();
+        Player.Position = (9, 9);
     }
 
     public Player Player { get; set; }
@@ -150,7 +150,7 @@ public class GameEngine
                 int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
                 int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
 
-                _ui.Console.Print(x, y, Player.Glyph.ToString(), Color.White);
+                _ui.Console.Print(x, y, Player.Glyph.ToString(), Player.Color);
             }
 
             Map.CurrentInteraction.Draw(_ui.Console);
@@ -162,7 +162,7 @@ public class GameEngine
             int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
             int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
 
-            _ui.Console.Print(x, y, Player.Glyph.ToString(), Color.White);
+            _ui.Console.Print(x, y, Player.Glyph.ToString(), Player.Color);
         }
     }
 }

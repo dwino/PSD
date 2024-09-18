@@ -45,7 +45,7 @@ public class MapTransitionAnimation : Animation
         _player = player;
         _oldPosition = oldPosition;
         _offset = offset;
-        _color = Color.White;
+        _color = _player.Color;
 
 
         var doorOpenSFX = AudioManager.DoorOpenSFX!.CreateInstance();

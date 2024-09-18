@@ -199,6 +199,12 @@ public class EngineObservationRoom : Map
     public EngineObservationRoom() : base("EngineObservationRoom")
     {
         Interactions.Add(new FullScreenInteraction("EngineRoomComputer", (8, 7)));
+
+        var victorInteraction = new MapInteraction("Victor", (8, 8));
+        var victor = new Entity("Victor", Color.Blue, 'V');
+        victor.Position = victorInteraction.Position;
+        victor.Interaction = victorInteraction;
+        Entities.Add(victor);
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)

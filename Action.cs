@@ -60,6 +60,14 @@ public class MoveByAction : Action
                     _map.AvailableInteractions.Add(interaction);
                 }
             }
+            foreach (var entity in _map.Entities)
+            {
+                if (entity.Interaction != null && entity.Interaction.IsAvailable(_game))
+                {
+                    _map.AvailableInteractions.Add(entity.Interaction);
+                }
+
+            }
             if (_map.AvailableInteractions.Count > 0)
             {
                 _map.CurrentInteractionIndex = 0;

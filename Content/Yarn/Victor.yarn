@@ -1,0 +1,77 @@
+title: Start
+---
+Victor: Ah, visiting engine observation are we?
+Victor: What can I do for you?
+    -> You: Would it be ok if I go into the engine room?
+        <<jump GoIntoEngineRoom>>
+    -> You: Nothing, I just wanted to come and say hi.
+         <<jump JustSayingHi>>
+    -> You: Nothing, I need to go.
+    Victor: Ok, well, bye then, pop in anytime!
+===
+
+title: GoIntoEngineRoom
+---
+Victor: I Can't let you do that!
+Victor: Why would you want to go in there anyway?
+    -> You: I really like the sound of the engines running,
+        You: I find it really soothing. Calmes my nerves...
+        Victor: Hmmm,... 
+        Victor: Yeah, I like the sound too, it's really a thing of beauty.
+        Victor: But normally I only go in there if something is 
+        wrong with the engine.
+        Victor: ...
+        Victor: Well ok then, but only for a few minutes.
+        Victor: And I'm watching you through the glass.
+            -> You: Thanks Victor! I won't touch anything I swear.
+            -> You: No that's ok, if you think it's a bad idea
+                You: I don't want you to risk anything.
+    -> You: You're right, it's a stupid idea. (Leave)
+        Victor: I didn't say that, just that it's unsafe.
+        Victor: I only go in there if something is wrong with the engine.
+        Victor: I do like to stay in there for a while though,
+        Victor: I like the sound in there, 
+        you can only hear the engine running...
+        Victor: I think it's quite beautifull
+    
+===
+
+title: JustSayingHi
+---
+Victor: Oh,...
+Victor: Well euh,... Hi?
+Victor: Just kidding, I aprreciate the company!
+Victor: How are you doing?
+    -> You: I'm fine, thanks. (leave)
+    -> You: So tired...
+        Victor: Aren't we all.
+        Victor: Then again, most of us can look forward to a nice long quality sleep.
+        Victor: I can't imagine being awake for the entire journey
+            -> You: That's the only reason I was able to join the ship, 
+                <<jump OnlyWayToJoin>>
+            -> You: I'm starting to question if I can imagine it myself...
+            Victor: Hey, hang in there, we'll get to paradise... eventually.
+                -> You: I hope I won't go Insane by then.
+                    Victor: You'll be fine! (nevertheless Victor looks a little worried.)
+                    -> You: You're right I'll be fine. (Leave)
+                    -> Leave...
+    -> You: Would it be ok if I go into the engine room?
+        <<jump GoIntoEngineRoom>>
+
+    
+===
+
+title: OnlyWayToJoin
+---
+You: I don't have any scientific skills like you and the rest of the crew.
+You: And if I worked my whole life and saved up everything I earned,
+You: I woulnd't even get close to paying for a sleeper-ticket.
+    Victor: Yeah me neither,
+    Victor: Otherwise I would be sleeping with the Icecubes for the entire journey!
+    Victor: Still, at least I'll be able to sleep for most of the journey.
+    Victor: Tell you what, you can visit me any time you want,
+    Victor:  we'll keep eachoter sane!
+    Victor: You can even go into the engine room if you want,
+    Victor: I do it sometimes too, the sound is really calming.
+
+===

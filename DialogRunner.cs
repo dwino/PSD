@@ -6,9 +6,11 @@ namespace Balance;
 
 public abstract class DialogueRunner
 {
+    private string _startNode;
     protected DialogueRunner(string name, string startNode = "Start")
     {
         Name = name;
+        _startNode = startNode;
         IsActive = false;
         IsMapDrawn = true;
         OptionRequired = false;
@@ -90,6 +92,8 @@ public abstract class DialogueRunner
     public void DialogueCompleteHandler()
     {
         IsActive = false;
+        Reset();
+
     }
 
     public void ContinueDialog()
@@ -98,6 +102,29 @@ public abstract class DialogueRunner
         {
             Dialogue.Continue();
         }
+    }
+
+    public void Reset()
+    {
+        OptionRequired = false;
+        if (Program.Nodes.ContainsKey(_startNode))
+        {
+            var storage = new Yarn.MemoryVariableStore();
+            Dialogue = new Yarn.Dialogue(storage);
+
+            Dialogue.SetProgram(Program);
+            Dialogue.SetNode(_startNode);
+        }
+
+        Dialogue!.LineHandler = LineHandler;
+        Dialogue.CommandHandler = CommandHandler;
+        Dialogue.OptionsHandler = OptionsHandler;
+        Dialogue.NodeCompleteHandler = NodeCompleteHandler;
+        Dialogue.DialogueCompleteHandler = DialogueCompleteHandler;
+
+        SelectedOptionIndex = -1;
+        LinesToDraw = new List<string>();
+        OptionsToDraw = new List<string>();
     }
 
     public abstract void Draw(Console console);

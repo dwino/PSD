@@ -120,7 +120,7 @@ public abstract class Map
                                 }},
                                 {"SecurityZone1", new Dictionary<Point, (string, Point)>(){
                                     {(2,1), ("Cryo1", (9,1))},
-                                    {(6,1), ("SecurityZoneCenter", (1,1))},
+                                    {(8,1), ("SecurityZoneCenter", (1,1))},
                                 }},
                                 {"SecurityZone2", new Dictionary<Point, (string, Point)>(){
                                     {(8,1), ("Cryo2", (1,1))},
@@ -188,6 +188,7 @@ public abstract class Map
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
 
+        Entities = new List<Entity>();
         Interactions = new List<DialogueRunner>();
         AvailableInteractions = new List<DialogueRunner>();
         CurrentInteractionIndex = -1;
@@ -197,6 +198,7 @@ public abstract class Map
     public int Width => RPImg.Width;
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
+    public List<Entity> Entities { get; set; }
     public List<DialogueRunner> Interactions { get; set; }
     public List<DialogueRunner> AvailableInteractions { get; set; }
     public int CurrentInteractionIndex { get; set; }
@@ -233,9 +235,16 @@ public abstract class Map
     {
         VisibleMap.Copy(console.Surface, _xOffset, _yOffset);
 
+        foreach (var entity in Entities)
+        {
+            int x = entity.Position.X + (GameSettings.GAME_WIDTH / 2) - (Width / 2);
+            int y = entity.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Height / 2);
+            console.Print(x, y, entity.Glyph.ToString(), entity.Color);
+        }
+
         for (int i = 0; i < AvailableInteractions.Count; i++)
         {
-            var availableInteraction = Interactions[i];
+            var availableInteraction = AvailableInteractions[i];
 
             string interactionOption = i + " - " + availableInteraction.Name;
             Color color = Color.White;
