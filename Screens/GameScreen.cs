@@ -1,12 +1,10 @@
 using Balance.Ui;
-using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
 
 namespace Balance.Screens;
 
 public class GameScreen
 {
-    private Console _console;
     private GameEngine _game;
     private GameUi _ui;
     public Animation? CurrentAnimation { get; set; }
@@ -14,7 +12,6 @@ public class GameScreen
     {
         _game = game;
         _ui = ui;
-        _console = console;
 
         CurrentAnimation = new GameScreenIntroAnimation(console, ui);
     }

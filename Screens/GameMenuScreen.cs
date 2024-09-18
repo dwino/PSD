@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Balance.Ui;
-using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
 
 namespace Balance.Screens;
@@ -52,14 +51,13 @@ public class MainMenuScreen
                 _activeSelection = 0;
             }
         }
-
     }
 
 
     public void Draw()
     {
         _console.Clear();
-        string menuScreenText = "It's Definitely about balance";
+        string menuScreenText = "Perfect Days in Space";
         var x = (GameSettings.GAME_WIDTH / 2) - (menuScreenText.Length / 2);
         var y = GameSettings.GAME_HEIGHT / 2 - 1;
         _console.Print(x, y, menuScreenText);

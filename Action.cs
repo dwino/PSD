@@ -1,6 +1,5 @@
 using Balance.Ui;
 
-
 namespace Balance;
 
 public abstract class Action
@@ -12,7 +11,6 @@ public abstract class Action
         _ui = ui;
         _game = game;
     }
-
 
     public abstract void Execute();
 }

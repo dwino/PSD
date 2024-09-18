@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text;
 using Balance.Ui;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
@@ -91,8 +90,6 @@ public class MapTransitionAnimation : Animation
             _color = _color.GetDarker();
             _ui.Console.Print(playerX + _offset.X, playerY + _offset.Y, _player.Glyph.ToString(), _color.GetDarkest());
             _ui.Console.Print(playerX, playerY, " ", Color.White.GetDarkest());
-
-
         }
         else if (_stopWatch.ElapsedMilliseconds >= 750)
         {
@@ -100,11 +97,8 @@ public class MapTransitionAnimation : Animation
             doorCloseSFX.Volume = 0.2f;
             doorCloseSFX.Play();
             IsRunning = false;
-            //TODO Play door closing sound (kenny)
         }
     }
-
-
 
     public override void ProcessKeyboard(Keyboard keyboard)
     {
@@ -119,8 +113,6 @@ public class GameScreenIntroAnimation : Animation
     private int _linesIndex;
     private string _currentLine;
     private int _currentLineIndex;
-
-
 
     public GameScreenIntroAnimation(Console console, GameUi ui) : base(console, ui)
     {
@@ -139,7 +131,6 @@ public class GameScreenIntroAnimation : Animation
         _currentLineIndex = 0;
     }
 
-
     public override void ProcessKeyboard(Keyboard keyboard)
     {
         if (keyboard.IsKeyPressed(Keys.Z))
@@ -151,7 +142,6 @@ public class GameScreenIntroAnimation : Animation
             {
                 _console.Print(_cursorX, _cursorY, line);
                 _cursorY += 2;
-
             }
             string continueText = "press A to get up";
             var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
@@ -167,7 +157,6 @@ public class GameScreenIntroAnimation : Animation
             MediaPlayer.IsRepeating = true;
             IsRunning = false;
             _console.Clear();
-
         }
     }
 

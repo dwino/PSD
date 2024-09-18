@@ -53,8 +53,6 @@ public class GameUi : ScreenObject
         {
             _introScreen.ProcessKeyboard(keyboard);
         }
-
-
         return base.ProcessKeyboard(keyboard);
     }
 
@@ -81,7 +79,4 @@ public class GameUi : ScreenObject
 
         base.Render(delta);
     }
-
-
-
 }

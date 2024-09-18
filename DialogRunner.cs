@@ -47,8 +47,6 @@ public abstract class DialogueRunner
     public List<String> LinesToDraw { get; set; }
     public List<String> OptionsToDraw { get; set; }
 
-
-
     public string TextForLine(string lineID)
     {
         return CompilationResult.StringTable[lineID].text;
@@ -61,7 +59,6 @@ public abstract class DialogueRunner
     public void LineHandler(Yarn.Line line)
     {
         LinesToDraw.Add(TextForLine(line.ID));
-
     }
 
     void OptionsHandler(Yarn.OptionSet options)
@@ -105,8 +102,6 @@ public abstract class DialogueRunner
 
     public abstract void Draw(Console console);
     public abstract bool IsAvailable(GameEngine game);
-
-
 }
 
 public class IntroTextScreen : DialogueRunner
@@ -198,7 +193,6 @@ public class MapInteraction : DialogueRunner
 
     public override bool IsAvailable(GameEngine game)
     {
-
         var distanceToPlayer = Distance.Manhattan.Calculate(game.Player.Position, this.Position);
 
         return Math.Floor(distanceToPlayer) <= _minDistToPlayer;

@@ -1,8 +1,5 @@
-using System;
 using Balance.Ui;
-using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
-using Yarn.Compiler;
 
 namespace Balance;
 
@@ -131,7 +128,6 @@ public class GameEngine
                 Player.NextAction = moveByAction;
             }
         }
-
     }
     public void Update()
     {
