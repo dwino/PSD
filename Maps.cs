@@ -198,9 +198,12 @@ public class EngineObservationRoom : Map
 {
     public EngineObservationRoom() : base("EngineObservationRoom")
     {
-        Interactions.Add(new FullScreenInteraction("EngineRoomComputer", (8, 7)));
+        Interactions.Add(new FullScreenInteraction("EngineRoomComputer", this, (8, 7)));
 
-        var victorInteraction = new MapInteraction("Victor", (8, 8));
+        Interactions.Add(new MapAutoInteraction("Door", this, (6, 9)));
+
+
+        var victorInteraction = new MapInteraction("Victor", this, (8, 8));
         var victor = new Entity("Victor", Color.Blue, 'V');
         victor.Position = victorInteraction.Position;
         victor.Interaction = victorInteraction;
@@ -459,6 +462,11 @@ public class YourRoom : Map
 {
     public YourRoom() : base("YourRoom")
     {
+        var anoukInteraction = new MapInteraction("Anouk", this, (2, 2));
+        var anouk = new Entity("Anouk", Color.Blue, 'A');
+        anouk.Position = anoukInteraction.Position;
+        anouk.Interaction = anoukInteraction;
+        Entities.Add(anouk);
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)

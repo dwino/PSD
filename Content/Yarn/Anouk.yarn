@@ -1,11 +1,15 @@
 title: Start
 ---
-Anouk: hallo Liefste, alles goed?
-    -> Ja Poepjes, met jou
-        <<jump KoekjesDiefOndervraagd>>
-    -> Heb jij de koekjes gestolen??
-        Anouk: Euhmm...
-        Anouk: Ik had honger Liefste!
+<<if $visited is true>>
+    <<jump Exit>>
+<<else>>
+    Anouk: hallo Liefste, alles goed?
+        -> Ja Poepjes, met jou
+            <<jump KoekjesDiefOndervraagd>>
+        -> Heb jij de koekjes gestolen??
+            Anouk: Euhmm...
+            Anouk: Ik had honger Liefste!
+<<endif>>
 ===
 
 title: KoekjesDiefOndervraagd
@@ -14,6 +18,15 @@ Anouk: Ja, alleen jammer dat alle koekjes op zijn.
     -> Heb jij de koekjes gestolen??
         Anouk: Euhmm...
         Anouk: Ik had honger Liefste!
+        <<set $visited to true>>
+
+    
+===
+
+title: Exit
+---
+Anouk: Ik heb u niets meer te zeggen!
+
     
 ===
 

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Readers;
 using SadConsole.Renderers;
+using Yarn;
 
 namespace Balance;
 
@@ -38,8 +39,6 @@ public abstract class Map
         {"Storage",() => new Storage()},
         {"Toilet",() => new Toilet()},
         {"YourRoom",() => new YourRoom()},
-
-
     };
 
     public static Dictionary<string, Dictionary<Point, (string, Point)>> InterMapDict
@@ -59,10 +58,10 @@ public abstract class Map
                                 }},
                                 {"EngineObservationRoom", new Dictionary<Point, (string, Point)>(){
                                     {(10,9), ("Security", (3,9))},
-                                    {(6,9), ("EngineRoom", (3,9))},
+                                    {(4,9), ("EngineRoom", (3,9))},
                                 }},
                                 {"EngineRoom", new Dictionary<Point, (string, Point)>(){
-                                    {(4,9), ("EngineObservationRoom", (7,9))},
+                                    {(4,9), ("EngineObservationRoom", (5,9))},
                                 }},
                                 {"FacilitiesCorridor", new Dictionary<Point, (string, Point)>(){
                                     {(1,6), ("Cafeteria", (6,1))},
@@ -158,6 +157,7 @@ public abstract class Map
                                     {(0,2), ("Storage", (3,5))},
                                 }},
                             };
+    public static Dictionary<string, MemoryVariableStore> MemoryPalace = new Dictionary<string, MemoryVariableStore>();
     public Map GetMap(string xpMapString)
     {
         // Dark Magic, dont change
@@ -189,9 +189,10 @@ public abstract class Map
         _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
 
         Entities = new List<Entity>();
-        Interactions = new List<DialogueRunner>();
-        AvailableInteractions = new List<DialogueRunner>();
+        Interactions = new List<MapBoundInteraction>();
+        AvailableInteractions = new List<MapBoundInteraction>();
         CurrentInteractionIndex = -1;
+        _currentInteraction = null!;
 
     }
     public string XpMapString { get; set; }
@@ -199,14 +200,19 @@ public abstract class Map
     public int Height => RPImg.Height;
     public REXPaintImage RPImg { get; set; }
     public List<Entity> Entities { get; set; }
-    public List<DialogueRunner> Interactions { get; set; }
-    public List<DialogueRunner> AvailableInteractions { get; set; }
+    public List<MapBoundInteraction> Interactions { get; set; }
+    public List<MapBoundInteraction> AvailableInteractions { get; set; }
     public int CurrentInteractionIndex { get; set; }
-    public DialogueRunner CurrentInteraction
+    private MapBoundInteraction _currentInteraction;
+    public MapBoundInteraction CurrentInteraction
     {
         get
         {
-            if (CurrentInteractionIndex != -1 && CurrentInteractionIndex < AvailableInteractions.Count)
+            if (_currentInteraction != null)
+            {
+                return _currentInteraction;
+            }
+            else if (CurrentInteractionIndex != -1 && CurrentInteractionIndex < AvailableInteractions.Count)
             {
                 return AvailableInteractions[CurrentInteractionIndex];
             }
@@ -214,6 +220,10 @@ public abstract class Map
             {
                 return null!;
             }
+        }
+        set
+        {
+            _currentInteraction = value;
         }
     }
 

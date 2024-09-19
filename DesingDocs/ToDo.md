@@ -1,3 +1,10 @@
+- Victor interactie
+    zet een gaurd op het stukje ervoor
+        die gaurd triggerd een interactie met victor, gebaseerd op de toestand van vroegere interacties
+        je gaat automatisch getriggerde interacties moeten maken
+    en ergens ook een geheugen bijhouden voor de speler, niet enkel voor gesprekken
+
+
 - the bidirectional links of travelnods you can do in a dictionary of <xpMapstring, Dictionary<point, xpMapstring>>
 
 - Animations only play, no processkeyboard shizzle

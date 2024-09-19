@@ -18,7 +18,7 @@ public class Entity
     public Color Color { get; set; }
     public char Glyph { get; set; }
     public Point Position { get; set; }
-    public DialogueRunner? Interaction { get; set; }
+    public MapBoundInteraction? Interaction { get; set; }
 }
 
 public class Player

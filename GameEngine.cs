@@ -10,8 +10,8 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        Map = new EngineObservationRoom();
-        Player.Position = (9, 9);
+        Map = new YourRoom();
+        Player.Position = (1, 2);
     }
 
     public Player Player { get; set; }

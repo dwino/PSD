@@ -6,22 +6,28 @@ namespace Balance;
 
 public abstract class DialogueRunner
 {
-    private string _startNode;
-    protected DialogueRunner(string name, string startNode = "Start")
+    protected string _startNode;
+    protected DialogueRunner(string name, string startNode = "Start", bool autoActivated = false)
     {
         Name = name;
         _startNode = startNode;
-        IsActive = false;
-        IsMapDrawn = true;
+        AutoActivated = autoActivated;
+        _isActive = false;
         OptionRequired = false;
         string[] sourceFiles = { "Content/Yarn/" + name + ".yarn" };
         var compilationJob = CompilationJob.CreateFromFiles(sourceFiles);
         CompilationResult = Compiler.Compile(compilationJob);
         Program = CompilationResult.Program;
+        MemoryVariableStore = new Yarn.MemoryVariableStore();
+
         if (Program.Nodes.ContainsKey(startNode))
         {
-            var storage = new Yarn.MemoryVariableStore();
-            Dialogue = new Yarn.Dialogue(storage);
+            if (Map.MemoryPalace.ContainsKey(name))
+            {
+                MemoryVariableStore = Map.MemoryPalace[name];
+            }
+
+            Dialogue = new Yarn.Dialogue(MemoryVariableStore);
 
             Dialogue.SetProgram(Program);
             Dialogue.SetNode(startNode);
@@ -36,15 +42,18 @@ public abstract class DialogueRunner
         SelectedOptionIndex = -1;
         LinesToDraw = new List<string>();
         OptionsToDraw = new List<string>();
-
     }
     public string Name { get; set; }
-    public bool IsActive { get; set; }
-    public bool IsMapDrawn { get; set; }
-    public bool OptionRequired { get; set; }
     public CompilationResult CompilationResult { get; set; }
     public Yarn.Program Program { get; set; }
     public Dialogue Dialogue { get; set; }
+    public MemoryVariableStore MemoryVariableStore { get; set; }
+
+    public bool AutoActivated { get; set; }
+    protected bool _isActive;
+    public virtual bool IsActive { get => _isActive; set => _isActive = value; }
+    public bool OptionRequired { get; set; }
+
     public int SelectedOptionIndex { get; set; }
     public List<String> LinesToDraw { get; set; }
     public List<String> OptionsToDraw { get; set; }
@@ -60,10 +69,12 @@ public abstract class DialogueRunner
 
     public void LineHandler(Yarn.Line line)
     {
-        LinesToDraw.Add(TextForLine(line.ID));
+        var newLine = TextForLine(line.ID);
+
+        LinesToDraw.Add(newLine);
     }
 
-    void OptionsHandler(Yarn.OptionSet options)
+    public void OptionsHandler(Yarn.OptionSet options)
     {
         OptionRequired = true;
         SelectedOptionIndex = 0;
@@ -89,11 +100,10 @@ public abstract class DialogueRunner
     {
     }
 
-    public void DialogueCompleteHandler()
+    public virtual void DialogueCompleteHandler()
     {
         IsActive = false;
         Reset();
-
     }
 
     public void ContinueDialog()
@@ -104,12 +114,12 @@ public abstract class DialogueRunner
         }
     }
 
-    public void Reset()
+    public virtual void Reset()
     {
         OptionRequired = false;
         if (Program.Nodes.ContainsKey(_startNode))
         {
-            var storage = new Yarn.MemoryVariableStore();
+            var storage = new MemoryVariableStore();
             Dialogue = new Yarn.Dialogue(storage);
 
             Dialogue.SetProgram(Program);
@@ -131,7 +141,14 @@ public abstract class DialogueRunner
     public abstract bool IsAvailable(GameEngine game);
 }
 
-public class IntroTextScreen : DialogueRunner
+public abstract class TextScreen : DialogueRunner
+{
+    protected TextScreen(string name, string startNode = "Start", bool autoActivated = false) : base(name, startNode, autoActivated)
+    {
+    }
+}
+
+public class IntroTextScreen : TextScreen
 {
     public IntroTextScreen(string name) : base(name)
     {
@@ -148,13 +165,72 @@ public class IntroTextScreen : DialogueRunner
 
 }
 
-public class FullScreenInteraction : DialogueRunner
+public abstract class MapBoundInteraction : DialogueRunner
+{
+    protected Map _map;
+
+    protected MapBoundInteraction(string name, Map map, Point position, string startNode = "Start", bool autoActivated = false) : base(name, startNode, autoActivated)
+    {
+        _map = map;
+        Position = position;
+    }
+
+    public Point Position { get; set; }
+    public bool IsMapDrawn { get; set; }
+
+    public override bool IsActive
+    {
+        get => _isActive;
+        set
+        {
+            if (_map != null)
+            {
+                if (value)
+                {
+                    _map.CurrentInteraction = this;
+                    _map.CurrentInteractionIndex = int.MaxValue;
+                }
+                else
+                {
+                    _map.CurrentInteraction = null!;
+                    _map.CurrentInteractionIndex = -1;
+
+                }
+            }
+            _isActive = value;
+
+        }
+    }
+
+    public override void DialogueCompleteHandler()
+    {
+        if (_map != null)
+        {
+            _map.CurrentInteraction = null!;
+        }
+
+        Map.MemoryPalace[Name] = MemoryVariableStore;
+        base.DialogueCompleteHandler();
+    }
+
+    public override void Reset()
+    {
+        System.Console.WriteLine(MemoryVariableStore.ToString());
+        var storage = Map.MemoryPalace[Name];
+        base.Reset();
+        MemoryVariableStore = storage;
+    }
+}
+
+
+
+public class FullScreenInteraction : MapBoundInteraction
 {
     private int _x;
     private int _y;
     private int _minDistToPlayer;
 
-    public FullScreenInteraction(string name, Point position, int minDistToPlayer = 1) : base(name)
+    public FullScreenInteraction(string name, Map map, Point position, int minDistToPlayer = 1) : base(name, map, position)
     {
         IsMapDrawn = false;
         _x = 1;
@@ -163,7 +239,6 @@ public class FullScreenInteraction : DialogueRunner
 
         Position = position;
     }
-    public Point Position { get; set; }
 
     public override bool IsAvailable(GameEngine game)
     {
@@ -202,21 +277,71 @@ public class FullScreenInteraction : DialogueRunner
     }
 }
 
-public class MapInteraction : DialogueRunner
+public class MapAutoInteraction : MapBoundInteraction
+{
+    private int _x;
+    private int _y;
+
+    public MapAutoInteraction(string name, Map map, Point position) : base(name, map, position)
+    {
+        _x = 1;
+        _y = 1;
+
+        _map = map;
+        IsMapDrawn = true;
+        Position = position;
+        AutoActivated = true;
+    }
+
+    public override bool IsAvailable(GameEngine game)
+    {
+        return false;
+    }
+
+    public override void Draw(Console console)
+    {
+        int i = 1;
+        foreach (var line in LinesToDraw)
+        {
+            console.Print(_x, _y + i, line);
+            i++;
+        }
+        int j = 0;
+        var color = Color.White;
+        foreach (var option in OptionsToDraw)
+        {
+            if (j == SelectedOptionIndex)
+            {
+                color = new Color(0, 217, 0);
+            }
+            else
+            {
+                color = Color.White;
+            }
+
+            console.Print(_x + 5, _y + i, option, color);
+
+            i++;
+            j++;
+        }
+    }
+}
+
+public class MapInteraction : MapBoundInteraction
 {
     private int _x;
     private int _y;
     private int _minDistToPlayer;
 
-    public MapInteraction(string name, Point position, int minDistToPlayer = 1) : base(name)
+    public MapInteraction(string name, Map map, Point position, int minDistToPlayer = 1) : base(name, map, position)
     {
         _x = 1;
         _y = 1;
         _minDistToPlayer = minDistToPlayer;
+        IsMapDrawn = true;
 
         Position = position;
     }
-    public Point Position { get; set; }
 
     public override bool IsAvailable(GameEngine game)
     {
@@ -254,4 +379,3 @@ public class MapInteraction : DialogueRunner
 
     }
 }
-
