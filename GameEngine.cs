@@ -10,7 +10,7 @@ public class GameEngine
     {
         _ui = ui;
         Player = new Player();
-        Map = new YourRoom();
+        Map = new YourRoom(this, _ui);
         Player.Position = (1, 2);
     }
 
@@ -37,7 +37,7 @@ public class GameEngine
         {
             Game.Instance.MonoGameInstance.Exit();
         }
-        if (Map.CurrentInteraction != null && Map.CurrentInteractionIndex != -1 && Map.CurrentInteraction.IsActive)
+        if ((Map.CurrentInteraction != null || Map.CurrentInteractionIndex != -1) && Map.CurrentInteraction.IsActive)
         {
             if (Map.CurrentInteraction.OptionRequired)
             {
@@ -141,7 +141,7 @@ public class GameEngine
     {
         _ui.Console.Clear();
 
-        if (Map.CurrentInteraction != null && Map.CurrentInteractionIndex != -1 && Map.CurrentInteraction.IsActive)
+        if ((Map.CurrentInteraction != null || Map.CurrentInteractionIndex != -1) && Map.CurrentInteraction.IsActive)
         {
             if (Map.CurrentInteraction.IsMapDrawn)
             {

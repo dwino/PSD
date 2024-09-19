@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using Balance.Ui;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Readers;
@@ -9,7 +10,7 @@ namespace Balance;
 
 public class Cafeteria : Map
 {
-    public Cafeteria() : base("Cafeteria")
+    public Cafeteria(GameEngine game, GameUi ui) : base("Cafeteria", game, ui)
     {
     }
 
@@ -19,7 +20,7 @@ public class Cafeteria : Map
 }
 public class Cryo1 : Map
 {
-    public Cryo1() : base("Cryo1")
+    public Cryo1(GameEngine game, GameUi ui) : base("Cryo1", game, ui)
     {
     }
 
@@ -29,7 +30,7 @@ public class Cryo1 : Map
 }
 public class Cryo2 : Map
 {
-    public Cryo2() : base("Cryo2")
+    public Cryo2(GameEngine game, GameUi ui) : base("Cryo2", game, ui)
     {
     }
 
@@ -49,7 +50,7 @@ public class Cryo3 : Map
     private int _tint1;
     private int _tintOffset1;
 
-    public Cryo3() : base("Cryo3")
+    public Cryo3(GameEngine game, GameUi ui) : base("Cryo3", game, ui)
     {
         _stopwatch = new Stopwatch();
         _stopwatch.Start();
@@ -196,11 +197,15 @@ public class Cryo3 : Map
 }
 public class EngineObservationRoom : Map
 {
-    public EngineObservationRoom() : base("EngineObservationRoom")
+    public EngineObservationRoom(GameEngine game, GameUi ui) : base("EngineObservationRoom", game, ui)
     {
         Interactions.Add(new FullScreenInteraction("EngineRoomComputer", this, (8, 7)));
 
-        Interactions.Add(new MapAutoInteraction("Door", this, (6, 9)));
+        var gaurdedAction = new MoveByAction(_ui, _game, this, (-1, 0));
+        var alternativeAction = new MoveByAction(_ui, _game, this, (1, 0));
+        var condition = new Condition { Dialogue = "Victor", Variable = "$permissionToEnterEngineRoom" };
+
+        Interactions.Add(new GaurdingMapAutoInteraction("Door", this, (6, 9), gaurdedAction, alternativeAction, condition));
 
 
         var victorInteraction = new MapInteraction("Victor", this, (8, 8));
@@ -218,7 +223,7 @@ public class EngineRoom : Map
 {
     private SoundEffectInstance _engineSFX;
 
-    public EngineRoom() : base("EngineRoom")
+    public EngineRoom(GameEngine game, GameUi ui) : base("EngineRoom", game, ui)
     {
         _engineSFX = AudioManager.SpaceEngineSFX!.CreateInstance();
 
@@ -250,7 +255,7 @@ public class EngineRoom : Map
 }
 public class FacilitiesCorridor : Map
 {
-    public FacilitiesCorridor() : base("FacilitiesCorridor")
+    public FacilitiesCorridor(GameEngine game, GameUi ui) : base("FacilitiesCorridor", game, ui)
     {
     }
 
@@ -260,7 +265,7 @@ public class FacilitiesCorridor : Map
 }
 public class Hydroponics : Map
 {
-    public Hydroponics() : base("Hydroponics")
+    public Hydroponics(GameEngine game, GameUi ui) : base("Hydroponics", game, ui)
     {
     }
 
@@ -270,7 +275,7 @@ public class Hydroponics : Map
 }
 public class MainCorridor : Map
 {
-    public MainCorridor() : base("MainCorridor")
+    public MainCorridor(GameEngine game, GameUi ui) : base("MainCorridor", game, ui)
     {
     }
 
@@ -280,7 +285,7 @@ public class MainCorridor : Map
 }
 public class NorthCorridor : Map
 {
-    public NorthCorridor() : base("NorthCorridor")
+    public NorthCorridor(GameEngine game, GameUi ui) : base("NorthCorridor", game, ui)
     {
     }
 
@@ -290,7 +295,7 @@ public class NorthCorridor : Map
 }
 public class Room1 : Map
 {
-    public Room1() : base("Room1")
+    public Room1(GameEngine game, GameUi ui) : base("Room1", game, ui)
     {
     }
 
@@ -300,7 +305,7 @@ public class Room1 : Map
 }
 public class Room2 : Map
 {
-    public Room2() : base("Room2")
+    public Room2(GameEngine game, GameUi ui) : base("Room2", game, ui)
     {
     }
 
@@ -310,7 +315,7 @@ public class Room2 : Map
 }
 public class Room3 : Map
 {
-    public Room3() : base("Room3")
+    public Room3(GameEngine game, GameUi ui) : base("Room3", game, ui)
     {
     }
 
@@ -320,7 +325,7 @@ public class Room3 : Map
 }
 public class Room4 : Map
 {
-    public Room4() : base("Room4")
+    public Room4(GameEngine game, GameUi ui) : base("Room4", game, ui)
     {
     }
 
@@ -330,7 +335,7 @@ public class Room4 : Map
 }
 public class Room5 : Map
 {
-    public Room5() : base("Room5")
+    public Room5(GameEngine game, GameUi ui) : base("Room5", game, ui)
     {
     }
 
@@ -340,7 +345,7 @@ public class Room5 : Map
 }
 public class Room6 : Map
 {
-    public Room6() : base("Room6")
+    public Room6(GameEngine game, GameUi ui) : base("Room6", game, ui)
     {
     }
 
@@ -350,7 +355,7 @@ public class Room6 : Map
 }
 public class RoomsCorridor : Map
 {
-    public RoomsCorridor() : base("RoomsCorridor")
+    public RoomsCorridor(GameEngine game, GameUi ui) : base("RoomsCorridor", game, ui)
     {
     }
 
@@ -360,7 +365,7 @@ public class RoomsCorridor : Map
 }
 public class Security : Map
 {
-    public Security() : base("Security")
+    public Security(GameEngine game, GameUi ui) : base("Security", game, ui)
     {
     }
 
@@ -370,7 +375,7 @@ public class Security : Map
 }
 public class SecurityZone1 : Map
 {
-    public SecurityZone1() : base("SecurityZone1")
+    public SecurityZone1(GameEngine game, GameUi ui) : base("SecurityZone1", game, ui)
     {
     }
 
@@ -380,7 +385,7 @@ public class SecurityZone1 : Map
 }
 public class SecurityZone2 : Map
 {
-    public SecurityZone2() : base("SecurityZone2")
+    public SecurityZone2(GameEngine game, GameUi ui) : base("SecurityZone2", game, ui)
     {
     }
 
@@ -390,7 +395,7 @@ public class SecurityZone2 : Map
 }
 public class SecurityZone3 : Map
 {
-    public SecurityZone3() : base("SecurityZone3")
+    public SecurityZone3(GameEngine game, GameUi ui) : base("SecurityZone3", game, ui)
     {
     }
 
@@ -400,7 +405,7 @@ public class SecurityZone3 : Map
 }
 public class SecurityZone4 : Map
 {
-    public SecurityZone4() : base("SecurityZone4")
+    public SecurityZone4(GameEngine game, GameUi ui) : base("SecurityZone4", game, ui)
     {
     }
 
@@ -410,7 +415,7 @@ public class SecurityZone4 : Map
 }
 public class SecurityZoneCenter : Map
 {
-    public SecurityZoneCenter() : base("SecurityZoneCenter")
+    public SecurityZoneCenter(GameEngine game, GameUi ui) : base("SecurityZoneCenter", game, ui)
     {
     }
 
@@ -420,7 +425,7 @@ public class SecurityZoneCenter : Map
 }
 public class ShowerNorth : Map
 {
-    public ShowerNorth() : base("ShowerNorth")
+    public ShowerNorth(GameEngine game, GameUi ui) : base("ShowerNorth", game, ui)
     {
     }
 
@@ -430,7 +435,7 @@ public class ShowerNorth : Map
 }
 public class ShowerSouth : Map
 {
-    public ShowerSouth() : base("ShowerSouth")
+    public ShowerSouth(GameEngine game, GameUi ui) : base("ShowerSouth", game, ui)
     {
     }
 
@@ -440,7 +445,7 @@ public class ShowerSouth : Map
 }
 public class Storage : Map
 {
-    public Storage() : base("Storage")
+    public Storage(GameEngine game, GameUi ui) : base("Storage", game, ui)
     {
     }
 
@@ -450,7 +455,7 @@ public class Storage : Map
 }
 public class Toilet : Map
 {
-    public Toilet() : base("Toilet")
+    public Toilet(GameEngine game, GameUi ui) : base("Toilet", game, ui)
     {
     }
 
@@ -460,7 +465,7 @@ public class Toilet : Map
 }
 public class YourRoom : Map
 {
-    public YourRoom() : base("YourRoom")
+    public YourRoom(GameEngine game, GameUi ui) : base("YourRoom", game, ui)
     {
         var anoukInteraction = new MapInteraction("Anouk", this, (2, 2));
         var anouk = new Entity("Anouk", Color.Blue, 'A');

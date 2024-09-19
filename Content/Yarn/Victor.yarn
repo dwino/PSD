@@ -1,5 +1,6 @@
 title: Start
 ---
+<<declare $permissionToEnterEngineRoom = true>>
 Victor: Ah, visiting engine observation are we?
 Victor: What can I do for you?
     -> You: Would it be ok if I go into the engine room?
@@ -23,6 +24,7 @@ Victor: Why would you want to go in there anyway?
         Victor: ...
         Victor: Well ok then, but only for a few minutes.
         Victor: And I'm watching you through the glass.
+        <<set $permissionToEnterEngineRoom to true>>
             -> You: Thanks Victor! I won't touch anything I swear.
             -> You: No that's ok, if you think it's a bad idea
                 You: I don't want you to risk anything.

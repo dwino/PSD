@@ -119,9 +119,12 @@ public abstract class DialogueRunner
         OptionRequired = false;
         if (Program.Nodes.ContainsKey(_startNode))
         {
-            var storage = new MemoryVariableStore();
-            Dialogue = new Yarn.Dialogue(storage);
+            if (Map.MemoryPalace.ContainsKey(Name))
+            {
+                MemoryVariableStore = Map.MemoryPalace[Name];
+            }
 
+            Dialogue = new Yarn.Dialogue(MemoryVariableStore);
             Dialogue.SetProgram(Program);
             Dialogue.SetNode(_startNode);
         }
@@ -183,20 +186,23 @@ public abstract class MapBoundInteraction : DialogueRunner
         get => _isActive;
         set
         {
-            if (_map != null)
+            // if (_map != null)
+            // {
+            if (value)
             {
-                if (value)
+                _map.CurrentInteraction = this;
+                _map.CurrentInteractionIndex = int.MaxValue;
+                if (Map.MemoryPalace.ContainsKey(Name))
                 {
-                    _map.CurrentInteraction = this;
-                    _map.CurrentInteractionIndex = int.MaxValue;
-                }
-                else
-                {
-                    _map.CurrentInteraction = null!;
-                    _map.CurrentInteractionIndex = -1;
-
+                    MemoryVariableStore = Map.MemoryPalace[Name];
                 }
             }
+            else
+            {
+                _map.CurrentInteraction = null!;
+                _map.CurrentInteractionIndex = -1;
+            }
+            // }
             _isActive = value;
 
         }
@@ -215,10 +221,7 @@ public abstract class MapBoundInteraction : DialogueRunner
 
     public override void Reset()
     {
-        System.Console.WriteLine(MemoryVariableStore.ToString());
-        var storage = Map.MemoryPalace[Name];
         base.Reset();
-        MemoryVariableStore = storage;
     }
 }
 
@@ -295,7 +298,91 @@ public class MapAutoInteraction : MapBoundInteraction
 
     public override bool IsAvailable(GameEngine game)
     {
-        return false;
+        var result = game.Player.Position == this.Position;
+
+        if (result)
+        {
+            IsActive = true;
+            ContinueDialog();
+        }
+
+        return result;
+    }
+
+    public override void Draw(Console console)
+    {
+        int i = 1;
+        foreach (var line in LinesToDraw)
+        {
+            console.Print(_x, _y + i, line);
+            i++;
+        }
+        int j = 0;
+        var color = Color.White;
+        foreach (var option in OptionsToDraw)
+        {
+            if (j == SelectedOptionIndex)
+            {
+                color = new Color(0, 217, 0);
+            }
+            else
+            {
+                color = Color.White;
+            }
+
+            console.Print(_x + 5, _y + i, option, color);
+
+            i++;
+            j++;
+        }
+    }
+}
+
+public class GaurdingMapAutoInteraction : MapBoundInteraction
+{
+    private int _x;
+    private int _y;
+    private Condition _condition;
+
+    public GaurdingMapAutoInteraction(string name, Map map, Point position, Action gaurdedAction, Action alternativeAction, Condition condition) : base(name, map, position)
+    {
+        _x = 1;
+        _y = 1;
+        _condition = condition;
+
+        _map = map;
+        IsMapDrawn = true;
+        Position = position;
+        AutoActivated = true;
+
+        GuardedAction = gaurdedAction;
+        AlternativeAction = alternativeAction;
+
+
+    }
+
+    public Action GuardedAction { get; set; }
+    public Action AlternativeAction { get; set; }
+
+    public override bool IsAvailable(GameEngine game)
+    {
+        var result = game.Player.Position == this.Position;
+
+        if (result)
+        {
+            IsActive = true;
+            bool passedGaurd = false;
+
+            if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
+            {
+                Map.MemoryPalace[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
+            }
+
+            MemoryVariableStore.SetValue(_condition.Variable, passedGaurd);
+            ContinueDialog();
+        }
+
+        return result;
     }
 
     public override void Draw(Console console)

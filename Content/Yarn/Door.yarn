@@ -1,5 +1,11 @@
 title: Start
 ---
-Victor: HELA!
+<<if $permissionToEnterEngineRoom is false>>
+    Victor: HELA!
+<<else>>
+    Victor: Go ahead!
+<<endif>>
+
+
 ===
 
