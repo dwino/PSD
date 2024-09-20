@@ -4,12 +4,8 @@ namespace Balance;
 
 public abstract class Action
 {
-    protected GameUi _ui;
-    protected GameEngine _game;
-    protected Action(GameUi ui, GameEngine game)
+    protected Action()
     {
-        _ui = ui;
-        _game = game;
     }
 
     public abstract void Execute();
@@ -20,7 +16,7 @@ public class MoveByAction : Action
 {
     private Point _offset;
     private Map _map;
-    public MoveByAction(GameUi ui, GameEngine game, Map map, Point offset) : base(ui, game)
+    public MoveByAction(Map map, Point offset) : base()
     {
         _offset = offset;
         _map = map;
@@ -28,11 +24,11 @@ public class MoveByAction : Action
 
     public override void Execute()
     {
-        var newPosition = _game.Player.Position + _offset;
+        var newPosition = Program.Engine.Player.Position + _offset;
 
         if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(newPosition.X, newPosition.Y) == '1')
         {
-            _game.Player.Position = newPosition;
+            Program.Engine.Player.Position = newPosition;
 
             var interMapDict = Map.InterMapDict;
             var xpMapString = _map.XpMapString;
@@ -41,28 +37,28 @@ public class MoveByAction : Action
 
             if (interMapHandle.ContainsKey(newPosition))
             {
-                var oldPosition = _game.Player.Position;
+                var oldPosition = Program.Engine.Player.Position;
                 var interMapTuple = interMapHandle[newPosition];
                 var newMap = _map.GetMap(interMapTuple.Item1);
-                _game.ChangeMap(newMap);
-                _game.Player.Position = interMapTuple.Item2;
+                Program.Engine.ChangeMap(newMap);
+                Program.Engine.Player.Position = interMapTuple.Item2;
 
-                _ui.Console.Clear();
-                _ui.GameScreen.CurrentAnimation = new MapTransitionAnimation(_map.VisibleMap, _game.Player, oldPosition, _offset, _ui.Console, _ui);
-                _ui.GameScreen.CurrentAnimation.IsRunning = true;
+                Program.Ui.Clear();
+                Program.Ui.GameScreen.CurrentAnimation = new MapTransitionAnimation(_map.VisibleMap, Program.Engine.Player, oldPosition, _offset);
+                Program.Ui.GameScreen.CurrentAnimation.IsRunning = true;
             }
 
             _map.AvailableInteractions.Clear();
             foreach (var interaction in _map.Interactions)
             {
-                if (interaction.IsAvailable(_game) && !interaction.AutoActivated)
+                if (interaction.IsAvailable() && !interaction.AutoActivated)
                 {
                     _map.AvailableInteractions.Add(interaction);
                 }
             }
             foreach (var entity in _map.Entities)
             {
-                if (entity.Interaction != null && entity.Interaction.IsAvailable(_game))
+                if (entity.Interaction != null && entity.Interaction.IsAvailable())
                 {
                     _map.AvailableInteractions.Add(entity.Interaction);
                 }

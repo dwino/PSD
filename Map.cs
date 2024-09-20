@@ -11,39 +11,39 @@ namespace Balance;
 
 public abstract class Map
 {
-    protected Dictionary<string, Func<Map>> mapDict;
+    protected Dictionary<string, Func<Map>>? mapDict;
 
     protected void initMapDict()
     {
         mapDict = new Dictionary<string, Func<Map>>(){
-        {"Cafeteria",() => new Cafeteria(_game, _ui)},
-        {"Cryo1",() => new Cryo1(_game, _ui)},
-        {"Cryo2",() => new Cryo2(_game, _ui)},
-        {"Cryo3",() => new Cryo3(_game, _ui)},
-        {"EngineObservationRoom",() => new EngineObservationRoom(_game, _ui)},
-        {"EngineRoom",() => new EngineRoom(_game, _ui)},
-        {"FacilitiesCorridor",() => new FacilitiesCorridor(_game, _ui)},
-        {"Hydroponics",() => new Hydroponics(_game, _ui)},
-        {"MainCorridor",() => new MainCorridor(_game, _ui)},
-        {"NorthCorridor",() => new NorthCorridor(_game, _ui)},
-        {"Room1",() => new Room1(_game, _ui)},
-        {"Room2",() => new Room2(_game, _ui)},
-        {"Room3",() => new Room3(_game, _ui)},
-        {"Room4",() => new Room4(_game, _ui)},
-        {"Room5",() => new Room5(_game, _ui)},
-        {"Room6",() => new Room6(_game, _ui)},
-        {"RoomsCorridor",() => new RoomsCorridor(_game, _ui)},
-        {"Security",() => new Security(_game, _ui)},
-        {"SecurityZone1",() => new SecurityZone1(_game, _ui)},
-        {"SecurityZone2",() => new SecurityZone2(_game, _ui)},
-        {"SecurityZone3",() => new SecurityZone3(_game, _ui)},
-        {"SecurityZone4",() => new SecurityZone4(_game, _ui)},
-        {"SecurityZoneCenter",() => new SecurityZoneCenter(_game, _ui)},
-        {"ShowerNorth",() => new ShowerNorth(_game, _ui)},
-        {"ShowerSouth",() => new ShowerSouth(_game, _ui)},
-        {"Storage",() => new Storage(_game, _ui)},
-        {"Toilet",() => new Toilet(_game, _ui)},
-        {"YourRoom",() => new YourRoom(_game, _ui)},};
+        {"Cafeteria",() => new Cafeteria()},
+        {"Cryo1",() => new Cryo1()},
+        {"Cryo2",() => new Cryo2()},
+        {"Cryo3",() => new Cryo3()},
+        {"EngineObservationRoom",() => new EngineObservationRoom()},
+        {"EngineRoom",() => new EngineRoom()},
+        {"FacilitiesCorridor",() => new FacilitiesCorridor()},
+        {"Hydroponics",() => new Hydroponics()},
+        {"MainCorridor",() => new MainCorridor()},
+        {"NorthCorridor",() => new NorthCorridor()},
+        {"Room1",() => new Room1()},
+        {"Room2",() => new Room2()},
+        {"Room3",() => new Room3()},
+        {"Room4",() => new Room4()},
+        {"Room5",() => new Room5()},
+        {"Room6",() => new Room6()},
+        {"RoomsCorridor",() => new RoomsCorridor()},
+        {"Security",() => new Security()},
+        {"SecurityZone1",() => new SecurityZone1()},
+        {"SecurityZone2",() => new SecurityZone2()},
+        {"SecurityZone3",() => new SecurityZone3()},
+        {"SecurityZone4",() => new SecurityZone4()},
+        {"SecurityZoneCenter",() => new SecurityZoneCenter()},
+        {"ShowerNorth",() => new ShowerNorth()},
+        {"ShowerSouth",() => new ShowerSouth()},
+        {"Storage",() => new Storage()},
+        {"Toilet",() => new Toilet()},
+        {"YourRoom",() => new YourRoom()},};
     }
 
     public static Dictionary<string, Dictionary<Point, (string, Point)>> InterMapDict
@@ -66,7 +66,7 @@ public abstract class Map
                                     {(4,9), ("EngineRoom", (3,9))},
                                 }},
                                 {"EngineRoom", new Dictionary<Point, (string, Point)>(){
-                                    {(4,9), ("EngineObservationRoom", (5,9))},
+                                    {(4,9), ("EngineObservationRoom", (7,9))},
                                 }},
                                 {"FacilitiesCorridor", new Dictionary<Point, (string, Point)>(){
                                     {(1,6), ("Cafeteria", (6,1))},
@@ -167,13 +167,10 @@ public abstract class Map
     {
         // Dark Magic, dont change
         Func<Map> func;
-        return mapDict.TryGetValue(xpMapString, out func!)
+        return mapDict!.TryGetValue(xpMapString, out func!)
             ? func() // invoking the delegate creates the instance of the brand object
             : null!;  // brandName was not in the dictionary
     }
-
-    protected GameEngine _game;
-    protected GameUi _ui;
 
     protected int _xOffset;
     protected int _yOffset;
@@ -181,11 +178,9 @@ public abstract class Map
     protected CellSurface _walkableMap;
     protected CellSurface _interactionMap;
 
-    protected Map(string xpMapString, GameEngine game, GameUi ui)
+    protected Map(string xpMapString)
     {
         initMapDict();
-        _game = game;
-        _ui = ui;
         XpMapString = xpMapString;
         var path = "Content/Maps/" + xpMapString + ".xp";
         RPImg = SadConsole.Readers.REXPaintImage.Load(new FileStream(path, FileMode.Open));
@@ -252,15 +247,15 @@ public abstract class Map
 
     public virtual void OnEnter() { }
     public virtual void OnExit() { }
-    public virtual void Draw(Console console)
+    public virtual void Draw()
     {
-        VisibleMap.Copy(console.Surface, _xOffset, _yOffset);
+        VisibleMap.Copy(Program.Ui.Surface, _xOffset, _yOffset);
 
         foreach (var entity in Entities)
         {
             int x = entity.Position.X + (GameSettings.GAME_WIDTH / 2) - (Width / 2);
             int y = entity.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Height / 2);
-            console.Print(x, y, entity.Glyph.ToString(), entity.Color);
+            Program.Ui.Print(x, y, entity.Glyph.ToString(), entity.Color);
         }
 
         for (int i = 0; i < AvailableInteractions.Count; i++)
@@ -276,7 +271,7 @@ public abstract class Map
             }
             int y = i + 1;
             int x = GameSettings.GAME_WIDTH - 2 - interactionOption.Length;
-            console.Print(x, y, interactionOption, color);
+            Program.Ui.Print(x, y, interactionOption, color);
         }
     }
 }

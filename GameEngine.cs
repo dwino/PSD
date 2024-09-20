@@ -5,12 +5,29 @@ namespace Balance;
 
 public class GameEngine
 {
-    private GameUi _ui;
-    public GameEngine(GameUi ui)
+    /// <summary>
+    /// 
+    /// </summary>
+    static GameEngine? instance;
+    public static GameEngine Instance()
     {
-        _ui = ui;
+        // Uses lazy initialization.
+        // Note: this is not thread safe.
+        if (instance == null)
+        {
+            instance = new GameEngine();
+        }
+        return instance;
+    }
+    /// <summary>
+    /// /
+    /// </summary>
+
+
+    private GameEngine()
+    {
         Player = new Player();
-        Map = new YourRoom(this, _ui);
+        Map = new YourRoom();
         Player.Position = (1, 2);
     }
 
@@ -109,22 +126,22 @@ public class GameEngine
 
             if (keyboard.IsKeyPressed(Keys.Left))
             {
-                var moveByAction = new MoveByAction(_ui, this, Map, (-1, 0));
+                var moveByAction = new MoveByAction(Map, (-1, 0));
                 Player.NextAction = moveByAction;
             }
             if (keyboard.IsKeyPressed(Keys.Right))
             {
-                var moveByAction = new MoveByAction(_ui, this, Map, (1, 0));
+                var moveByAction = new MoveByAction(Map, (1, 0));
                 Player.NextAction = moveByAction;
             }
             if (keyboard.IsKeyPressed(Keys.Up))
             {
-                var moveByAction = new MoveByAction(_ui, this, Map, (0, -1));
+                var moveByAction = new MoveByAction(Map, (0, -1));
                 Player.NextAction = moveByAction;
             }
             if (keyboard.IsKeyPressed(Keys.Down))
             {
-                var moveByAction = new MoveByAction(_ui, this, Map, (0, 1));
+                var moveByAction = new MoveByAction(Map, (0, 1));
                 Player.NextAction = moveByAction;
             }
         }
@@ -139,30 +156,30 @@ public class GameEngine
     }
     public void Draw()
     {
-        _ui.Console.Clear();
+        Program.Ui.Clear();
 
         if ((Map.CurrentInteraction != null || Map.CurrentInteractionIndex != -1) && Map.CurrentInteraction.IsActive)
         {
             if (Map.CurrentInteraction.IsMapDrawn)
             {
-                Map.Draw(_ui.Console);
+                Map.Draw();
 
                 int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
                 int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
 
-                _ui.Console.Print(x, y, Player.Glyph.ToString(), Player.Color);
+                Program.Ui.Print(x, y, Player.Glyph.ToString(), Player.Color);
             }
 
-            Map.CurrentInteraction.Draw(_ui.Console);
+            Map.CurrentInteraction.Draw();
         }
         else
         {
-            Map.Draw(_ui.Console);
+            Map.Draw();
 
             int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
             int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
 
-            _ui.Console.Print(x, y, Player.Glyph.ToString(), Player.Color);
+            Program.Ui.Print(x, y, Player.Glyph.ToString(), Player.Color);
         }
     }
 }

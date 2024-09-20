@@ -5,15 +5,11 @@ namespace Balance.Screens;
 
 public class GameScreen
 {
-    private GameEngine _game;
-    private GameUi _ui;
-    public Animation? CurrentAnimation { get; set; }
-    public GameScreen(GameEngine game, GameUi ui, Console console)
-    {
-        _game = game;
-        _ui = ui;
 
-        CurrentAnimation = new GameScreenIntroAnimation(console, ui);
+    public Animation? CurrentAnimation { get; set; }
+    public GameScreen()
+    {
+        CurrentAnimation = new GameScreenIntroAnimation();
     }
 
     public void ProcessKeyboard(Keyboard keyboard)
@@ -24,7 +20,7 @@ public class GameScreen
         }
         else
         {
-            _game.ProcessKeyboard(keyboard);
+            Program.Engine.ProcessKeyboard(keyboard);
         }
     }
     public void DrawGameScreen()
@@ -36,7 +32,7 @@ public class GameScreen
         }
         else
         {
-            _game.Draw();
+            Program.Engine.Draw();
         }
 
     }

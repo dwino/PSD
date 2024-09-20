@@ -140,8 +140,8 @@ public abstract class DialogueRunner
         OptionsToDraw = new List<string>();
     }
 
-    public abstract void Draw(Console console);
-    public abstract bool IsAvailable(GameEngine game);
+    public abstract void Draw();
+    public abstract bool IsAvailable();
 }
 
 public abstract class TextScreen : DialogueRunner
@@ -157,11 +157,11 @@ public class IntroTextScreen : TextScreen
     {
     }
 
-    public override void Draw(Console console)
+    public override void Draw()
     {
     }
 
-    public override bool IsAvailable(GameEngine game)
+    public override bool IsAvailable()
     {
         return true;
     }
@@ -243,19 +243,19 @@ public class FullScreenInteraction : MapBoundInteraction
         Position = position;
     }
 
-    public override bool IsAvailable(GameEngine game)
+    public override bool IsAvailable()
     {
-        var distanceToPlayer = Distance.Manhattan.Calculate(game.Player.Position, this.Position);
+        var distanceToPlayer = Distance.Manhattan.Calculate(Balance.Program.Engine.Player.Position, this.Position);
 
         return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
     }
 
-    public override void Draw(Console console)
+    public override void Draw()
     {
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            console.Print(_x, _y + i, line);
+            Balance.Program.Ui.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -271,7 +271,7 @@ public class FullScreenInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            console.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;
@@ -296,9 +296,9 @@ public class MapAutoInteraction : MapBoundInteraction
         AutoActivated = true;
     }
 
-    public override bool IsAvailable(GameEngine game)
+    public override bool IsAvailable()
     {
-        var result = game.Player.Position == this.Position;
+        var result = Balance.Program.Engine.Player.Position == this.Position;
 
         if (result)
         {
@@ -309,12 +309,12 @@ public class MapAutoInteraction : MapBoundInteraction
         return result;
     }
 
-    public override void Draw(Console console)
+    public override void Draw()
     {
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            console.Print(_x, _y + i, line);
+            Balance.Program.Ui.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -330,7 +330,7 @@ public class MapAutoInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            console.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;
@@ -343,6 +343,7 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
     private int _x;
     private int _y;
     private Condition _condition;
+    private bool passedGaurd;
 
     public GaurdingMapAutoInteraction(string name, Map map, Point position, Action gaurdedAction, Action alternativeAction, Condition condition) : base(name, map, position)
     {
@@ -358,20 +359,19 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
         GuardedAction = gaurdedAction;
         AlternativeAction = alternativeAction;
 
-
+        passedGaurd = false;
     }
 
     public Action GuardedAction { get; set; }
     public Action AlternativeAction { get; set; }
 
-    public override bool IsAvailable(GameEngine game)
+    public override bool IsAvailable()
     {
-        var result = game.Player.Position == this.Position;
+        var result = Balance.Program.Engine.Player.Position == this.Position;
 
         if (result)
         {
             IsActive = true;
-            bool passedGaurd = false;
 
             if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
             {
@@ -385,12 +385,28 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
         return result;
     }
 
-    public override void Draw(Console console)
+    public override void DialogueCompleteHandler()
+    {
+        if (passedGaurd)
+        {
+            Balance.Program.Engine.Player.NextAction = GuardedAction;
+        }
+        else
+        {
+            Balance.Program.Engine.Player.NextAction = AlternativeAction;
+
+        }
+
+
+        base.DialogueCompleteHandler();
+    }
+
+    public override void Draw()
     {
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            console.Print(_x, _y + i, line);
+            Balance.Program.Ui.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -406,7 +422,7 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            console.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;
@@ -430,19 +446,19 @@ public class MapInteraction : MapBoundInteraction
         Position = position;
     }
 
-    public override bool IsAvailable(GameEngine game)
+    public override bool IsAvailable()
     {
-        var distanceToPlayer = Distance.Manhattan.Calculate(game.Player.Position, this.Position);
+        var distanceToPlayer = Distance.Manhattan.Calculate(Balance.Program.Engine.Player.Position, this.Position);
 
         return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
     }
 
-    public override void Draw(Console console)
+    public override void Draw()
     {
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            console.Print(_x, _y + i, line);
+            Balance.Program.Ui.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -458,7 +474,7 @@ public class MapInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            console.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;

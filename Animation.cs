@@ -7,14 +7,10 @@ namespace Balance;
 
 public abstract class Animation
 {
-    protected Console _console;
-    protected GameUi _ui;
     protected Stopwatch _stopWatch;
 
-    protected Animation(Console console, GameUi ui)
+    protected Animation()
     {
-        _console = console;
-        _ui = ui;
         _stopWatch = new Stopwatch();
         _stopWatch.Start();
         IsRunning = true;
@@ -35,7 +31,7 @@ public class MapTransitionAnimation : Animation
     private Point _oldPosition;
     private Point _offset;
     private Color _color;
-    public MapTransitionAnimation(CellSurface visibleMap, Player player, Point oldPosition, Point offset, Console console, GameUi ui) : base(console, ui)
+    public MapTransitionAnimation(CellSurface visibleMap, Player player, Point oldPosition, Point offset) : base()
     {
         _visibleMap = new CellSurface(visibleMap.Width, visibleMap.Height);
         visibleMap.Copy(_visibleMap);
@@ -59,16 +55,16 @@ public class MapTransitionAnimation : Animation
         int playerY = _oldPosition.Y + (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
         if (_stopWatch.ElapsedMilliseconds < 500)
         {
-            _visibleMap.Copy(_console.Surface, _xOffset, _yOffset);
+            _visibleMap.Copy(Program.Ui.Surface, _xOffset, _yOffset);
 
             if (_stopWatch.ElapsedMilliseconds < 300)
             {
-                _ui.Console.Print(playerX - _offset.X, playerY - _offset.Y, _player.Glyph.ToString(), _color.GetDark());
-                _ui.Console.Print(playerX, playerY, " ", Color.White.GetDark());
+                Program.Ui.Print(playerX - _offset.X, playerY - _offset.Y, _player.Glyph.ToString(), _color.GetDark());
+                Program.Ui.Print(playerX, playerY, " ", Color.White.GetDark());
             }
             else if (_stopWatch.ElapsedMilliseconds >= 300)
             {
-                _ui.Console.Print(playerX, playerY, _player.Glyph.ToString(), _color.GetDarker());
+                Program.Ui.Print(playerX, playerY, _player.Glyph.ToString(), _color.GetDarker());
             }
         }
         else if (_stopWatch.ElapsedMilliseconds >= 500 && _stopWatch.ElapsedMilliseconds < 750)
@@ -85,11 +81,11 @@ public class MapTransitionAnimation : Animation
                     _visibleMap.SetBackground(x, y, bgNewColor);
                 }
             }
-            _visibleMap.Copy(_console.Surface, _xOffset, _yOffset);
+            _visibleMap.Copy(Program.Ui.Surface, _xOffset, _yOffset);
 
             _color = _color.GetDarker();
-            _ui.Console.Print(playerX + _offset.X, playerY + _offset.Y, _player.Glyph.ToString(), _color.GetDarkest());
-            _ui.Console.Print(playerX, playerY, " ", Color.White.GetDarkest());
+            Program.Ui.Print(playerX + _offset.X, playerY + _offset.Y, _player.Glyph.ToString(), _color.GetDarkest());
+            Program.Ui.Print(playerX, playerY, " ", Color.White.GetDarkest());
         }
         else if (_stopWatch.ElapsedMilliseconds >= 750)
         {
@@ -114,7 +110,7 @@ public class GameScreenIntroAnimation : Animation
     private string _currentLine;
     private int _currentLineIndex;
 
-    public GameScreenIntroAnimation(Console console, GameUi ui) : base(console, ui)
+    public GameScreenIntroAnimation() : base()
     {
         _diaglogRunner = new IntroTextScreen("GameScreenIntro");
         _diaglogRunner.IsActive = true;
@@ -137,16 +133,16 @@ public class GameScreenIntroAnimation : Animation
         {
             _cursorX = 5;
             _cursorY = 5;
-            _console.Clear();
+            Program.Ui.Clear();
             foreach (var line in _diaglogRunner.LinesToDraw)
             {
-                _console.Print(_cursorX, _cursorY, line);
+                Program.Ui.Print(_cursorX, _cursorY, line);
                 _cursorY += 2;
             }
             string continueText = "press A to get up";
             var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
             var y = GameSettings.GAME_HEIGHT / 2 - 1;
-            _console.Print(x, y, continueText);
+            Program.Ui.Print(x, y, continueText);
             _stopWatch.Stop();
         }
 
@@ -156,7 +152,7 @@ public class GameScreenIntroAnimation : Animation
             MediaPlayer.Play(AudioManager.LeavingHome);
             MediaPlayer.IsRepeating = true;
             IsRunning = false;
-            _console.Clear();
+            Program.Ui.Clear();
         }
     }
 
@@ -171,7 +167,7 @@ public class GameScreenIntroAnimation : Animation
             {
                 if (_stopWatch.ElapsedMilliseconds > 55)
                 {
-                    _console.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString());
+                    Program.Ui.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString());
 
                     _cursorX++;
                     _currentLineIndex++;
@@ -191,7 +187,7 @@ public class GameScreenIntroAnimation : Animation
             string continueText = "press A to get up";
             var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
             var y = GameSettings.GAME_HEIGHT / 2 - 1;
-            _console.Print(x, y, continueText);
+            Program.Ui.Print(x, y, continueText);
             _stopWatch.Stop();
         }
     }

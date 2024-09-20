@@ -1,16 +1,25 @@
-﻿using Balance;
-using Balance.Ui;
-using SadConsole.Configuration;
+﻿using Balance.Ui;
 
-Settings.WindowTitle = "Balance";
+namespace Balance;
 
-Builder gameStartup = new Builder()
-    .SetScreenSize(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT)
-    .SetStartingScreen<GameUi>()
-    .IsStartingScreenFocused(true)
-    .ConfigureFonts("fonts/cp437_20.font")
-    ;
+public class Program
+{
+    public static GameUi Ui { get; set; }
+    public static GameEngine Engine { get; set; }
+    private static void Main(string[] args)
+    {
+        Settings.WindowTitle = "Routine";
 
-Game.Create(gameStartup);
-Game.Instance.Run();
-Game.Instance.Dispose();
+        Game.Create(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT, "fonts/cp437_20.font", gameStartup);
+        Game.Instance.Run();
+        Game.Instance.Dispose();
+    }
+
+    static void gameStartup(object? sender, GameHost host)
+    {
+        Ui = GameUi.Instance();
+        Engine = GameEngine.Instance();
+        Game.Instance.Screen = Ui;
+        Game.Instance.Screen.IsFocused = true;
+    }
+}

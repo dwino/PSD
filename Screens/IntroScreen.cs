@@ -8,7 +8,7 @@ namespace Balance.Screens;
 
 public class IntroScreen
 {
-    public IntroScreen(Console console, GameUi ui)
+    public IntroScreen()
     {
         string sourceFile = "Content/ScreenText/IntroScreen" + "_SSBalance" + ".txt";
         StringBuilder stringBuilder = new StringBuilder();
@@ -21,8 +21,6 @@ public class IntroScreen
             }
         }
         _introText = stringBuilder.ToString(); ;
-        _console = console;
-        _gameUi = ui;
         _cursorX = 5;
         _cursorY = 5;
         _stopWatch = new Stopwatch();
@@ -36,10 +34,6 @@ public class IntroScreen
     private string _introText;
     private int index = 0;
 
-    private Console _console;
-
-    private GameUi _gameUi;
-
     private Stopwatch _stopWatch;
 
     public void ProcessKeyboard(Keyboard keyboard)
@@ -49,8 +43,8 @@ public class IntroScreen
             MediaPlayer.Stop();
             MediaPlayer.Play(AudioManager.MenuMusic);
             MediaPlayer.IsRepeating = true;
-            _console.Clear();
-            _gameUi.ActiveScreen = ScreensEnum.GameMenuScreen;
+            Program.Ui.Clear();
+            Program.Ui.ActiveScreen = ScreensEnum.GameMenuScreen;
         }
     }
 
@@ -60,7 +54,7 @@ public class IntroScreen
         {
             if (_stopWatch.ElapsedMilliseconds > 55)
             {
-                if (_console.Cursor.Position.X > GameSettings.GAME_WIDTH - 10 || _introText[index] == '\n')
+                if (Program.Ui.Cursor.Position.X > GameSettings.GAME_WIDTH - 10 || _introText[index] == '\n')
                 {
                     _cursorX = 5;
                     _cursorY += 2;
@@ -69,7 +63,7 @@ public class IntroScreen
                         index++;
                     }
                 }
-                _console.Print(_cursorX, _cursorY, _introText[index].ToString());
+                Program.Ui.Print(_cursorX, _cursorY, _introText[index].ToString());
 
                 _cursorX++;
                 index++;
@@ -82,9 +76,9 @@ public class IntroScreen
                     MediaPlayer.Stop();
                     MediaPlayer.Play(AudioManager.MenuMusic);
                     MediaPlayer.IsRepeating = true;
-                    _gameUi.Console.Clear();
+                    Program.Ui.Clear();
 
-                    _gameUi.ActiveScreen = ScreensEnum.GameMenuScreen;
+                    Program.Ui.ActiveScreen = ScreensEnum.GameMenuScreen;
 
                 }
             }

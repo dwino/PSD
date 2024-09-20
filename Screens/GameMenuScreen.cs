@@ -6,16 +6,9 @@ namespace Balance.Screens;
 
 public class MainMenuScreen
 {
-    private Console _console;
-    private GameUi _gameUi;
-    private Stopwatch _stopwatch;
     private int _activeSelection;
-    public MainMenuScreen(Console console, GameUi ui)
+    public MainMenuScreen()
     {
-        _console = console;
-        console.Clear();
-        _gameUi = ui;
-        _stopwatch = Stopwatch.StartNew();
         _activeSelection = 0;
     }
 
@@ -29,8 +22,8 @@ public class MainMenuScreen
         {
             if (_activeSelection == 0)
             {
-                _console.Clear();
-                _gameUi.ActiveScreen = ScreensEnum.GameScreen;
+                Program.Ui.Clear();
+                Program.Ui.ActiveScreen = ScreensEnum.GameScreen;
             }
             else if (_activeSelection == 1)
             {
@@ -56,29 +49,29 @@ public class MainMenuScreen
 
     public void Draw()
     {
-        _console.Clear();
+        Program.Ui.Clear();
         string menuScreenText = "Perfect Days in Space";
         var x = (GameSettings.GAME_WIDTH / 2) - (menuScreenText.Length / 2);
         var y = GameSettings.GAME_HEIGHT / 2 - 1;
-        _console.Print(x, y, menuScreenText);
+        Program.Ui.Print(x, y, menuScreenText);
 
         if (_activeSelection == 0)
         {
             x = (GameSettings.GAME_WIDTH / 2) - (">Play<".Length / 2);
             y++;
-            _console.Print(x, y, ">Play<");
+            Program.Ui.Print(x, y, ">Play<");
             x = (GameSettings.GAME_WIDTH / 2) - ("Exit".Length / 2);
             y++;
-            _console.Print(x, y, "Exit");
+            Program.Ui.Print(x, y, "Exit");
         }
         else if (_activeSelection == 1)
         {
             x = (GameSettings.GAME_WIDTH / 2) - ("Play".Length / 2);
             y++;
-            _console.Print(x, y, "Play");
+            Program.Ui.Print(x, y, "Play");
             x = (GameSettings.GAME_WIDTH / 2) - (">Exit<".Length / 2);
             y++;
-            _console.Print(x, y, ">Exit<");
+            Program.Ui.Print(x, y, ">Exit<");
         }
 
 

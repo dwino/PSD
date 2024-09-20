@@ -4,30 +4,41 @@ using SadConsole.Input;
 
 namespace Balance.Ui;
 
-public class GameUi : ScreenObject
+public class GameUi : Console
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    static GameUi? instance;
+    public static GameUi Instance()
+    {
+        // Uses lazy initialization.
+        // Note: this is not thread safe.
+        if (instance == null)
+        {
+            instance = new GameUi();
+        }
+        return instance;
+    }
+    /// <summary>
+    /// /
+    /// </summary>
+
     private IntroScreen _introScreen;
     private MainMenuScreen _menuScreen;
     public GameScreen GameScreen { get; set; }
 
-    private GameEngine _game;
     public ScreensEnum ActiveScreen { get; set; }
 
-    public GameUi()
+    private GameUi() : base(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT)
     {
         AudioManager.Initialize();
 
-        Console = new Console(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT, GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT);
+        _introScreen = new IntroScreen();
 
-        Children.Add(Console);
+        _menuScreen = new MainMenuScreen();
 
-        _introScreen = new IntroScreen(Console, this);
-
-        _menuScreen = new MainMenuScreen(Console, this);
-
-        _game = new GameEngine(this);
-
-        GameScreen = new GameScreen(_game, this, Console);
+        GameScreen = new GameScreen();
 
         ActiveScreen = ScreensEnum.IntroScreen;
         MediaPlayer.Play(AudioManager.IntroMusic);
@@ -36,7 +47,6 @@ public class GameUi : ScreenObject
         //Game.Instance.ToggleFullScreen();
     }
 
-    public Console Console { get; set; }
 
 
     public override bool ProcessKeyboard(Keyboard keyboard)
@@ -58,7 +68,7 @@ public class GameUi : ScreenObject
 
     public override void Update(TimeSpan delta)
     {
-        _game.Update();
+        Program.Engine.Update();
         base.Update(delta);
     }
 
