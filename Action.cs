@@ -39,13 +39,12 @@ public class MoveByAction : Action
             {
                 var oldPosition = Program.Engine.Player.Position;
                 var interMapTuple = interMapHandle[newPosition];
-                var newMap = _map.GetMap(interMapTuple.Item1);
+                var newMap = Map.GetMap(interMapTuple.Item1);
                 Program.Engine.ChangeMap(newMap);
                 Program.Engine.Player.Position = interMapTuple.Item2;
 
                 Program.Ui.Clear();
-                Program.Ui.GameScreen.CurrentAnimation = new MapTransitionAnimation(_map.VisibleMap, Program.Engine.Player, oldPosition, _offset);
-                Program.Ui.GameScreen.CurrentAnimation.IsRunning = true;
+                Program.Ui.GameScreen.AddAnimation(new MapTransitionAnimation(_map.VisibleMap, Program.Engine.Player, oldPosition, _offset));
             }
 
             _map.AvailableInteractions.Clear();

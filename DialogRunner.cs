@@ -151,9 +151,9 @@ public abstract class TextScreen : DialogueRunner
     }
 }
 
-public class IntroTextScreen : TextScreen
+public class BasicTextScreen : TextScreen
 {
-    public IntroTextScreen(string name) : base(name)
+    public BasicTextScreen(string name) : base(name)
     {
     }
 

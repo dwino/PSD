@@ -68,6 +68,10 @@ public class GameUi : Console
 
     public override void Update(TimeSpan delta)
     {
+        if (ActiveScreen == ScreensEnum.GameScreen)
+        {
+            GameScreen.Update();
+        }
         Program.Engine.Update();
         base.Update(delta);
     }

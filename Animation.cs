@@ -103,7 +103,7 @@ public class MapTransitionAnimation : Animation
 
 public class GameScreenIntroAnimation : Animation
 {
-    private IntroTextScreen _diaglogRunner;
+    private BasicTextScreen _diaglogRunner;
     private int _cursorX;
     private int _cursorY;
     private int _linesIndex;
@@ -112,13 +112,11 @@ public class GameScreenIntroAnimation : Animation
 
     public GameScreenIntroAnimation() : base()
     {
-        _diaglogRunner = new IntroTextScreen("GameScreenIntro");
+        _diaglogRunner = new BasicTextScreen("GameScreenIntro");
         _diaglogRunner.IsActive = true;
 
-        while (_diaglogRunner.IsActive)
-        {
-            _diaglogRunner.ContinueDialog();
-        }
+        _diaglogRunner.ContinueDialog();
+
         _cursorX = 5;
         _cursorY = 5;
 
@@ -159,6 +157,7 @@ public class GameScreenIntroAnimation : Animation
 
     public override void Play()
     {
+
         if (_linesIndex < _diaglogRunner.LinesToDraw.Count)
         {
             _currentLine = _diaglogRunner.LinesToDraw[_linesIndex];
@@ -167,7 +166,7 @@ public class GameScreenIntroAnimation : Animation
             {
                 if (_stopWatch.ElapsedMilliseconds > 55)
                 {
-                    Program.Ui.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString());
+                    Program.Ui.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString(), Color.White, Color.Black);
 
                     _cursorX++;
                     _currentLineIndex++;
@@ -180,6 +179,7 @@ public class GameScreenIntroAnimation : Animation
                 _cursorY += 2;
                 _linesIndex++;
                 _currentLineIndex = 0;
+                _diaglogRunner.ContinueDialog();
             }
         }
         else
@@ -187,7 +187,97 @@ public class GameScreenIntroAnimation : Animation
             string continueText = "press A to get up";
             var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
             var y = GameSettings.GAME_HEIGHT / 2 - 1;
+            Program.Ui.Print(x, y, continueText, Color.White, Color.Black);
+            _stopWatch.Stop();
+        }
+    }
+}
+
+public class BasicTextScreenAnimation : Animation
+{
+    private BasicTextScreen _diaglogRunner;
+    private int _cursorX;
+    private int _cursorY;
+    private int _linesIndex;
+    private string _currentLine;
+    private int _currentLineIndex;
+
+    public BasicTextScreenAnimation(string dialogString, bool autoRun = false) : base()
+    {
+        _diaglogRunner = new BasicTextScreen(dialogString);
+        _diaglogRunner.IsActive = true;
+
+        _diaglogRunner.ContinueDialog();
+
+        _cursorX = 5;
+        _cursorY = 5;
+
+        _linesIndex = 0;
+        _currentLine = "";
+        _currentLineIndex = 0;
+
+        IsRunning = autoRun;
+    }
+
+    public override void ProcessKeyboard(Keyboard keyboard)
+    {
+        if (keyboard.IsKeyPressed(Keys.Z))
+        {
+            _cursorX = 5;
+            _cursorY = 5;
+            Program.Ui.Clear();
+            foreach (var line in _diaglogRunner.LinesToDraw)
+            {
+                Program.Ui.Print(_cursorX, _cursorY, line);
+                _cursorY += 2;
+            }
+            string continueText = "press A to get up";
+            var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
+            var y = GameSettings.GAME_HEIGHT / 2 - 1;
             Program.Ui.Print(x, y, continueText);
+            _stopWatch.Stop();
+        }
+
+        else if (keyboard.IsKeyPressed(Keys.A))
+        {
+            IsRunning = false;
+            Program.Ui.Clear();
+        }
+    }
+
+
+    public override void Play()
+    {
+        if (_linesIndex < _diaglogRunner.LinesToDraw.Count)
+        {
+            _currentLine = _diaglogRunner.LinesToDraw[_linesIndex];
+
+            if (_currentLineIndex < _currentLine.Length)
+            {
+                if (_stopWatch.ElapsedMilliseconds > 55)
+                {
+                    Program.Ui.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString(), Color.White, Color.Black);
+
+                    _cursorX++;
+                    _currentLineIndex++;
+                    _stopWatch.Restart();
+                }
+            }
+            else
+            {
+                _cursorX = 5;
+                _cursorY += 2;
+                _linesIndex++;
+                _currentLineIndex = 0;
+                _diaglogRunner.ContinueDialog();
+            }
+        }
+        else
+        {
+            string continueText = "press A to get up";
+            var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
+            var y = GameSettings.GAME_HEIGHT / 2 - 1;
+            Program.Ui.Print(x, y, continueText, Color.White, Color.Black);
             _stopWatch.Stop();
         }
     }

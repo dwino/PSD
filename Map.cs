@@ -11,11 +11,8 @@ namespace Balance;
 
 public abstract class Map
 {
-    protected Dictionary<string, Func<Map>>? mapDict;
-
-    protected void initMapDict()
+    public static Dictionary<string, Func<Map>>? MapDict = new Dictionary<string, Func<Map>>()
     {
-        mapDict = new Dictionary<string, Func<Map>>(){
         {"Cafeteria",() => new Cafeteria()},
         {"Cryo1",() => new Cryo1()},
         {"Cryo2",() => new Cryo2()},
@@ -43,8 +40,8 @@ public abstract class Map
         {"ShowerSouth",() => new ShowerSouth()},
         {"Storage",() => new Storage()},
         {"Toilet",() => new Toilet()},
-        {"YourRoom",() => new YourRoom()},};
-    }
+        {"YourRoom",() => new YourRoom()},
+    };
 
     public static Dictionary<string, Dictionary<Point, (string, Point)>> InterMapDict
                             = new Dictionary<string, Dictionary<Point, (string, Point)>>(){
@@ -163,11 +160,11 @@ public abstract class Map
                                 }},
                             };
     public static Dictionary<string, MemoryVariableStore> MemoryPalace = new Dictionary<string, MemoryVariableStore>();
-    public Map GetMap(string xpMapString)
+    public static Map GetMap(string xpMapString)
     {
         // Dark Magic, dont change
         Func<Map> func;
-        return mapDict!.TryGetValue(xpMapString, out func!)
+        return MapDict!.TryGetValue(xpMapString, out func!)
             ? func() // invoking the delegate creates the instance of the brand object
             : null!;  // brandName was not in the dictionary
     }
@@ -180,7 +177,6 @@ public abstract class Map
 
     protected Map(string xpMapString)
     {
-        initMapDict();
         XpMapString = xpMapString;
         var path = "Content/Maps/" + xpMapString + ".xp";
         RPImg = SadConsole.Readers.REXPaintImage.Load(new FileStream(path, FileMode.Open));

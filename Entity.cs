@@ -32,6 +32,8 @@ public class Player
         Position = (-1, -1);
 
         NextAction = null;
+
+        Triggers = new List<Trigger>();
     }
     public string Name { get; set; }
     public Color Color { get; set; }
@@ -39,5 +41,7 @@ public class Player
     public Point Position { get; set; }
 
     public Action? NextAction { get; set; }
+
+    public List<Trigger> Triggers { get; set; }
 }
 

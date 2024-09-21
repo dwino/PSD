@@ -1,3 +1,4 @@
+using Assimp.Unmanaged;
 using Balance.Ui;
 using SadConsole.Input;
 
@@ -27,6 +28,13 @@ public class GameEngine
     private GameEngine()
     {
         Player = new Player();
+
+        var condition = () => { return Map!.XpMapString == "EngineRoom"; };
+        var consequence = () => { Program.Ui.GameScreen.AddAnimation(new BasicTextScreenAnimation("PeaceAtLast")); };
+        var trigger = new Trigger(condition, consequence, true);
+
+        Player.Triggers.Add(trigger);
+
         Map = new YourRoom();
         Player.Position = (1, 2);
     }
@@ -152,6 +160,21 @@ public class GameEngine
         {
             Player.NextAction.Execute();
             Player.NextAction = null;
+        }
+
+        var removeTrigers = new List<Trigger>();
+
+        foreach (var trigger in Player.Triggers)
+        {
+            trigger.Run();
+            if (trigger.Remove)
+            {
+                removeTrigers.Add(trigger);
+            }
+        }
+        foreach (var trigger in removeTrigers)
+        {
+            Player.Triggers.Remove(trigger);
         }
     }
     public void Draw()
