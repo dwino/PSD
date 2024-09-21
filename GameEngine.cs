@@ -179,7 +179,7 @@ public class GameEngine
     }
     public void Draw()
     {
-        Program.Ui.Clear();
+        // Program.Ui.Clear();
 
         if ((Map.CurrentInteraction != null || Map.CurrentInteractionIndex != -1) && Map.CurrentInteraction.IsActive)
         {
@@ -201,6 +201,9 @@ public class GameEngine
 
             int x = Player.Position.X + (GameSettings.GAME_WIDTH / 2) - (Map.Width / 2);
             int y = Player.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Map.Height / 2);
+
+            // int x = GameSettings.GAME_WIDTH / 2;
+            // int y = GameSettings.GAME_HEIGHT / 2;
 
             Program.Ui.Print(x, y, Player.Glyph.ToString(), Player.Color);
         }

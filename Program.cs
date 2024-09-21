@@ -4,8 +4,8 @@ namespace Balance;
 
 public class Program
 {
-    public static GameUi Ui { get; set; }
-    public static GameEngine Engine { get; set; }
+    public static GameUi? Ui { get; set; }
+    public static GameEngine? Engine { get; set; }
     private static void Main(string[] args)
     {
         Settings.WindowTitle = "Routine";

@@ -275,6 +275,7 @@ public class MainCorridor : Map
 {
     public MainCorridor() : base("MainCorridor")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Security", XRef = _xOffset, YRef = _yOffset, XOffset = -9, YOffset = 0 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)

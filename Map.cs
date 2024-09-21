@@ -177,6 +177,7 @@ public abstract class Map
 
     protected Map(string xpMapString)
     {
+        ShadowMaps = new List<ShadowMap>();
         XpMapString = xpMapString;
         var path = "Content/Maps/" + xpMapString + ".xp";
         RPImg = SadConsole.Readers.REXPaintImage.Load(new FileStream(path, FileMode.Open));
@@ -197,6 +198,7 @@ public abstract class Map
         _currentInteraction = null!;
 
     }
+    public List<ShadowMap> ShadowMaps;
     public string XpMapString { get; set; }
     public int Width => RPImg.Width;
     public int Height => RPImg.Height;
@@ -245,7 +247,39 @@ public abstract class Map
     public virtual void OnExit() { }
     public virtual void Draw()
     {
+        int x1 = GameSettings.GAME_WIDTH / 2 - Program.Engine.Player.Position.X;
+        int y1 = GameSettings.GAME_HEIGHT / 2 - Program.Engine.Player.Position.Y;
+        foreach (var shadowMap in ShadowMaps)
+        {
+            var map = GetMap(shadowMap.MapString);
+
+            var _visibleMap = new CellSurface(map.VisibleMap.Width, map.VisibleMap.Height);
+            map.VisibleMap.Copy(_visibleMap);
+
+            for (int x = 0; x < _visibleMap.Width; x++)
+            {
+                for (int y = 0; y < _visibleMap.Height; y++)
+                {
+                    var fgColor = _visibleMap.GetForeground(x, y);
+                    var fgNewColor = fgColor.GetDarkest().GetDarkest();
+                    var bgColor = _visibleMap.GetBackground(x, y);
+                    var bgNewColor = bgColor.GetDarkest().GetDarkest();
+                    _visibleMap.SetForeground(x, y, fgNewColor);
+                    _visibleMap.SetBackground(x, y, bgNewColor);
+                }
+            }
+            _visibleMap.Copy(Program.Ui.Surface, shadowMap.X, shadowMap.Y);
+
+            // _visibleMap.Copy(Program.Ui.Surface, shadowMap.XOffset + x1, shadowMap.YOffset + y1);
+        }
+
+
+
+        // VisibleMap.Copy(Program.Ui.Surface, x1, y1);
+
         VisibleMap.Copy(Program.Ui.Surface, _xOffset, _yOffset);
+
+
 
         foreach (var entity in Entities)
         {
