@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Media;
 
 public static class AudioManager
 {
+    public static Dictionary<string, SoundEffect?> SFXDict = new Dictionary<string, SoundEffect?>();
     public static Song? IntroMusic { get; set; }
     public static Song? MenuMusic { get; set; }
     public static Song? CombatInteractionMusic { get; set; }
@@ -20,7 +21,6 @@ public static class AudioManager
 
     private static ContentManager? contentManager;
 
-    // Initialize the ContentManager using the correct MonoGame services
     public static void Initialize()
     {
         contentManager = new ContentManager(Game.Instance.MonoGameInstance.Services, "Content/Audio");
@@ -44,6 +44,8 @@ public static class AudioManager
             DoorCloseSFX = contentManager?.Load<SoundEffect>("Xnb/doorClose");
 
             SpaceEngineSFX = contentManager?.Load<SoundEffect>("Xnb/space_engine");
+
+            SFXDict.Add("faucet_running", HealSFX);
 
         }
         catch (Exception ex)

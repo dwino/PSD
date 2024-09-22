@@ -65,6 +65,7 @@ public abstract class DialogueRunner
 
     public void CommandHandler(Yarn.Command command)
     {
+        CommandParser.Parse(command.Text);
     }
 
     public void LineHandler(Yarn.Line line)
@@ -84,6 +85,7 @@ public abstract class DialogueRunner
         {
             OptionsToDraw.Add(TextForLine(option.Line.ID));
             count += 1;
+
         }
     }
 

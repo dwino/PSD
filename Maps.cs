@@ -446,6 +446,9 @@ public class Storage : Map
 {
     public Storage() : base("Storage")
     {
+        var sinkInteraction = new MapInteraction("Sink", this, (1, 1));
+        Interactions.Add(sinkInteraction);
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)

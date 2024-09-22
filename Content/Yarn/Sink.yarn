@@ -1,0 +1,16 @@
+title: Start
+---
+Sink:
+    -> Wash your hands.
+        <<play_sound:faucet_running>>
+    -> Wash yourself.
+    -> Drink a glass of water.
+    -> Clean the sink.
+===
+
+title: Exit
+---
+Leave the sink alone
+===
+
+
