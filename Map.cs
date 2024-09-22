@@ -304,4 +304,5 @@ public abstract class Map
             Program.Ui.Print(x, y, interactionOption, color);
         }
     }
+
 }

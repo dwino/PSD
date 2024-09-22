@@ -59,6 +59,7 @@ public class GameScreen
     public void DrawGameScreen()
     {
 
+
         if (_currentAnimation != null && _currentAnimation.IsRunning)
         {
             _currentAnimation.Play();

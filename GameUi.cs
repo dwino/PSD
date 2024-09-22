@@ -32,6 +32,9 @@ public class GameUi : Console
 
     private GameUi() : base(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT)
     {
+        SpaceShipGenerator.Init(40, 40);
+        SpaceShipGenerator.Generate();
+
         AudioManager.Initialize();
 
         _introScreen = new IntroScreen();
@@ -50,6 +53,14 @@ public class GameUi : Console
 
     public override bool ProcessKeyboard(Keyboard keyboard)
     {
+        if (ActiveScreen == ScreensEnum.MapGen)
+        {
+            if (keyboard.IsKeyPressed(Keys.A))
+            {
+                SpaceShipGenerator.Generate();
+            }
+        }
+
         if (ActiveScreen == ScreensEnum.GameScreen)
         {
             GameScreen.ProcessKeyboard(keyboard);
@@ -77,6 +88,11 @@ public class GameUi : Console
 
     public override void Render(TimeSpan delta)
     {
+        if (ActiveScreen == ScreensEnum.MapGen)
+        {
+            SpaceShipGenerator.DrawFullMap();
+        }
+
         if (ActiveScreen == ScreensEnum.GameScreen)
         {
             GameScreen.DrawGameScreen();

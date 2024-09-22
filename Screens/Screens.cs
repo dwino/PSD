@@ -5,4 +5,5 @@ public enum ScreensEnum
     GameScreen,
     GameMenuScreen,
     IntroScreen,
+    MapGen,
 }
