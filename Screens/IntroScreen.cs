@@ -40,9 +40,7 @@ public class IntroScreen
     {
         if (keyboard.IsKeyPressed(Keys.A))
         {
-            MediaPlayer.Stop();
-            MediaPlayer.Play(AudioManager.MenuMusic);
-            MediaPlayer.IsRepeating = true;
+            AudioManager.PlaySong("menu");
             Program.Ui.Clear();
             Program.Ui.ActiveScreen = ScreensEnum.GameMenuScreen;
         }
@@ -71,11 +69,8 @@ public class IntroScreen
 
                 if (index == _introText.Length)
                 {
-                    //AudioManager.HitSFX.CreateInstance().Play();
                     _stopWatch.Stop(); ;
-                    MediaPlayer.Stop();
-                    MediaPlayer.Play(AudioManager.MenuMusic);
-                    MediaPlayer.IsRepeating = true;
+                    AudioManager.PlaySong("menu");
                     Program.Ui.Clear();
 
                     Program.Ui.ActiveScreen = ScreensEnum.GameMenuScreen;

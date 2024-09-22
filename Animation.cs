@@ -44,7 +44,7 @@ public class MapTransitionAnimation : Animation
         _color = _player.Color;
 
 
-        var doorOpenSFX = AudioManager.DoorOpenSFX!.CreateInstance();
+        var doorOpenSFX = AudioManager.GetSFX("doorOpen");
         doorOpenSFX.Volume = 0.2f;
         doorOpenSFX.Play();
     }
@@ -89,7 +89,7 @@ public class MapTransitionAnimation : Animation
         }
         else if (_stopWatch.ElapsedMilliseconds >= 750)
         {
-            var doorCloseSFX = AudioManager.DoorCloseSFX!.CreateInstance();
+            var doorCloseSFX = AudioManager.GetSFX("doorClose");
             doorCloseSFX.Volume = 0.2f;
             doorCloseSFX.Play();
             IsRunning = false;
@@ -146,9 +146,7 @@ public class GameScreenIntroAnimation : Animation
 
         else if (keyboard.IsKeyPressed(Keys.A))
         {
-            MediaPlayer.Stop();
-            MediaPlayer.Play(AudioManager.LeavingHome);
-            MediaPlayer.IsRepeating = true;
+            AudioManager.PlaySong("leaving_home");
             IsRunning = false;
             Program.Ui.Clear();
         }

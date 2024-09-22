@@ -41,8 +41,7 @@ public class GameUi : Console
         GameScreen = new GameScreen();
 
         ActiveScreen = ScreensEnum.IntroScreen;
-        MediaPlayer.Play(AudioManager.IntroMusic);
-        MediaPlayer.IsRepeating = true;
+        AudioManager.PlaySong("intro");
 
         //Game.Instance.ToggleFullScreen();
     }

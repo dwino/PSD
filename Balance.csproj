@@ -12,7 +12,10 @@
   </PropertyGroup>
 
  <ItemGroup>
-    <None Update="Content/Audio/Xnb/*">
+    <None Update="Content/Audio/Xnb/Song/*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+     <None Update="Content/Audio/Xnb/SFX/*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Content/ScreenText/*">

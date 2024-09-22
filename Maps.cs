@@ -129,7 +129,7 @@ public class Cryo3 : Map
             Program.Ui.SetBackground(AnimationPosition_a.X + _xOffset, AnimationPosition_a.Y + _yOffset, new SadRogue.Primitives.Color(25, 25, 25));
             if (_stopwatch.ElapsedMilliseconds > Helper.Rnd.Next(3000, 4500))
             {
-                var sfx = AudioManager.MalfunctionSFX!.CreateInstance();
+                var sfx = AudioManager.GetSFX("malfunction");
                 sfx.Volume = 0.4f;
                 sfx.Play();
 
@@ -225,7 +225,7 @@ public class EngineRoom : Map
 
     public EngineRoom() : base("EngineRoom")
     {
-        _engineSFX = AudioManager.SpaceEngineSFX!.CreateInstance();
+        _engineSFX = AudioManager.GetSFX("space_engine");
 
     }
 

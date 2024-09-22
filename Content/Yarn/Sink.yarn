@@ -1,8 +1,11 @@
 title: Start
 ---
 Sink:
+    -> Leave sink
+        <<jump Exit>>
     -> Wash your hands.
-        <<play_sound:faucet_running>>
+        <<play_sound:washing_hands>>
+        <<jump Start>>
     -> Wash yourself.
     -> Drink a glass of water.
     -> Clean the sink.
@@ -10,7 +13,7 @@ Sink:
 
 title: Exit
 ---
-Leave the sink alone
+You leave the sink be.
 ===
 
 

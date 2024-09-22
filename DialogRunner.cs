@@ -66,6 +66,7 @@ public abstract class DialogueRunner
     public void CommandHandler(Yarn.Command command)
     {
         CommandParser.Parse(command.Text);
+        ContinueDialog();
     }
 
     public void LineHandler(Yarn.Line line)
