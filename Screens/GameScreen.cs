@@ -16,6 +16,7 @@ public class GameScreen
     {
         _animationsQueue = new Queue<Animation>();
         _animationsQueue.Enqueue(new GameScreenIntroAnimation());
+
         _backgroundAnimation = new BackgroundAnimation();
     }
 
@@ -137,70 +138,3 @@ public class Star
         return new Color(Life, Life, Life);
     }
 }
-
-// public class BackgroundAnimation
-// {
-//     private List<PointFloat> stars;
-//     public BackgroundAnimation()
-//     {
-//         stars = new List<PointFloat>();
-//         for (int i = 0; i < 20; i++)
-//         {
-//             if (i % 2 == 0)
-//             {
-//                 stars.Add(new PointFloat(Helper.Rnd.NextSingle() * GameSettings.GAME_WIDTH - 1, 1, Helper.Rnd.NextSingle() / 2 * -1));
-//             }
-//             else
-//             {
-//                 stars.Add(new PointFloat(GameSettings.GAME_WIDTH - 1, Helper.Rnd.NextSingle() * GameSettings.GAME_HEIGHT - 1, Helper.Rnd.NextSingle() / 2 * -1));
-//             }
-//         }
-//     }
-
-//     public void Play()
-//     {
-//         foreach (var star in stars)
-//         {
-//             while (!star.InBounds())
-//             {
-//                 if (Helper.Rnd.Next(2) == 0)
-//                 {
-//                     star.X = Helper.Rnd.NextSingle() * GameSettings.GAME_WIDTH - 1;
-//                     star.Y = 1;
-//                 }
-//                 else
-//                 {
-//                     star.X = GameSettings.GAME_WIDTH - 1;
-//                     star.Y = Helper.Rnd.NextSingle() * GameSettings.GAME_HEIGHT - 1;
-//                 }
-//             }
-
-//             var pointToDraw = star.GetPoint();
-
-//             Program.Ui.Print(pointToDraw.X, pointToDraw.Y, ".", Color.White, Color.Black);
-//             star.Increase();
-//         }
-//     }
-// }
-
-// public class PointFloat(float x, float y, float inc)
-// {
-//     public float X { get; set; } = x;
-//     public float Y { get; set; } = y;
-//     public float Inc { get; set; } = inc;
-//     public Point GetPoint()
-//     {
-//         return new Point((int)X, (int)Y);
-//     }
-
-//     public bool InBounds()
-//     {
-//         return (X >= 0 && X <= GameSettings.GAME_WIDTH) && (Y >= 0 && Y <= GameSettings.GAME_HEIGHT);
-//     }
-
-//     public void Increase()
-//     {
-//         X += Inc;
-//         Y -= Inc;
-//     }
-// }

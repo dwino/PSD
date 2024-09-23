@@ -31,8 +31,8 @@ public class GameEngine
 
         Player.Triggers.AddRange(Trigger.Triggers);
 
-        Map = new YourRoom();
-        Player.Position = (1, 2);
+        Map = new Hydroponics();
+        Player.Position = (8, 8);
     }
 
     public Player Player { get; set; }

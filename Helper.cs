@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Figgle;
 
 namespace Balance;
@@ -23,5 +24,93 @@ public class ShadowMap
     public int YRef { get; set; }
     public int XOffset { get; set; }
     public int YOffset { get; set; }
+
+}
+
+public class PointFloat(float x, float y)
+{
+    public float X { get; set; } = x;
+    public float Y { get; set; } = y;
+    public Point GetPoint()
+    {
+        return new Point((int)X, (int)Y);
+    }
+    public PointFloat GetCopy()
+    {
+        return new PointFloat(X, Y);
+    }
+}
+
+public class Particle
+{
+    private Stopwatch _stopwatch;
+    private int life;
+    public Particle(PointFloat position, PointFloat velocity, char glyph, Color fgColor, Color bgColor)
+    {
+        _stopwatch = new Stopwatch();
+        life = Helper.Rnd.Next(50, 100);
+        Died = false;
+        Position = position;
+        Velocity = velocity;
+        Glyph = glyph;
+        FGColor = fgColor;
+        BGColor = bgColor;
+
+        _stopwatch.Start();
+    }
+    public bool Died { get; set; }
+
+    public PointFloat Position { get; set; }
+    public PointFloat Velocity { get; set; }
+    public char Glyph { get; set; }
+    public Color FGColor { get; set; }
+    public Color BGColor { get; set; }
+
+    public void Update()
+    {
+        if (_stopwatch.ElapsedMilliseconds > 50)
+        {
+            life--;
+
+            byte r, g, b, a = 0;
+
+            FGColor.Deconstruct(out r, out g, out b, out a);
+            a--;
+            FGColor = FGColor.SetAlpha(a);
+
+            BGColor.Deconstruct(out r, out g, out b, out a);
+            a--;
+            BGColor = BGColor.SetAlpha(a);
+            if (life <= 0)
+            {
+                Died = true;
+            }
+            else
+            {
+                Position.X += Velocity.X;
+                Position.Y += Velocity.Y;
+
+                if (OutOfBounds())
+                {
+                    Died = true;
+                }
+            }
+            _stopwatch.Restart();
+        }
+
+        System.Console.WriteLine("Position: " + Position.X + ", " + Position.Y);
+        System.Console.WriteLine("Velocity: " + Velocity.X + ", " + Velocity.Y);
+
+    }
+
+    private bool OutOfBounds()
+    {
+        var position = Position.GetPoint();
+
+        return position.X <= 0 || position.X >= Program.Engine.Map.Width || position.Y <= 0 || position.Y >= Program.Engine.Map.Height;
+
+    }
+
+
 
 }

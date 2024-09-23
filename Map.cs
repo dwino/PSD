@@ -169,10 +169,10 @@ public abstract class Map
             : null!;  // brandName was not in the dictionary
     }
 
-    protected int _xOffset;
-    protected int _yOffset;
+    public int XOffset;
+    public int YOffset;
     public CellSurface VisibleMap { get; set; }
-    protected CellSurface _walkableMap;
+    public CellSurface WalkableMap { get; set; }
     protected CellSurface _interactionMap;
 
     protected Map(string xpMapString)
@@ -183,13 +183,13 @@ public abstract class Map
         RPImg = SadConsole.Readers.REXPaintImage.Load(new FileStream(path, FileMode.Open));
 
         VisibleMap = (CellSurface?)RPImg.ToCellSurface()[0]!;
-        _walkableMap = (CellSurface?)RPImg.ToCellSurface()[1]!;
+        WalkableMap = (CellSurface?)RPImg.ToCellSurface()[1]!;
         _interactionMap = (CellSurface?)RPImg.ToCellSurface()[2]!;
 
         LoadInteractionMap();
 
-        _xOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
-        _yOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
+        XOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
+        YOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
 
         Entities = new List<Entity>();
         Interactions = new List<MapBoundInteraction>();
@@ -277,7 +277,7 @@ public abstract class Map
 
         // VisibleMap.Copy(Program.Ui.Surface, x1, y1);
 
-        VisibleMap.Copy(Program.Ui.Surface, _xOffset, _yOffset);
+        VisibleMap.Copy(Program.Ui.Surface, XOffset, YOffset);
 
 
 

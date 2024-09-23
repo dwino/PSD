@@ -344,3 +344,64 @@ public class ColoredBackgroundTextScreen : BasicTextScreenAnimation
 
 
 }
+
+public class ParticleEmmitter : Animation
+{
+    private PointFloat _position;
+    private List<Particle> _particles;
+    private Stopwatch _stopWatch;
+
+    public ParticleEmmitter(PointFloat position) : base(BackGroundPermisson.Full)
+    {
+        _stopWatch = new Stopwatch();
+        _position = position;
+        _particles = new List<Particle>();
+
+        _stopWatch.Start();
+    }
+
+    public override void ProcessKeyboard(Keyboard keyboard)
+    {
+    }
+
+    public override void Play()
+    {
+        if (_stopWatch.ElapsedMilliseconds > Helper.Rnd.Next(10000, 15000))
+        {
+            Program.Ui.AnimationConsole.Clear();
+
+            while (_particles.Count < 15)
+            {
+                var fgColor = new Color(Color.Blue, 0.65f);
+                var bgColor = new Color(Color.Blue, 0.5f);
+
+                _particles.Add(new Particle(_position.GetCopy(), new PointFloat((Helper.Rnd.NextSingle() - 0.5f) / 5, (Helper.Rnd.NextSingle() - 0.5f) / 5), '.', fgColor, bgColor));
+            }
+            _stopWatch.Restart();
+        }
+
+        if (_particles.Count > 0)
+        {
+            var removeList = new List<Particle>();
+
+            foreach (var particle in _particles)
+            {
+                if (particle.Died)
+                {
+                    removeList.Add(particle);
+                }
+                else
+                {
+                    var point = particle.Position.GetPoint();
+                    Program.Ui.AnimationConsole.Print(point.X + Program.Engine.Map.XOffset, point.Y + Program.Engine.Map.YOffset, particle.Glyph.ToString(), particle.FGColor, particle.BGColor);
+                    particle.Update();
+                }
+            }
+
+            foreach (var particle in removeList)
+            {
+                _particles.Remove(particle);
+            }
+        }
+    }
+}
