@@ -147,16 +147,16 @@ public abstract class DialogueRunner
     public abstract bool IsAvailable();
 }
 
-public abstract class TextScreen : DialogueRunner
+public abstract class TextScreenDialog : DialogueRunner
 {
-    protected TextScreen(string name, string startNode = "Start", bool autoActivated = false) : base(name, startNode, autoActivated)
+    protected TextScreenDialog(string name, string startNode = "Start", bool autoActivated = false) : base(name, startNode, autoActivated)
     {
     }
 }
 
-public class BasicTextScreen : TextScreen
+public class BasicTextScreenDialog : TextScreenDialog
 {
-    public BasicTextScreen(string name) : base(name)
+    public BasicTextScreenDialog(string name) : base(name)
     {
     }
 

@@ -23,12 +23,12 @@ public class MainMenuScreen
             if (_activeSelection == 0)
             {
                 Program.Ui.Clear();
-                Program.Ui.ActiveScreen = ScreensEnum.MapGen;
+                Program.Ui.ActiveScreen = ScreensEnum.GameScreen;
             }
-            if (_activeSelection == 1)
+            else if (_activeSelection == 1)
             {
                 Program.Ui.Clear();
-                Program.Ui.ActiveScreen = ScreensEnum.GameScreen;
+                Program.Ui.ActiveScreen = ScreensEnum.MapGen;
             }
             else if (_activeSelection == 2)
             {
@@ -62,18 +62,12 @@ public class MainMenuScreen
 
         if (_activeSelection == 0)
         {
-            x = (GameSettings.GAME_WIDTH / 2) - (">MapGen<".Length / 2);
-            y++;
-            Program.Ui.Print(x, y, ">MapGen<");
-            x = (GameSettings.GAME_WIDTH / 2) - ("Play".Length / 2);
-            y++;
-            Program.Ui.Print(x, y, "Play");
-        }
-        else if (_activeSelection == 1)
-        {
             x = (GameSettings.GAME_WIDTH / 2) - (">Play<".Length / 2);
             y++;
             Program.Ui.Print(x, y, ">Play<");
+            x = (GameSettings.GAME_WIDTH / 2) - ("MapGen".Length / 2);
+            y++;
+            Program.Ui.Print(x, y, "MapGen");
             x = (GameSettings.GAME_WIDTH / 2) - ("Exit".Length / 2);
             y++;
             Program.Ui.Print(x, y, "Exit");
@@ -83,6 +77,21 @@ public class MainMenuScreen
             x = (GameSettings.GAME_WIDTH / 2) - ("Play".Length / 2);
             y++;
             Program.Ui.Print(x, y, "Play");
+            x = (GameSettings.GAME_WIDTH / 2) - (">MapGen<".Length / 2);
+            y++;
+            Program.Ui.Print(x, y, ">MapGen<");
+            x = (GameSettings.GAME_WIDTH / 2) - ("Exit".Length / 2);
+            y++;
+            Program.Ui.Print(x, y, "Exit");
+        }
+        else if (_activeSelection == 2)
+        {
+            x = (GameSettings.GAME_WIDTH / 2) - ("Play".Length / 2);
+            y++;
+            Program.Ui.Print(x, y, "Play");
+            x = (GameSettings.GAME_WIDTH / 2) - ("MapGen".Length / 2);
+            y++;
+            Program.Ui.Print(x, y, "MapGen");
             x = (GameSettings.GAME_WIDTH / 2) - (">Exit<".Length / 2);
             y++;
             Program.Ui.Print(x, y, ">Exit<");

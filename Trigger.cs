@@ -28,4 +28,14 @@ public class Trigger
         }
     }
 
+    public static List<Trigger> Triggers = new List<Trigger>(){
+        new Trigger(() => { return Program.Engine!.Map.XpMapString == "EngineRoom"; },
+                    () => { Program.Ui!.GameScreen.AddAnimation(new BasicTextScreenAnimation("PeaceAtLast")); },
+                    true),
+        new Trigger(() => { return Program.Engine!.Map.XpMapString == "Hydroponics"; },
+                    () => { Program.Ui!.GameScreen.AddAnimation(new ColoredBackgroundTextScreen("HydroponicsFirstTime")); },
+                    true),
+
+    };
+
 }

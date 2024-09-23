@@ -59,9 +59,12 @@ public class GameScreen
     public void DrawGameScreen()
     {
 
-
         if (_currentAnimation != null && _currentAnimation.IsRunning)
         {
+            if (_currentAnimation.BackGroundPermisson == BackGroundPermisson.Full)
+            {
+                _backgroundAnimation.Play();
+            }
             _currentAnimation.Play();
         }
         else

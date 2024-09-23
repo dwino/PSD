@@ -2,19 +2,29 @@ using System.Diagnostics;
 using Balance.Ui;
 using Microsoft.Xna.Framework.Media;
 using SadConsole.Input;
+using SharpDX.D3DCompiler;
 
 namespace Balance;
+
+public enum BackGroundPermisson
+{
+    None,
+    Full,
+}
 
 public abstract class Animation
 {
     protected Stopwatch _stopWatch;
 
-    protected Animation()
+    protected Animation(BackGroundPermisson backGroundPermisson)
     {
+        BackGroundPermisson = backGroundPermisson;
         _stopWatch = new Stopwatch();
         _stopWatch.Start();
         IsRunning = true;
     }
+    public BackGroundPermisson BackGroundPermisson;
+
 
     public bool IsRunning { get; set; }
 
@@ -31,7 +41,7 @@ public class MapTransitionAnimation : Animation
     private Point _oldPosition;
     private Point _offset;
     private Color _color;
-    public MapTransitionAnimation(CellSurface visibleMap, Player player, Point oldPosition, Point offset) : base()
+    public MapTransitionAnimation(CellSurface visibleMap, Player player, Point oldPosition, Point offset) : base(BackGroundPermisson.Full)
     {
         _visibleMap = new CellSurface(visibleMap.Width, visibleMap.Height);
         visibleMap.Copy(_visibleMap);
@@ -89,6 +99,7 @@ public class MapTransitionAnimation : Animation
         }
         else if (_stopWatch.ElapsedMilliseconds >= 750)
         {
+            Program.Ui.Clear();
             var doorCloseSFX = AudioManager.GetSFX("doorClose");
             doorCloseSFX.Volume = 0.2f;
             doorCloseSFX.Play();
@@ -103,16 +114,16 @@ public class MapTransitionAnimation : Animation
 
 public class GameScreenIntroAnimation : Animation
 {
-    private BasicTextScreen _diaglogRunner;
+    private BasicTextScreenDialog _diaglogRunner;
     private int _cursorX;
     private int _cursorY;
     private int _linesIndex;
     private string _currentLine;
     private int _currentLineIndex;
 
-    public GameScreenIntroAnimation() : base()
+    public GameScreenIntroAnimation() : base(BackGroundPermisson.None)
     {
-        _diaglogRunner = new BasicTextScreen("GameScreenIntro");
+        _diaglogRunner = new BasicTextScreenDialog("GameScreenIntro");
         _diaglogRunner.IsActive = true;
 
         _diaglogRunner.ContinueDialog();
@@ -164,16 +175,16 @@ public class GameScreenIntroAnimation : Animation
             {
                 if (_stopWatch.ElapsedMilliseconds > 55)
                 {
-                    Program.Ui.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString(), Color.White, Color.Black);
+                    Program.Ui.Print(_cursorX, _cursorY, _currentLine.Substring(0, _currentLineIndex), Color.White, Color.Black);
 
-                    _cursorX++;
+                    //_cursorX++;
                     _currentLineIndex++;
                     _stopWatch.Restart();
                 }
             }
             else
             {
-                _cursorX = 5;
+                //_cursorX = 5;
                 _cursorY += 2;
                 _linesIndex++;
                 _currentLineIndex = 0;
@@ -182,10 +193,6 @@ public class GameScreenIntroAnimation : Animation
         }
         else
         {
-            string continueText = "press A to get up";
-            var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
-            var y = GameSettings.GAME_HEIGHT / 2 - 1;
-            Program.Ui.Print(x, y, continueText, Color.White, Color.Black);
             _stopWatch.Stop();
         }
     }
@@ -193,16 +200,17 @@ public class GameScreenIntroAnimation : Animation
 
 public class BasicTextScreenAnimation : Animation
 {
-    private BasicTextScreen _diaglogRunner;
+    private BasicTextScreenDialog _diaglogRunner;
     private int _cursorX;
     private int _cursorY;
     private int _linesIndex;
     private string _currentLine;
     private int _currentLineIndex;
+    private string _continueText;
 
-    public BasicTextScreenAnimation(string dialogString, bool autoRun = false) : base()
+    public BasicTextScreenAnimation(string dialogString, bool autoRun = false, string continueText = "") : base(BackGroundPermisson.None)
     {
-        _diaglogRunner = new BasicTextScreen(dialogString);
+        _diaglogRunner = new BasicTextScreenDialog(dialogString);
         _diaglogRunner.IsActive = true;
 
         _diaglogRunner.ContinueDialog();
@@ -215,6 +223,7 @@ public class BasicTextScreenAnimation : Animation
         _currentLineIndex = 0;
 
         IsRunning = autoRun;
+        _continueText = continueText;
     }
 
     public override void ProcessKeyboard(Keyboard keyboard)
@@ -229,10 +238,9 @@ public class BasicTextScreenAnimation : Animation
                 Program.Ui.Print(_cursorX, _cursorY, line);
                 _cursorY += 2;
             }
-            string continueText = "press A to get up";
-            var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
+            var x = (GameSettings.GAME_WIDTH / 2) - (_continueText.Length / 2);
             var y = GameSettings.GAME_HEIGHT / 2 - 1;
-            Program.Ui.Print(x, y, continueText);
+            Program.Ui.Print(x, y, _continueText);
             _stopWatch.Stop();
         }
 
@@ -254,16 +262,16 @@ public class BasicTextScreenAnimation : Animation
             {
                 if (_stopWatch.ElapsedMilliseconds > 55)
                 {
-                    Program.Ui.Print(_cursorX, _cursorY, _currentLine[_currentLineIndex].ToString(), Color.White, Color.Black);
+                    Program.Ui.Print(_cursorX, _cursorY, _currentLine.Substring(0, _currentLineIndex), Color.White, Color.Black);
 
-                    _cursorX++;
+                    //_cursorX++;
                     _currentLineIndex++;
                     _stopWatch.Restart();
                 }
             }
             else
             {
-                _cursorX = 5;
+                //_cursorX = 5;
                 _cursorY += 2;
                 _linesIndex++;
                 _currentLineIndex = 0;
@@ -272,11 +280,67 @@ public class BasicTextScreenAnimation : Animation
         }
         else
         {
-            string continueText = "press A to get up";
-            var x = (GameSettings.GAME_WIDTH / 2) - (continueText.Length / 2);
-            var y = GameSettings.GAME_HEIGHT / 2 - 1;
-            Program.Ui.Print(x, y, continueText, Color.White, Color.Black);
             _stopWatch.Stop();
         }
     }
+}
+
+public class ColoredBackgroundTextScreen : BasicTextScreenAnimation
+{
+    private float r;
+    private float g;
+    private float b;
+    private float incR;
+    private float incG;
+    private float incB;
+
+    public ColoredBackgroundTextScreen(string name) : base(name)
+    {
+        r = Helper.Rnd.NextSingle();
+        g = Helper.Rnd.NextSingle();
+        b = Helper.Rnd.NextSingle();
+        incR = (Helper.Rnd.NextSingle() - 0.5f) / 50;
+        incG = (Helper.Rnd.NextSingle() - 0.5f) / 50;
+        incB = (Helper.Rnd.NextSingle() - 0.5f) / 50;
+    }
+
+    public override void Play()
+    {
+        base.Play();
+
+        r += incR;
+        g += incG;
+        b += incB;
+        Math.Clamp(r, 0, 1);
+        Math.Clamp(g, 0, 1);
+        Math.Clamp(b, 0, 1);
+
+        if (r < 0.1 || r > 0.9)
+        {
+            incR *= -1;
+        }
+        if (g < 0.1 || g > 0.9)
+        {
+            incG *= -1;
+
+        }
+        if (b < 0.1 || b > 0.9)
+        {
+            incB *= -1;
+
+        }
+
+        var color = new Color(r, g, b);
+
+        for (int x = 0; x < GameSettings.GAME_WIDTH; x++)
+        {
+            for (int y = 0; y < GameSettings.GAME_HEIGHT; y++)
+            {
+                Program.Ui.SetBackground(x, y, color);
+            }
+
+        }
+    }
+
+
 }

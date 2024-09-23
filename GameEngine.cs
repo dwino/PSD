@@ -29,11 +29,7 @@ public class GameEngine
     {
         Player = new Player();
 
-        var condition = () => { return Map!.XpMapString == "EngineRoom"; };
-        var consequence = () => { Program.Ui.GameScreen.AddAnimation(new BasicTextScreenAnimation("PeaceAtLast")); };
-        var trigger = new Trigger(condition, consequence, true);
-
-        Player.Triggers.Add(trigger);
+        Player.Triggers.AddRange(Trigger.Triggers);
 
         Map = new YourRoom();
         Player.Position = (1, 2);

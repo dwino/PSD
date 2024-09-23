@@ -59,6 +59,10 @@ public class GameUi : Console
             {
                 SpaceShipGenerator.Generate();
             }
+            else if (keyboard.IsKeyPressed(Keys.Escape))
+            {
+                Game.Instance.MonoGameInstance.Exit();
+            }
         }
 
         if (ActiveScreen == ScreensEnum.GameScreen)

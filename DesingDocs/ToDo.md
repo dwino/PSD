@@ -1,5 +1,10 @@
-- Finish sink 
-    add different sounds
+- Hydroponics
+    - water
+    - air
+    - heat lamps glow up
+    - color of waterstream changes
+    - you can hear water running
+    - occasional water spray (+sound) dots
 
 # Ooit eens
 - random numbers in dialogen
