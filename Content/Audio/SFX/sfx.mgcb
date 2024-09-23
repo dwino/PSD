@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin cleaning_sink.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cleaning_sink.ogg
+
 #begin doorClose.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -24,6 +30,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:doorOpen.ogg
+
+#begin drink_water.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:drink_water.ogg
 
 #begin malfunction.ogg
 /importer:OggImporter
@@ -42,4 +54,10 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:washing_hands.ogg
+
+#begin washing_yourself.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:washing_yourself.ogg
 

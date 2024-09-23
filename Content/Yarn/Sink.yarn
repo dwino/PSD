@@ -5,15 +5,26 @@ Sink:
         <<jump Exit>>
     -> Wash your hands.
         <<play_sound:washing_hands>>
+        You wash your hands thoroughly
         <<jump Start>>
     -> Wash yourself.
+        <<play_sound:washing_yourself>>
+        You feel a little more refreshed,
+        and a little less smelly.
+        <<jump Start>>
     -> Drink a glass of water.
+        <<play_sound:drink_water>>
+        Aaah...
+        <<jump Start>>
     -> Clean the sink.
+        <<play_sound:cleaning_sink>>
+        All clean.
+        <<jump Start>>
 ===
 
 title: Exit
 ---
-You leave the sink be.
+You leave the sink alone.
 ===
 
 

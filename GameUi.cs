@@ -32,7 +32,7 @@ public class GameUi : Console
 
     private GameUi() : base(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT)
     {
-        SpaceShipGenerator.Init(40, 40);
+        SpaceShipGenerator.Init(41, 41);
         SpaceShipGenerator.Generate();
 
         AudioManager.Initialize();

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework.Media;
 
 namespace Balance;
 
@@ -21,8 +22,16 @@ public static class PlaySoundCommandParser
 {
     public static void Parse(string command)
     {
+        MediaPlayer.Pause();
 
-        AudioManager.SFXDict[command].CreateInstance().Play();
+        var sfxInstance = AudioManager.SFXDict[command].CreateInstance();
+        sfxInstance.Play();
+        while (sfxInstance.State == Microsoft.Xna.Framework.Audio.SoundState.Playing)
+        {
+
+        }
+
+        MediaPlayer.Resume();
 
     }
 }

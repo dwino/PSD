@@ -15,6 +15,7 @@ public static class SpaceShipGenerator
     public static int[,] CenterGrid { get; set; }
     public static int CenterGridWith => Width / 4;
     public static int CenterGridHeight => Height / 4;
+    public static int GirdInterval;
 
     public static void Init(int width, int height)
     {
@@ -22,6 +23,7 @@ public static class SpaceShipGenerator
         Height = height;
         MainGrid = new int[Width, Height];
         CenterGrid = new int[Width / 4, Height / 4];
+        GirdInterval = 10;
     }
 
     public static void Generate()
@@ -35,8 +37,9 @@ public static class SpaceShipGenerator
         SeparateCenter();
         FillShipCenter();
 
-
         MirrorRefGrid();
+
+        ApplyGrid();
     }
 
     private static void RectangleFill()
@@ -202,9 +205,25 @@ public static class SpaceShipGenerator
                 MainGrid[x, Height - 1 - y] = MainGrid[x, y];
             }
         }
+    }
 
+    private static void ApplyGrid()
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y += GirdInterval)
+            {
+                MainGrid[x, y] = 0;
+            }
+        }
 
-
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x += GirdInterval)
+            {
+                MainGrid[x, y] = 0;
+            }
+        }
     }
 
     public static void DrawFullMap()

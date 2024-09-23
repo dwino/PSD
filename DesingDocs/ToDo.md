@@ -1,7 +1,7 @@
 - Finish sink 
     add different sounds
 
-- PCG mapgen research
-
 # Ooit eens
+- random numbers in dialogen
+- dialogen doen autoscroll
 - Errorlogging
