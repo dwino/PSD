@@ -49,6 +49,18 @@
 /processorParam:Quality=Best
 /build:space_engine.mp3
 
+#begin spray.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:spray.ogg
+
+#begin sprinkler.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sprinkler.ogg
+
 #begin washing_hands.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

@@ -263,22 +263,158 @@ public class FacilitiesCorridor : Map
 }
 public class Hydroponics : Map
 {
-    private Animation _animation;
+    private List<ParticleEmmitter> _particleEmitters;
     public Hydroponics() : base("Hydroponics")
     {
-        _animation = new ParticleEmmitter(new PointFloat(1.0f, 2.0f));
 
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
     {
+        if (_particleEmitters == null)
+        {
+            _particleEmitters = new List<ParticleEmmitter>();
+
+        }
+
+        if (_interactionMap.GetGlyph(x, y) == 'a')
+        {
+            var position = new Point(x + 1, y);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (0.0f, 25);
+            var velocityRangeY = (0.5f, 15);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'b')
+        {
+            var position = new Point(x, y + 1);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (0.5f, 10);
+            var velocityRangeY = (0.0f, 20);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'c')
+        {
+            var position = new Point(x, y + 1);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (0.5f, 10);
+            var velocityRangeY = (0.0f, 20);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'd')
+        {
+
+            var position = new Point(x - 1, y);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (1.0f, 25);
+            var velocityRangeY = (0.5f, 15);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+
+            position = new Point(x + 1, y);
+            emmitterInterval = (15000, 30000);
+            lifeStepRange = (100, 150);
+            particleAmount = 20;
+            velocityRangeX = (0.0f, 25);
+            velocityRangeY = (0.5f, 15);
+            fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'e')
+        {
+            var position = new Point(x, y + 1);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (0.5f, 10);
+            var velocityRangeY = (0.0f, 20);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'f')
+        {
+            var position = new Point(x - 1, y);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (1.0f, 25);
+            var velocityRangeY = (0.5f, 15);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+
+            position = new Point(x + 1, y);
+            emmitterInterval = (15000, 30000);
+            lifeStepRange = (100, 150);
+            particleAmount = 20;
+            velocityRangeX = (0.0f, 25);
+            velocityRangeY = (0.5f, 15);
+            fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'g')
+        {
+            var position = new Point(x, y + 1);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (0.5f, 10);
+            var velocityRangeY = (0.0f, 20);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
+        if (_interactionMap.GetGlyph(x, y) == 'h')
+        {
+            var position = new Point(x, y + 1);
+            var emmitterInterval = (15000, 30000);
+            var lifeStepRange = (100, 150);
+            var particleAmount = 20;
+            var velocityRangeX = (0.5f, 10);
+            var velocityRangeY = (0.0f, 20);
+            var fgColor = new Color(new Color(0, 0, 220), 0.75f);
+            var bgColor = new Color(new Color(0, 0, 110), 0.55f);
+            var particleEmmitter = new ParticleEmmitter(position, emmitterInterval, lifeStepRange, particleAmount, velocityRangeX, velocityRangeY, fgColor, bgColor);
+            _particleEmitters.Add(particleEmmitter);
+        }
     }
 
     public override void Draw()
     {
         base.Draw();
-
-        _animation.Play();
+        Program.Ui.AnimationConsole.Clear();
+        foreach (var particleEmmitter in _particleEmitters)
+        {
+            particleEmmitter.Play();
+        }
     }
 }
 public class MainCorridor : Map

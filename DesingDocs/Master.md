@@ -1,5 +1,15 @@
 # Master
 
+- eigenschappen van speler  
+    - orthagonality (zie https://www.youtube.com/watch?v=qX5-2D8SP5A&list=PLb6TChl0LDGyoaa2L3s4MuIIMIwoV3C0U)
+    - hero myth (moon hunters)
+    - interne dialoog disco elysium
+    - ! wanneer je dingen doet heb je interne monoloog die je verhouding tot de actie verduidelijkt
+        dit kan mee je persoonlijkheid diepte en breedte geven 
+        => je kan die dingen evenwel blijven doen ookal heb je er een 'negatieve' houding tov (gebruik niet negatief maar meer bloemige, orthagonale categorien)
+        - bv. je doet iets, je vind het saai, maar je blijft die dingen wel doen
+            (je kan zo een spanning creëren tussen wie je voelt/denkt/wilt te zijn en wat je werkelijk doet, wat op zijn beurt weer iets over je vertelt)
+
 - Setting
     - Jij ben de fallback, jij bent onbepaald lang wakker (hou je mentale toestand stabiel)
     - vooral alleen (jij, de ai en het schip, eventueel je dromen)
@@ -86,3 +96,5 @@
 - Resources
     - https://freesound.org/
     - Christine Love interview (humans who make games)
+    - tracery.net
+    - cheap bots done quick (https://cheapbotsdonequick.com/)

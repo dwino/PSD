@@ -347,15 +347,28 @@ public class ColoredBackgroundTextScreen : BasicTextScreenAnimation
 
 public class ParticleEmmitter : Animation
 {
-    private PointFloat _position;
+    private Point _position;
     private List<Particle> _particles;
-    private Stopwatch _stopWatch;
+    private int _emitterInterval;
+    private (int, int) _lifeStepsRange;
+    private int _particleAmount;
+    private (float, float) _velocityRangeX;
+    private (float, float) _velocityRangeY;
 
-    public ParticleEmmitter(PointFloat position) : base(BackGroundPermisson.Full)
+    private Color _fgColor;
+    private Color _bgColor;
+
+    public ParticleEmmitter(Point position, (int, int) emitterInterval, (int, int) lifeStepRange, int particleAmount, (float, float) velocityRangeX, (float, float) velocityRangeY, Color fgColor, Color bgColor) : base(BackGroundPermisson.Full)
     {
-        _stopWatch = new Stopwatch();
         _position = position;
         _particles = new List<Particle>();
+        _emitterInterval = Helper.Rnd.Next(emitterInterval.Item1, emitterInterval.Item2);
+        _lifeStepsRange = lifeStepRange;
+        _particleAmount = particleAmount;
+        _velocityRangeX = velocityRangeX;
+        _velocityRangeY = velocityRangeY;
+        _fgColor = fgColor;
+        _bgColor = bgColor;
 
         _stopWatch.Start();
     }
@@ -366,16 +379,21 @@ public class ParticleEmmitter : Animation
 
     public override void Play()
     {
-        if (_stopWatch.ElapsedMilliseconds > Helper.Rnd.Next(10000, 15000))
+
+        if (_stopWatch.ElapsedMilliseconds > _emitterInterval)
         {
-            Program.Ui.AnimationConsole.Clear();
+            AudioManager.PlaySFX("spray");
 
             while (_particles.Count < 15)
             {
-                var fgColor = new Color(Color.Blue, 0.65f);
-                var bgColor = new Color(Color.Blue, 0.5f);
+                var lifeSteps = Helper.Rnd.Next(_lifeStepsRange.Item1, _lifeStepsRange.Item2);
+                var position = new PointFloat((float)_position.X, (float)_position.Y);
+                var velocity = new PointFloat((Helper.Rnd.NextSingle() - _velocityRangeX.Item1) / _velocityRangeX.Item2, (Helper.Rnd.NextSingle() - _velocityRangeY.Item1) / _velocityRangeY.Item2);
+                var glyph = '.';
+                var fgColor = _fgColor;
+                var bgColor = _bgColor;
 
-                _particles.Add(new Particle(_position.GetCopy(), new PointFloat((Helper.Rnd.NextSingle() - 0.5f) / 5, (Helper.Rnd.NextSingle() - 0.5f) / 5), '.', fgColor, bgColor));
+                _particles.Add(new Particle(lifeSteps, position, velocity, glyph, fgColor, bgColor));
             }
             _stopWatch.Restart();
         }

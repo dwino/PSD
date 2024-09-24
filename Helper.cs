@@ -44,11 +44,12 @@ public class PointFloat(float x, float y)
 public class Particle
 {
     private Stopwatch _stopwatch;
-    private int life;
-    public Particle(PointFloat position, PointFloat velocity, char glyph, Color fgColor, Color bgColor)
+    private int _lifeSteps;
+    public Particle(int lifeSteps, PointFloat position, PointFloat velocity, char glyph, Color fgColor, Color bgColor)
     {
         _stopwatch = new Stopwatch();
-        life = Helper.Rnd.Next(50, 100);
+        _lifeSteps = lifeSteps;
+
         Died = false;
         Position = position;
         Velocity = velocity;
@@ -59,7 +60,6 @@ public class Particle
         _stopwatch.Start();
     }
     public bool Died { get; set; }
-
     public PointFloat Position { get; set; }
     public PointFloat Velocity { get; set; }
     public char Glyph { get; set; }
@@ -68,34 +68,31 @@ public class Particle
 
     public void Update()
     {
-        if (_stopwatch.ElapsedMilliseconds > 50)
+        _lifeSteps--;
+
+        byte r, g, b, a = 0;
+
+        FGColor.Deconstruct(out r, out g, out b, out a);
+        a--;
+        FGColor = FGColor.SetAlpha(a);
+
+        BGColor.Deconstruct(out r, out g, out b, out a);
+        a--;
+        BGColor = BGColor.SetAlpha(a);
+        if (_lifeSteps <= 0)
         {
-            life--;
+            Died = true;
+        }
+        else
+        {
+            Position.X += Velocity.X;
+            Position.Y += Velocity.Y;
 
-            byte r, g, b, a = 0;
-
-            FGColor.Deconstruct(out r, out g, out b, out a);
-            a--;
-            FGColor = FGColor.SetAlpha(a);
-
-            BGColor.Deconstruct(out r, out g, out b, out a);
-            a--;
-            BGColor = BGColor.SetAlpha(a);
-            if (life <= 0)
+            if (OutOfBounds())
             {
                 Died = true;
             }
-            else
-            {
-                Position.X += Velocity.X;
-                Position.Y += Velocity.Y;
 
-                if (OutOfBounds())
-                {
-                    Died = true;
-                }
-            }
-            _stopwatch.Restart();
         }
 
         System.Console.WriteLine("Position: " + Position.X + ", " + Position.Y);
