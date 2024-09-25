@@ -1,10 +1,6 @@
 using System.Diagnostics;
-using System.Text;
-using Balance.Ui;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
-using SadConsole.Readers;
-using SadConsole.Renderers;
 
 namespace Balance;
 
@@ -12,6 +8,9 @@ public class Cafeteria : Map
 {
     public Cafeteria() : base("Cafeteria")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "FacilitiesCorridor", XRef = XOffset, YRef = YOffset, XOffset = 5, YOffset = -6 });
+        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = -11, YOffset = 0 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -22,6 +21,8 @@ public class Cryo1 : Map
 {
     public Cryo1() : base("Cryo1")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone1", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -32,6 +33,8 @@ public class Cryo2 : Map
 {
     public Cryo2() : base("Cryo2")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone2", XRef = XOffset, YRef = YOffset, XOffset = -10, YOffset = 0 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -52,6 +55,9 @@ public class Cryo3 : Map
 
     public Cryo3() : base("Cryo3")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone3", XRef = XOffset, YRef = YOffset, XOffset = 3, YOffset = -7 });
+
+
         _stopwatch = new Stopwatch();
         _stopwatch.Start();
         _stopwatch1 = new Stopwatch();
@@ -199,6 +205,9 @@ public class EngineObservationRoom : Map
 {
     public EngineObservationRoom() : base("EngineObservationRoom")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Security", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
+
+
         Interactions.Add(new FullScreenInteraction("EngineRoomComputer", this, (8, 7)));
 
         var gaurdedAction = new MoveByAction(this, (-2, 0));
@@ -225,6 +234,8 @@ public class EngineRoom : Map
 
     public EngineRoom() : base("EngineRoom")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Security", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
+
         _engineSFX = AudioManager.GetSFX("space_engine");
 
     }
@@ -255,6 +266,9 @@ public class FacilitiesCorridor : Map
 {
     public FacilitiesCorridor() : base("FacilitiesCorridor")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = -14, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Cafeteria", XRef = XOffset, YRef = YOffset, XOffset = -5, YOffset = 6 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -266,6 +280,9 @@ public class Hydroponics : Map
     private List<ParticleEmmitter> _particleEmitters;
     public Hydroponics() : base("Hydroponics")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "NorthCorridor", XRef = XOffset, YRef = YOffset, XOffset = 20, YOffset = 4 });
+
+
         var isAvailable =
         () => { return Program.Engine.Player.Position.Y + YOffset >= this.Height / 2 + YOffset && Program.Engine.Player.Position.X + XOffset < this.Width + XOffset - 4; };
         var interaction = new MapInteraction("TransparantBoxes", this, new Point(10, 8), isAvailable);
@@ -431,6 +448,11 @@ public class MainCorridor : Map
     public MainCorridor() : base("MainCorridor")
     {
         ShadowMaps.Add(new ShadowMap { MapString = "Security", XRef = XOffset, YRef = YOffset, XOffset = -9, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "NorthCorridor", XRef = XOffset, YRef = YOffset, XOffset = 0, YOffset = -6 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Storage", XRef = XOffset, YRef = YOffset, XOffset = 2, YOffset = 2 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Cafeteria", XRef = XOffset, YRef = YOffset, XOffset = 11, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = -1, YOffset = 10 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -441,6 +463,10 @@ public class NorthCorridor : Map
 {
     public NorthCorridor() : base("NorthCorridor")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Hydroponics", XRef = XOffset, YRef = YOffset, XOffset = -19, YOffset = -4 });
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = 2, YOffset = 1 });
+        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = 0, YOffset = 6 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -451,6 +477,8 @@ public class Room1 : Map
 {
     public Room1() : base("Room1")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = 0, YOffset = 4 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -461,6 +489,8 @@ public class Room2 : Map
 {
     public Room2() : base("Room2")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = -4, YOffset = 4 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -471,6 +501,8 @@ public class Room3 : Map
 {
     public Room3() : base("Room3")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = -8, YOffset = 4 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -481,6 +513,8 @@ public class Room4 : Map
 {
     public Room4() : base("Room4")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = -12, YOffset = 4 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -491,6 +525,8 @@ public class Room5 : Map
 {
     public Room5() : base("Room5")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = 0, YOffset = -2 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -501,6 +537,8 @@ public class Room6 : Map
 {
     public Room6() : base("Room6")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "RoomsCorridor", XRef = XOffset, YRef = YOffset, XOffset = -6, YOffset = -2 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -511,6 +549,15 @@ public class RoomsCorridor : Map
 {
     public RoomsCorridor() : base("RoomsCorridor")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "NorthCorridor", XRef = XOffset, YRef = YOffset, XOffset = -2, YOffset = -1 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Room1", XRef = XOffset, YRef = YOffset, XOffset = 0, YOffset = -4 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Room2", XRef = XOffset, YRef = YOffset, XOffset = 4, YOffset = -4 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Room3", XRef = XOffset, YRef = YOffset, XOffset = 8, YOffset = -4 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Room4", XRef = XOffset, YRef = YOffset, XOffset = 12, YOffset = -4 });
+        ShadowMaps.Add(new ShadowMap { MapString = "FacilitiesCorridor", XRef = XOffset, YRef = YOffset, XOffset = 14, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Room5", XRef = XOffset, YRef = YOffset, XOffset = 0, YOffset = 2 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Room6", XRef = XOffset, YRef = YOffset, XOffset = 6, YOffset = 2 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -521,6 +568,9 @@ public class Security : Map
 {
     public Security() : base("Security")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "EngineObservationRoom", XRef = XOffset, YRef = YOffset, XOffset = -10, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -531,6 +581,8 @@ public class SecurityZone1 : Map
 {
     public SecurityZone1() : base("SecurityZone1")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Cryo1", XRef = XOffset, YRef = YOffset, XOffset = -10, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = 8, YOffset = 0 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -541,6 +593,8 @@ public class SecurityZone2 : Map
 {
     public SecurityZone2() : base("SecurityZone2")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Cryo2", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = -8, YOffset = 0 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -551,6 +605,10 @@ public class SecurityZone3 : Map
 {
     public SecurityZone3() : base("SecurityZone3")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Cryo3", XRef = XOffset, YRef = YOffset, XOffset = -2, YOffset = 7 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = 6, YOffset = -3 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone4", XRef = XOffset, YRef = YOffset, XOffset = 8, YOffset = 0 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -561,6 +619,7 @@ public class SecurityZone4 : Map
 {
     public SecurityZone4() : base("SecurityZone4")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone3", XRef = XOffset, YRef = YOffset, XOffset = -8, YOffset = 0 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -571,6 +630,10 @@ public class SecurityZoneCenter : Map
 {
     public SecurityZoneCenter() : base("SecurityZoneCenter")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = 1, YOffset = -10 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone1", XRef = XOffset, YRef = YOffset, XOffset = -8, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone2", XRef = XOffset, YRef = YOffset, XOffset = 4, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone3", XRef = XOffset, YRef = YOffset, XOffset = -6, YOffset = 3 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -581,16 +644,21 @@ public class ShowerNorth : Map
 {
     public ShowerNorth() : base("ShowerNorth")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "FacilitiesCorridor", XRef = XOffset, YRef = YOffset, XOffset = -2, YOffset = 4 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
     {
+
     }
 }
 public class ShowerSouth : Map
 {
     public ShowerSouth() : base("ShowerSouth")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "FacilitiesCorridor", XRef = XOffset, YRef = YOffset, XOffset = -2, YOffset = -2 });
+
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -601,6 +669,10 @@ public class Storage : Map
 {
     public Storage() : base("Storage")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "YourRoom", XRef = XOffset, YRef = YOffset, XOffset = 4, YOffset = 3 });
+        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = -2, YOffset = -2 });
+
+
         var sinkInteraction = new MapInteraction("Sink", this, (1, 1));
         Interactions.Add(sinkInteraction);
 
@@ -614,6 +686,7 @@ public class Toilet : Map
 {
     public Toilet() : base("Toilet")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "FacilitiesCorridor", XRef = XOffset, YRef = YOffset, XOffset = 4, YOffset = -2 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -624,6 +697,10 @@ public class YourRoom : Map
 {
     public YourRoom() : base("YourRoom")
     {
+        ShadowMaps.Add(new ShadowMap { MapString = "Storage", XRef = XOffset, YRef = YOffset, XOffset = -4, YOffset = -3 });
+
+
+
         var anoukInteraction = new MapInteraction("Anouk", this, (2, 2));
         var anouk = new Entity("Anouk", Color.Blue, 'A');
         anouk.Position = anoukInteraction.Position;
