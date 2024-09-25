@@ -71,6 +71,7 @@ public class GameScreen
         else
         {
             Program.Ui.Clear();
+            Program.Ui.DrawConsole.Clear();
             _backgroundAnimation.Play();
             Program.Engine.Draw();
         }
@@ -106,7 +107,7 @@ public class BackgroundAnimation
         }
         foreach (var star in _stars)
         {
-            Program.Ui.Print(star.X, star.Y, ((char)249).ToString(), star.GetColor(), Color.Black);
+            Program.Ui.DrawConsole.Print(star.X, star.Y, ((char)249).ToString(), star.GetColor(), Color.Black);
             star.AdvanceLife();
         }
     }

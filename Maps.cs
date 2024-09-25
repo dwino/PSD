@@ -128,11 +128,11 @@ public class Cryo3 : Map
 
         if (_stopwatch.ElapsedMilliseconds < Helper.Rnd.Next(500, 2500))
         {
-            Program.Ui.SetBackground(AnimationPosition_a.X + XOffset, AnimationPosition_a.Y + YOffset, new SadRogue.Primitives.Color(217, 0, 0));
+            Program.Ui.DrawConsole.SetBackground(AnimationPosition_a.X + XOffset, AnimationPosition_a.Y + YOffset, new SadRogue.Primitives.Color(217, 0, 0));
         }
         else
         {
-            Program.Ui.SetBackground(AnimationPosition_a.X + XOffset, AnimationPosition_a.Y + YOffset, new SadRogue.Primitives.Color(25, 25, 25));
+            Program.Ui.DrawConsole.SetBackground(AnimationPosition_a.X + XOffset, AnimationPosition_a.Y + YOffset, new SadRogue.Primitives.Color(25, 25, 25));
             if (_stopwatch.ElapsedMilliseconds > Helper.Rnd.Next(3000, 4500))
             {
                 var sfx = AudioManager.GetSFX("malfunction");
@@ -164,12 +164,12 @@ public class Cryo3 : Map
 
         if (_stopwatch1.ElapsedMilliseconds > 5)
         {
-            Program.Ui.SetForeground(AnimationPosition_c.X + XOffset, AnimationPosition_c.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
-            Program.Ui.SetForeground(AnimationPosition_d.X + XOffset, AnimationPosition_d.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
-            Program.Ui.SetForeground(AnimationPosition_e.X + XOffset, AnimationPosition_e.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
-            Program.Ui.SetForeground(AnimationPosition_f.X + XOffset, AnimationPosition_f.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
-            Program.Ui.SetForeground(AnimationPosition_g.X + XOffset, AnimationPosition_g.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
-            Program.Ui.SetForeground(AnimationPosition_h.X + XOffset, AnimationPosition_h.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            Program.Ui.DrawConsole.SetForeground(AnimationPosition_c.X + XOffset, AnimationPosition_c.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            Program.Ui.DrawConsole.SetForeground(AnimationPosition_d.X + XOffset, AnimationPosition_d.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            Program.Ui.DrawConsole.SetForeground(AnimationPosition_e.X + XOffset, AnimationPosition_e.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            Program.Ui.DrawConsole.SetForeground(AnimationPosition_f.X + XOffset, AnimationPosition_f.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            Program.Ui.DrawConsole.SetForeground(AnimationPosition_g.X + XOffset, AnimationPosition_g.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
+            Program.Ui.DrawConsole.SetForeground(AnimationPosition_h.X + XOffset, AnimationPosition_h.Y + YOffset, new SadRogue.Primitives.Color(_tint, _tint, _tint));
             _tint += _tintOffset;
 
             if (_tint >= 255)
@@ -185,7 +185,7 @@ public class Cryo3 : Map
             _stopwatch1.Restart();
         }
 
-        Program.Ui.SetForeground(AnimationPosition_i.X + XOffset, AnimationPosition_i.Y + YOffset, new SadRogue.Primitives.Color(_tint1, 0, 0));
+        Program.Ui.DrawConsole.SetForeground(AnimationPosition_i.X + XOffset, AnimationPosition_i.Y + YOffset, new SadRogue.Primitives.Color(_tint1, 0, 0));
         _tint1 += _tintOffset1;
 
         if (_tint1 >= 255)
@@ -593,8 +593,8 @@ public class SecurityZone2 : Map
 {
     public SecurityZone2() : base("SecurityZone2")
     {
-        ShadowMaps.Add(new ShadowMap { MapString = "Cryo2", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
-        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = -8, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Cryo2", XRef = XOffset, YRef = YOffset, XOffset = 9, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = -5, YOffset = 0 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -669,8 +669,9 @@ public class Storage : Map
 {
     public Storage() : base("Storage")
     {
-        ShadowMaps.Add(new ShadowMap { MapString = "YourRoom", XRef = XOffset, YRef = YOffset, XOffset = 4, YOffset = 3 });
         ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = -2, YOffset = -2 });
+        ShadowMaps.Add(new ShadowMap { MapString = "YourRoom", XRef = XOffset, YRef = YOffset, XOffset = 4, YOffset = 3 });
+
 
 
         var sinkInteraction = new MapInteraction("Sink", this, (1, 1));

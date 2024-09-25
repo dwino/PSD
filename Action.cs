@@ -26,7 +26,7 @@ public class MoveByAction : Action
     {
         var newPosition = Program.Engine.Player.Position + _offset;
 
-        if ((char)_map.RPImg.ToCellSurface()[1].GetGlyph(newPosition.X, newPosition.Y) == '1')
+        if ((char)_map.WalkableMap.GetGlyph(newPosition.X, newPosition.Y) == '1')
         {
             Program.Engine.Player.Position = newPosition;
 
@@ -43,7 +43,7 @@ public class MoveByAction : Action
                 Program.Engine.ChangeMap(newMap);
                 Program.Engine.Player.Position = interMapTuple.Item2;
 
-                Program.Ui.Clear();
+                Program.Ui.DrawConsole.Clear();
                 Program.Ui.GameScreen.AddAnimation(new MapTransitionAnimation(_map.VisibleMap, Program.Engine.Player, oldPosition, _offset));
             }
 

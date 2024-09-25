@@ -267,7 +267,7 @@ public class FullScreenInteraction : MapBoundInteraction
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            Balance.Program.Ui.Print(_x, _y + i, line);
+            Balance.Program.Ui.DrawConsole.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -283,7 +283,7 @@ public class FullScreenInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.DrawConsole.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;
@@ -341,7 +341,7 @@ public class MapAutoInteraction : MapBoundInteraction
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            Balance.Program.Ui.Print(_x, _y + i, line);
+            Balance.Program.Ui.DrawConsole.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -357,7 +357,7 @@ public class MapAutoInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.DrawConsole.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;
@@ -456,7 +456,7 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            Balance.Program.Ui.Print(_x, _y + i, line);
+            Balance.Program.Ui.DrawConsole.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -472,7 +472,7 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.DrawConsole.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;
@@ -515,7 +515,7 @@ public class MapInteraction : MapBoundInteraction
         int i = 1;
         foreach (var line in LinesToDraw)
         {
-            Balance.Program.Ui.Print(_x, _y + i, line);
+            Balance.Program.Ui.DrawConsole.Print(_x, _y + i, line);
             i++;
         }
         int j = 0;
@@ -531,7 +531,7 @@ public class MapInteraction : MapBoundInteraction
                 color = Color.White;
             }
 
-            Balance.Program.Ui.Print(_x + 5, _y + i, option, color);
+            Balance.Program.Ui.DrawConsole.Print(_x + 5, _y + i, option, color);
 
             i++;
             j++;

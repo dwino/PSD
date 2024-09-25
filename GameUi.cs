@@ -28,13 +28,16 @@ public class GameUi : Console
     private MainMenuScreen _menuScreen;
     public GameScreen GameScreen { get; set; }
 
+    public Console DrawConsole { get; set; }
     public Console AnimationConsole { get; set; }
 
     public ScreensEnum ActiveScreen { get; set; }
 
     private GameUi() : base(GameSettings.GAME_WIDTH, GameSettings.GAME_HEIGHT)
     {
+        DrawConsole = new Console(Width, Height);
         AnimationConsole = new Console(Width, Height);
+        Children.Add(DrawConsole);
         Children.Add(AnimationConsole);
 
         SpaceShipGenerator.Init(41, 41);

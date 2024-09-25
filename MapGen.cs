@@ -228,14 +228,14 @@ public static class SpaceShipGenerator
 
     public static void DrawFullMap()
     {
-        Program.Ui.Clear();
+        Program.Ui.DrawConsole.Clear();
         for (var x = 0; x < Width; x++)
         {
             for (var y = 0; y < Height; y++)
             {
                 if (MainGrid[x, y] == 1)
                 {
-                    Program.Ui.Print(x, y, ((char)219).ToString(), Color.White);
+                    Program.Ui.DrawConsole.Print(x, y, ((char)219).ToString(), Color.White);
                 }
             }
         }
@@ -306,11 +306,11 @@ public static class WFCMap
             {
                 if (x == 0 || x == _xoutput - 1 || y == 0 || y == _youtput - 1)
                 {
-                    Program.Ui.Print(x, y, ((char)219).ToString(), Color.White);
+                    Program.Ui.DrawConsole.Print(x, y, ((char)219).ToString(), Color.White);
                 }
                 else
                 {
-                    Program.Ui.Print(x, y, ((char)Output[x, y]).ToString());
+                    Program.Ui.DrawConsole.Print(x, y, ((char)Output[x, y]).ToString());
                 }
             }
         }

@@ -124,7 +124,7 @@ public abstract class Map
                                     {(8,1), ("SecurityZoneCenter", (1,1))},
                                 }},
                                 {"SecurityZone2", new Dictionary<Point, (string, Point)>(){
-                                    {(8,1), ("Cryo2", (1,1))},
+                                    {(6,1), ("Cryo2", (1,1))},
                                     {(0,1), ("SecurityZoneCenter", (3,1))},
                                 }},
 
@@ -186,7 +186,7 @@ public abstract class Map
         WalkableMap = (CellSurface?)RPImg.ToCellSurface()[1]!;
         _interactionMap = (CellSurface?)RPImg.ToCellSurface()[2]!;
 
-        LoadInteractionMap();
+        MapTouchUp();
 
         XOffset = (GameSettings.GAME_WIDTH / 2) - (Width / 2);
         YOffset = GameSettings.GAME_HEIGHT / 2 - Height / 2;
@@ -231,12 +231,18 @@ public abstract class Map
         }
     }
 
-    public void LoadInteractionMap()
+    public void MapTouchUp()
     {
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
+                if ((char)WalkableMap.GetGlyph(x, y) == '2')
+                {
+                    VisibleMap.SetBackground(x, y, Color.Transparent);
+                    VisibleMap.SetForeground(x, y, Color.Transparent);
+
+                }
                 LoadSpecificInteractionMap(x, y);
             }
         }
@@ -270,14 +276,14 @@ public abstract class Map
             }
             _visibleMap.Copy(Program.Ui.Surface, shadowMap.X, shadowMap.Y);
 
-            // _visibleMap.Copy(Program.Ui.Surface, shadowMap.XOffset + x1, shadowMap.YOffset + y1);
+            // _visibleMap.Copy(Program.Ui.DrawConsole.Surface, shadowMap.XOffset + x1, shadowMap.YOffset + y1);
         }
 
 
 
-        // VisibleMap.Copy(Program.Ui.Surface, x1, y1);
+        // VisibleMap.Copy(Program.Ui.DrawConsole.Surface, x1, y1);
 
-        VisibleMap.Copy(Program.Ui.Surface, XOffset, YOffset);
+        VisibleMap.Copy(Program.Ui.DrawConsole.Surface, XOffset, YOffset);
 
 
 
@@ -285,7 +291,7 @@ public abstract class Map
         {
             int x = entity.Position.X + (GameSettings.GAME_WIDTH / 2) - (Width / 2);
             int y = entity.Position.Y + (GameSettings.GAME_HEIGHT / 2) - (Height / 2);
-            Program.Ui.Print(x, y, entity.Glyph.ToString(), entity.Color);
+            Program.Ui.DrawConsole.Print(x, y, entity.Glyph.ToString(), entity.Color);
         }
 
         for (int i = 0; i < AvailableInteractions.Count; i++)
@@ -301,7 +307,7 @@ public abstract class Map
             }
             int y = i + 1;
             int x = GameSettings.GAME_WIDTH - 2 - interactionOption.Length;
-            Program.Ui.Print(x, y, interactionOption, color);
+            Program.Ui.DrawConsole.Print(x, y, interactionOption, color);
         }
     }
 
