@@ -266,6 +266,15 @@ public class Hydroponics : Map
     private List<ParticleEmmitter> _particleEmitters;
     public Hydroponics() : base("Hydroponics")
     {
+        var isAvailable =
+        () => { return Program.Engine.Player.Position.Y + YOffset >= this.Height / 2 + YOffset && Program.Engine.Player.Position.X + XOffset < this.Width + XOffset - 4; };
+        var interaction = new MapInteraction("TransparantBoxes", this, new Point(10, 8), isAvailable);
+        Interactions.Add(interaction);
+
+        var isAvailable1 =
+        () => { return Program.Engine.Player.Position.Y + YOffset < this.Height / 2 + YOffset && Program.Engine.Player.Position.X + XOffset < this.Width + XOffset - 4; };
+        var interaction1 = new MapInteraction("Soil", this, new Point(10, 8), isAvailable1);
+        Interactions.Add(interaction1);
 
     }
 

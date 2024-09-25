@@ -1,0 +1,20 @@
+title: Start
+---
+The plants on this side of the room are kept in transparent lidded boxes. 
+They grow directly in water.
+    -> touch one of the boxes
+        It feels warm to the touch.
+        <<jump Start>>
+    -> open one of the boxes
+        The warm and humid air streams in your face, 
+        you close the box.
+        <<jump Start>>
+    -> Leave.
+        <<jump Exit>>
+
+===
+
+title: Exit
+---
+You leave the boxes alone 
+===

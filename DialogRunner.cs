@@ -174,11 +174,13 @@ public class BasicTextScreenDialog : TextScreenDialog
 public abstract class MapBoundInteraction : DialogueRunner
 {
     protected Map _map;
+    protected Func<bool> _isAvailable;
 
-    protected MapBoundInteraction(string name, Map map, Point position, string startNode = "Start", bool autoActivated = false) : base(name, startNode, autoActivated)
+    protected MapBoundInteraction(string name, Map map, Point position, Func<bool> isAvailable, string startNode = "Start", bool autoActivated = false) : base(name, startNode, autoActivated)
     {
         _map = map;
         Position = position;
+        _isAvailable = isAvailable;
     }
 
     public Point Position { get; set; }
@@ -236,7 +238,7 @@ public class FullScreenInteraction : MapBoundInteraction
     private int _y;
     private int _minDistToPlayer;
 
-    public FullScreenInteraction(string name, Map map, Point position, int minDistToPlayer = 1) : base(name, map, position)
+    public FullScreenInteraction(string name, Map map, Point position, Func<bool> isAvailable = null, int minDistToPlayer = 1) : base(name, map, position, isAvailable)
     {
         IsMapDrawn = false;
         _x = 1;
@@ -248,9 +250,16 @@ public class FullScreenInteraction : MapBoundInteraction
 
     public override bool IsAvailable()
     {
-        var distanceToPlayer = Distance.Manhattan.Calculate(Balance.Program.Engine.Player.Position, this.Position);
+        if (_isAvailable != null)
+        {
+            return _isAvailable();
+        }
+        else
+        {
+            var distanceToPlayer = Distance.Manhattan.Calculate(Balance.Program.Engine.Player.Position, this.Position);
 
-        return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+            return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+        }
     }
 
     public override void Draw()
@@ -288,7 +297,7 @@ public class MapAutoInteraction : MapBoundInteraction
     private int _x;
     private int _y;
 
-    public MapAutoInteraction(string name, Map map, Point position) : base(name, map, position)
+    public MapAutoInteraction(string name, Map map, Point position, Func<bool> isAvailable = null) : base(name, map, position, isAvailable)
     {
         _x = 1;
         _y = 1;
@@ -301,15 +310,30 @@ public class MapAutoInteraction : MapBoundInteraction
 
     public override bool IsAvailable()
     {
-        var result = Balance.Program.Engine.Player.Position == this.Position;
-
-        if (result)
+        if (_isAvailable != null)
         {
-            IsActive = true;
-            ContinueDialog();
-        }
+            var result = _isAvailable();
 
-        return result;
+            if (result)
+            {
+                IsActive = true;
+                ContinueDialog();
+            }
+
+            return result;
+        }
+        else
+        {
+            var result = Balance.Program.Engine.Player.Position == this.Position;
+
+            if (result)
+            {
+                IsActive = true;
+                ContinueDialog();
+            }
+
+            return result;
+        }
     }
 
     public override void Draw()
@@ -348,7 +372,8 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
     private Condition _condition;
     private bool passedGaurd;
 
-    public GaurdingMapAutoInteraction(string name, Map map, Point position, Action gaurdedAction, Action alternativeAction, Condition condition) : base(name, map, position)
+    public GaurdingMapAutoInteraction(string name, Map map, Point position, Action gaurdedAction, Action alternativeAction, Condition condition, Func<bool> isAvailable = null)
+    : base(name, map, position, isAvailable)
     {
         _x = 1;
         _y = 1;
@@ -370,22 +395,44 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
 
     public override bool IsAvailable()
     {
-        var result = Balance.Program.Engine.Player.Position == this.Position;
-
-        if (result)
+        if (_isAvailable != null)
         {
-            IsActive = true;
+            var result = _isAvailable();
 
-            if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
+            if (result)
             {
-                Map.MemoryPalace[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
+                IsActive = true;
+
+                if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
+                {
+                    Map.MemoryPalace[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
+                }
+
+                MemoryVariableStore.SetValue(_condition.Variable, passedGaurd);
+                ContinueDialog();
             }
 
-            MemoryVariableStore.SetValue(_condition.Variable, passedGaurd);
-            ContinueDialog();
+            return result;
         }
+        else
+        {
+            var result = Balance.Program.Engine.Player.Position == this.Position;
 
-        return result;
+            if (result)
+            {
+                IsActive = true;
+
+                if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
+                {
+                    Map.MemoryPalace[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
+                }
+
+                MemoryVariableStore.SetValue(_condition.Variable, passedGaurd);
+                ContinueDialog();
+            }
+
+            return result;
+        }
     }
 
     public override void DialogueCompleteHandler()
@@ -439,7 +486,7 @@ public class MapInteraction : MapBoundInteraction
     private int _y;
     private int _minDistToPlayer;
 
-    public MapInteraction(string name, Map map, Point position, int minDistToPlayer = 1) : base(name, map, position)
+    public MapInteraction(string name, Map map, Point position, Func<bool> isAvailable = null, int minDistToPlayer = 1) : base(name, map, position, isAvailable)
     {
         _x = 1;
         _y = 1;
@@ -451,9 +498,16 @@ public class MapInteraction : MapBoundInteraction
 
     public override bool IsAvailable()
     {
-        var distanceToPlayer = Distance.Manhattan.Calculate(Balance.Program.Engine.Player.Position, this.Position);
+        if (_isAvailable != null)
+        {
+            return _isAvailable();
+        }
+        else
+        {
+            var distanceToPlayer = Distance.Manhattan.Calculate(Balance.Program.Engine.Player.Position, this.Position);
 
-        return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+            return Math.Floor(distanceToPlayer) <= _minDistToPlayer;
+        }
     }
 
     public override void Draw()
