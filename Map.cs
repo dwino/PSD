@@ -267,9 +267,9 @@ public abstract class Map
                 for (int y = 0; y < _visibleMap.Height; y++)
                 {
                     var fgColor = _visibleMap.GetForeground(x, y);
-                    var fgNewColor = fgColor.GetDarkest().GetDarkest();
+                    var fgNewColor = fgColor.GetDarkest().GetDark();
                     var bgColor = _visibleMap.GetBackground(x, y);
-                    var bgNewColor = bgColor.GetDarkest().GetDarkest();
+                    var bgNewColor = bgColor.GetDarkest().GetDark();
                     _visibleMap.SetForeground(x, y, fgNewColor);
                     _visibleMap.SetBackground(x, y, bgNewColor);
                 }

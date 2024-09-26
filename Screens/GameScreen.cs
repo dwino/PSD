@@ -72,6 +72,7 @@ public class GameScreen
         {
             Program.Ui.Clear();
             Program.Ui.DrawConsole.Clear();
+            Program.Ui.AnimationConsole.Clear();
             _backgroundAnimation.Play();
             Program.Engine.Draw();
         }

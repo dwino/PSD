@@ -55,8 +55,7 @@ public class Cryo3 : Map
 
     public Cryo3() : base("Cryo3")
     {
-        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone3", XRef = XOffset, YRef = YOffset, XOffset = 3, YOffset = -7 });
-
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZone3", XRef = XOffset, YRef = YOffset, XOffset = 2, YOffset = -7 });
 
         _stopwatch = new Stopwatch();
         _stopwatch.Start();
@@ -64,7 +63,6 @@ public class Cryo3 : Map
         _stopwatch1.Start();
         _stopwatch2 = new Stopwatch();
         _stopwatch2.Start();
-
 
         _tint = 128;
         _tintOffset = 3;
@@ -593,8 +591,8 @@ public class SecurityZone2 : Map
 {
     public SecurityZone2() : base("SecurityZone2")
     {
-        ShadowMaps.Add(new ShadowMap { MapString = "Cryo2", XRef = XOffset, YRef = YOffset, XOffset = 9, YOffset = 0 });
-        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = -5, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "Cryo2", XRef = XOffset, YRef = YOffset, XOffset = 8, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "SecurityZoneCenter", XRef = XOffset, YRef = YOffset, XOffset = -4, YOffset = 0 });
     }
 
     public override void LoadSpecificInteractionMap(int x, int y)
@@ -676,6 +674,9 @@ public class Storage : Map
 
         var sinkInteraction = new MapInteraction("Sink", this, (1, 1));
         Interactions.Add(sinkInteraction);
+
+        var coffeeMaker = new MapInteraction("Sink", this, (1, 1));
+        Interactions.Add(coffeeMaker);
 
     }
 

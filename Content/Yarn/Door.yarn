@@ -1,9 +1,9 @@
 title: Start
 ---
 <<if $permissionToEnterEngineRoom is false>>
-    Victor: HELA!
+    Victor: Hej! You can't go in there!
 <<else>>
-    Victor: Go ahead!
+    Victor: Go ahead! Just don't touch anything.
 <<endif>>
 
 
