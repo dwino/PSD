@@ -44,7 +44,7 @@ public class MoveByAction : Action
                 Program.Engine.Player.Position = interMapTuple.Item2;
 
                 Program.Ui.DrawConsole.Clear();
-                Program.Ui.GameScreen.AddAnimation(new MapTransitionAnimation(_map.VisibleMap, Program.Engine.Player, oldPosition, _offset));
+                Program.Ui.GameScreen.AddAnimation(new MapTransitionAnimation(_map, Program.Engine.Player, oldPosition, _offset));
             }
 
             _map.AvailableInteractions.Clear();

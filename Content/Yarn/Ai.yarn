@@ -1,0 +1,18 @@
+title: Start
+---
+Ship Ai: Good morning...,
+This is your first shift.
+I hope you slept well.
+Today is reserved for reviewing your training
+and getting acquainted with the ship and it's
+system outside of a simulation environment.
+This review is optional, so you are free to
+explore the ship on your own.
+What would you like to do?
+    -> I would like to get a coffee first.
+    -> Review the training.
+    -> Explore the ship on my own.
+===
+
+
+

@@ -35,16 +35,19 @@ public abstract class Animation
 public class MapTransitionAnimation : Animation
 {
     private CellSurface _visibleMap;
+    private List<Entity> _entities;
     private int _xOffset;
     private int _yOffset;
     private Player _player;
     private Point _oldPosition;
     private Point _offset;
     private Color _color;
-    public MapTransitionAnimation(CellSurface visibleMap, Player player, Point oldPosition, Point offset) : base(BackGroundPermisson.Full)
+    public MapTransitionAnimation(Map oldMap, Player player, Point oldPosition, Point offset) : base(BackGroundPermisson.Full)
     {
-        _visibleMap = new CellSurface(visibleMap.Width, visibleMap.Height);
-        visibleMap.Copy(_visibleMap);
+        _visibleMap = new CellSurface(oldMap.Width, oldMap.Height);
+        oldMap.VisibleMap.Copy(_visibleMap);
+        _entities = new List<Entity>();
+        _entities.AddRange(oldMap.Entities);
         _xOffset = (GameSettings.GAME_WIDTH / 2) - (_visibleMap.Width / 2);
         _yOffset = (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
 
@@ -65,6 +68,8 @@ public class MapTransitionAnimation : Animation
     {
         int playerX = _oldPosition.X + (GameSettings.GAME_WIDTH / 2) - (_visibleMap.Width / 2);
         int playerY = _oldPosition.Y + (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
+        int entityoffsetX = (GameSettings.GAME_WIDTH / 2) - (_visibleMap.Width / 2);
+        int entityoffsetY = (GameSettings.GAME_HEIGHT / 2) - (_visibleMap.Height / 2);
         if (_stopWatch.ElapsedMilliseconds < 500)
         {
             _visibleMap.Copy(Program.Ui.DrawConsole.Surface, _xOffset, _yOffset);
@@ -73,10 +78,18 @@ public class MapTransitionAnimation : Animation
             {
                 Program.Ui.DrawConsole.Print(playerX - _offset.X, playerY - _offset.Y, _player.Glyph.ToString(), _color.GetDark());
                 Program.Ui.DrawConsole.Print(playerX, playerY, " ", Color.White.GetDark());
+                foreach (var entity in _entities)
+                {
+                    Program.Ui.DrawConsole.Print(entity.Position.X + entityoffsetX, entity.Position.Y + entityoffsetY, entity.Glyph.ToString(), entity.Color.GetDark());
+                }
             }
             else if (_stopWatch.ElapsedMilliseconds >= 300)
             {
                 Program.Ui.DrawConsole.Print(playerX, playerY, _player.Glyph.ToString(), _color.GetDarker());
+                foreach (var entity in _entities)
+                {
+                    Program.Ui.DrawConsole.Print(entity.Position.X + entityoffsetX, entity.Position.Y + entityoffsetY, entity.Glyph.ToString(), entity.Color.GetDarker());
+                }
             }
         }
         else if (_stopWatch.ElapsedMilliseconds >= 500 && _stopWatch.ElapsedMilliseconds < 750)
@@ -98,6 +111,10 @@ public class MapTransitionAnimation : Animation
             _color = _color.GetDarker();
             Program.Ui.DrawConsole.Print(playerX + _offset.X, playerY + _offset.Y, _player.Glyph.ToString(), _color.GetDarkest());
             Program.Ui.DrawConsole.Print(playerX, playerY, " ", Color.White.GetDarkest());
+            foreach (var entity in _entities)
+            {
+                Program.Ui.DrawConsole.Print(entity.Position.X + entityoffsetX, entity.Position.Y + entityoffsetY, entity.Glyph.ToString(), entity.Color.GetDarkest());
+            }
         }
         else if (_stopWatch.ElapsedMilliseconds >= 750)
         {

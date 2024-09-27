@@ -567,7 +567,7 @@ public class Security : Map
     public Security() : base("Security")
     {
         ShadowMaps.Add(new ShadowMap { MapString = "EngineObservationRoom", XRef = XOffset, YRef = YOffset, XOffset = -10, YOffset = 0 });
-        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = 10, YOffset = 0 });
+        ShadowMaps.Add(new ShadowMap { MapString = "MainCorridor", XRef = XOffset, YRef = YOffset, XOffset = 9, YOffset = 0 });
 
     }
 
@@ -677,6 +677,9 @@ public class Storage : Map
 
         var coffeeMaker = new MapInteraction("Sink", this, (1, 1));
         Interactions.Add(coffeeMaker);
+
+        var aiInteraction = new MapAutoInteraction("Ai", this, (3, 5));
+        Interactions.Add(aiInteraction);
 
     }
 

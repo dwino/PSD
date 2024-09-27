@@ -86,6 +86,7 @@
 - Security room
     - computer sounds
     - screen flashes
+- soundeffects die spelen wanneer je binnen een bepaalde afstand van een punt bent
 
 ## Niet vergeten:
 - De elementen van de map kunnen steeds overschreven worden
