@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -44,12 +44,12 @@
   <ItemGroup>
     <PackageReference Include="DeBroglie" Version="2.0.0" />
     <PackageReference Include="Figgle" Version="0.5.1" />
-    <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.2.1105" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
-    <PackageReference Include="SadConsole.Host.MonoGame" Version="10.4.1" />
-    <PackageReference Include="SadConsole.Extended" Version="10.4.0" />
-    <PackageReference Include="YarnSpinner" Version="2.4.2" />
-    <PackageReference Include="YarnSpinner.Compiler" Version="2.4.2" />
+    <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.5-develop.11" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.5-develop.11" />
+    <PackageReference Include="SadConsole.Host.MonoGame" Version="10.6.0" />
+    <PackageReference Include="SadConsole.Extended" Version="10.6.0" />
+    <PackageReference Include="YarnSpinner" Version="3.0.2" />
+    <PackageReference Include="YarnSpinner.Compiler" Version="3.0.2" />
   </ItemGroup>
 
 </Project>

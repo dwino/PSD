@@ -430,7 +430,7 @@ public class ParticleEmmitter : Animation
                 else
                 {
                     var point = particle.Position.GetPoint();
-                    Program.Ui.AnimationConsole.Print(point.X + Program.Engine.Map.XOffset, point.Y + Program.Engine.Map.YOffset, particle.Glyph.ToString(), particle.FGColor, particle.BGColor);
+                    Program.Ui.FGAnimationConsole.Print(point.X + Program.Engine.Map.XOffset, point.Y + Program.Engine.Map.YOffset, particle.Glyph.ToString(), particle.FGColor, particle.BGColor);
                     particle.Update();
                 }
             }

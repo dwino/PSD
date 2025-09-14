@@ -72,7 +72,7 @@ public class GameScreen
         {
             Program.Ui.Clear();
             Program.Ui.DrawConsole.Clear();
-            Program.Ui.AnimationConsole.Clear();
+            Program.Ui.FGAnimationConsole.Clear();
             _backgroundAnimation.Play();
             Program.Engine.Draw();
         }
@@ -108,7 +108,7 @@ public class BackgroundAnimation
         }
         foreach (var star in _stars)
         {
-            Program.Ui.DrawConsole.Print(star.X, star.Y, ((char)249).ToString(), star.GetColor(), Color.Black);
+            Program.Ui.BGAnimationConsole.Print(star.X, star.Y, ((char)249).ToString(), star.GetColor(), Color.Black);
             star.AdvanceLife();
         }
     }

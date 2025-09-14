@@ -274,7 +274,7 @@ public abstract class Map
                     _visibleMap.SetBackground(x, y, bgNewColor);
                 }
             }
-            _visibleMap.Copy(Program.Ui.Surface, shadowMap.X, shadowMap.Y);
+            _visibleMap.Copy(Program.Ui.DrawConsole.Surface, shadowMap.X, shadowMap.Y);
 
             // _visibleMap.Copy(Program.Ui.DrawConsole.Surface, shadowMap.XOffset + x1, shadowMap.YOffset + y1);
         }

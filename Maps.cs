@@ -434,7 +434,7 @@ public class Hydroponics : Map
     public override void Draw()
     {
         base.Draw();
-        Program.Ui.AnimationConsole.Clear();
+        Program.Ui.FGAnimationConsole.Clear();
         foreach (var particleEmmitter in _particleEmitters)
         {
             particleEmmitter.Play();
