@@ -9,8 +9,43 @@ public abstract class Action
     }
 
     public abstract void Execute();
+    public void ReloadInteractions()
+    {
+        Program.Engine.Map.AvailableInteractions.Clear();
+        foreach (var interaction in Program.Engine.Map.Interactions)
+        {
+            if (interaction.IsAvailable() && !interaction.AutoActivated)
+            {
+                Program.Engine.Map.AvailableInteractions.Add(interaction);
+            }
+        }
+        foreach (var entity in Program.Engine.Map.Entities)
+        {
+            if (entity.Interaction != null && entity.Interaction.IsAvailable())
+            {
+                Program.Engine.Map.AvailableInteractions.Add(entity.Interaction);
+            }
+
+        }
+
+        if (Program.Engine.Map.AvailableInteractions.Count > 0)
+        {
+            Program.Engine.Map.CurrentInteractionIndex = 0;
+        }
+        else
+        {
+            Program.Engine.Map.CurrentInteractionIndex = -1;
+        }
+    }
 }
 
+public class DummyAction : Action
+{
+    public override void Execute()
+    {
+        ReloadInteractions();
+    }
+}
 
 public class MoveByAction : Action
 {
@@ -47,33 +82,9 @@ public class MoveByAction : Action
                 Program.Ui.GameScreen.AddAnimation(new MapTransitionAnimation(_map, Program.Engine.Player, oldPosition, _offset));
                 _map = newMap;
             }
-
-            _map.AvailableInteractions.Clear();
-            foreach (var interaction in _map.Interactions)
-            {
-                if (interaction.IsAvailable() && !interaction.AutoActivated)
-                {
-                    _map.AvailableInteractions.Add(interaction);
-                }
-            }
-            foreach (var entity in _map.Entities)
-            {
-                if (entity.Interaction != null && entity.Interaction.IsAvailable())
-                {
-                    _map.AvailableInteractions.Add(entity.Interaction);
-                }
-
-            }
-
-            if (_map.AvailableInteractions.Count > 0)
-            {
-                _map.CurrentInteractionIndex = 0;
-            }
-            else
-            {
-                _map.CurrentInteractionIndex = -1;
-            }
         }
+
+        ReloadInteractions();
     }
 }
 

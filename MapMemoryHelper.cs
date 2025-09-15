@@ -207,13 +207,13 @@ public static class MapMemoryHelper
         new Trigger(() => { return Program.Engine!.Map.XpMapString == "EngineRoom" &&
                             !TriggerMemory.Contains("visitedEngineRoomFirstTime"); },
                     () => { Program.Ui!.GameScreen.AddAnimation(new BasicTextScreenAnimation("PeaceAtLast"));
-                            TriggerMemory.Add("visitedEngineRoomFirstTime"); },
-                    true),
+                            TriggerMemory.Add("visitedEngineRoomFirstTime"); }
+                    ),
         new Trigger(() => { return Program.Engine!.Map.XpMapString == "Hydroponics" &&
                             !TriggerMemory.Contains("visitedHydroponicsFirstTime"); },
                     () => { Program.Ui!.GameScreen.AddAnimation(new ColoredBackgroundTextScreen("HydroponicsFirstTime"));
-                            TriggerMemory.Add("visitedHydroponicsFirstTime"); },
-                    true),
+                            TriggerMemory.Add("visitedHydroponicsFirstTime"); }
+                    ),
 
     };
 

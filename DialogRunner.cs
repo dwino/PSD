@@ -106,6 +106,32 @@ public abstract class DialogueRunner
     public virtual void DialogueCompleteHandler()
     {
         IsActive = false;
+        // Balance.Program.Engine.Map.AvailableInteractions.Clear();
+        // foreach (var interaction in Balance.Program.Engine.Map.Interactions)
+        // {
+        //     if (interaction.IsAvailable() && !interaction.AutoActivated)
+        //     {
+        //         Balance.Program.Engine.Map.AvailableInteractions.Add(interaction);
+        //     }
+        // }
+        // foreach (var entity in Balance.Program.Engine.Map.Entities)
+        // {
+        //     if (entity.Interaction != null && entity.Interaction.IsAvailable())
+        //     {
+        //         Balance.Program.Engine.Map.AvailableInteractions.Add(entity.Interaction);
+        //     }
+
+        // }
+
+        // if (Balance.Program.Engine.Map.AvailableInteractions.Count > 0)
+        // {
+        //     Balance.Program.Engine.Map.CurrentInteractionIndex = 0;
+        // }
+        // else
+        // {
+        //     Balance.Program.Engine.Map.CurrentInteractionIndex = -1;
+        // }
+
         Reset();
     }
 

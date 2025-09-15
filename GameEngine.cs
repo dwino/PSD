@@ -198,19 +198,10 @@ public class GameEngine
             Player.NextAction = null;
         }
 
-        var removeTrigers = new List<Trigger>();
-
         foreach (var trigger in Player.Triggers)
         {
             trigger.Run();
-            if (trigger.Remove)
-            {
-                removeTrigers.Add(trigger);
-            }
-        }
-        foreach (var trigger in removeTrigers)
-        {
-            Player.Triggers.Remove(trigger);
+
         }
     }
     public void Draw()
