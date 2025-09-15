@@ -18,13 +18,13 @@ public abstract class DialogueRunner
         var compilationJob = CompilationJob.CreateFromFiles(sourceFiles);
         CompilationResult = Compiler.Compile(compilationJob);
         Program = CompilationResult.Program;
-        MemoryVariableStore = new Yarn.MemoryVariableStore();
+        MemoryVariableStore = new CustomMemoryVariableStore();
 
         if (Program.Nodes.ContainsKey(startNode))
         {
-            if (Map.MemoryPalace.ContainsKey(name))
+            if (MapMemoryHelper.DialogueMemory.ContainsKey(name))
             {
-                MemoryVariableStore = Map.MemoryPalace[name];
+                MemoryVariableStore = MapMemoryHelper.DialogueMemory[name];
             }
 
             Dialogue = new Yarn.Dialogue(MemoryVariableStore);
@@ -47,7 +47,7 @@ public abstract class DialogueRunner
     public CompilationResult CompilationResult { get; set; }
     public Yarn.Program Program { get; set; }
     public Dialogue Dialogue { get; set; }
-    public MemoryVariableStore MemoryVariableStore { get; set; }
+    public CustomMemoryVariableStore MemoryVariableStore { get; set; }
 
     public bool AutoActivated { get; set; }
     protected bool _isActive;
@@ -122,9 +122,9 @@ public abstract class DialogueRunner
         OptionRequired = false;
         if (Program.Nodes.ContainsKey(_startNode))
         {
-            if (Map.MemoryPalace.ContainsKey(Name))
+            if (MapMemoryHelper.DialogueMemory.ContainsKey(Name))
             {
-                MemoryVariableStore = Map.MemoryPalace[Name];
+                MemoryVariableStore = MapMemoryHelper.DialogueMemory[Name];
             }
 
             Dialogue = new Yarn.Dialogue(MemoryVariableStore);
@@ -197,9 +197,9 @@ public abstract class MapBoundInteraction : DialogueRunner
             {
                 _map.CurrentInteraction = this;
                 _map.CurrentInteractionIndex = int.MaxValue;
-                if (Map.MemoryPalace.ContainsKey(Name))
+                if (MapMemoryHelper.DialogueMemory.ContainsKey(Name))
                 {
-                    MemoryVariableStore = Map.MemoryPalace[Name];
+                    MemoryVariableStore = MapMemoryHelper.DialogueMemory[Name];
                 }
             }
             else
@@ -220,7 +220,7 @@ public abstract class MapBoundInteraction : DialogueRunner
             _map.CurrentInteraction = null!;
         }
 
-        Map.MemoryPalace[Name] = MemoryVariableStore;
+        MapMemoryHelper.DialogueMemory[Name] = MemoryVariableStore;
         base.DialogueCompleteHandler();
     }
 
@@ -403,9 +403,9 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
             {
                 IsActive = true;
 
-                if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
+                if (MapMemoryHelper.DialogueMemory.ContainsKey(_condition.Dialogue))
                 {
-                    Map.MemoryPalace[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
+                    MapMemoryHelper.DialogueMemory[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
                 }
 
                 MemoryVariableStore.SetValue(_condition.Variable, passedGaurd);
@@ -422,9 +422,9 @@ public class GaurdingMapAutoInteraction : MapBoundInteraction
             {
                 IsActive = true;
 
-                if (Map.MemoryPalace.ContainsKey(_condition.Dialogue))
+                if (MapMemoryHelper.DialogueMemory.ContainsKey(_condition.Dialogue))
                 {
-                    Map.MemoryPalace[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
+                    MapMemoryHelper.DialogueMemory[_condition.Dialogue].TryGetValue(_condition.Variable, out passedGaurd);
                 }
 
                 MemoryVariableStore.SetValue(_condition.Variable, passedGaurd);
@@ -536,6 +536,5 @@ public class MapInteraction : MapBoundInteraction
             i++;
             j++;
         }
-
     }
 }

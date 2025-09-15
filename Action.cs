@@ -30,7 +30,7 @@ public class MoveByAction : Action
         {
             Program.Engine.Player.Position = newPosition;
 
-            var interMapDict = Map.InterMapDict;
+            var interMapDict = MapMemoryHelper.InterMapDict;
             var xpMapString = _map.XpMapString;
 
             var interMapHandle = interMapDict[xpMapString];
@@ -39,12 +39,13 @@ public class MoveByAction : Action
             {
                 var oldPosition = Program.Engine.Player.Position;
                 var interMapTuple = interMapHandle[newPosition];
-                var newMap = Map.GetMap(interMapTuple.Item1);
+                var newMap = MapMemoryHelper.GetMap(interMapTuple.Item1);
                 Program.Engine.ChangeMap(newMap);
                 Program.Engine.Player.Position = interMapTuple.Item2;
 
                 Program.Ui.DrawConsole.Clear();
                 Program.Ui.GameScreen.AddAnimation(new MapTransitionAnimation(_map, Program.Engine.Player, oldPosition, _offset));
+                _map = newMap;
             }
 
             _map.AvailableInteractions.Clear();

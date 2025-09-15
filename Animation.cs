@@ -190,7 +190,7 @@ public class GameScreenIntroAnimation : Animation
         {
             _currentLine = _diaglogRunner.LinesToDraw[_linesIndex];
 
-            if (_currentLineIndex < _currentLine.Length)
+            if (_currentLineIndex <= _currentLine.Length)
             {
                 if (_stopWatch.ElapsedMilliseconds > 55)
                 {

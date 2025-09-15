@@ -27,12 +27,17 @@ public class GameEngine
 
     private GameEngine()
     {
+        MapMemoryHelper.LoadDialogueMemory();
+        MapMemoryHelper.LoadTriggerMemory();
+
         Player = new Player();
 
-        Player.Triggers.AddRange(Trigger.Triggers);
+        Player.Triggers.AddRange(MapMemoryHelper.Triggers);
 
         Map = new YourRoom();
         Player.Position = (1, 2);
+        var moveByAction = new MoveByAction(Map, (0, 0));
+        Player.NextAction = moveByAction;
     }
 
     public Player Player { get; set; }
@@ -54,6 +59,41 @@ public class GameEngine
 
     public void ProcessKeyboard(Keyboard keyboard)
     {
+        if (keyboard.IsKeyPressed(Keys.Space))
+        {
+            // Create a string with a line of text.
+            string dialogueMemoryFile = "";
+
+            foreach (var key in MapMemoryHelper.DialogueMemory.Keys)
+            {
+                dialogueMemoryFile += "Dialogue:" + key.ToString() + Environment.NewLine;
+
+                foreach (var variable in MapMemoryHelper.DialogueMemory[key].DialogueVariables)
+                {
+                    dialogueMemoryFile += variable.Key.ToString() + ":" + variable.Value.ToString() + Environment.NewLine;
+                }
+            }
+            // Write the text to a new file named "WriteFile.txt".
+            File.WriteAllText(Path.Combine("DialogueMemory.txt"), dialogueMemoryFile);
+
+            // Create a string with a line of text.
+            string triggerMemoryFile = "";
+
+            foreach (var value in MapMemoryHelper.TriggerMemory)
+            {
+                triggerMemoryFile += value.ToString() + Environment.NewLine;
+            }
+            // Write the text to a new file named "WriteFile.txt".
+            File.WriteAllText(Path.Combine("TriggerMemory.txt"), triggerMemoryFile);
+
+        }
+        if (keyboard.IsKeyPressed(Keys.Enter))
+        {
+            MapMemoryHelper.LoadDialogueMemory();
+            MapMemoryHelper.LoadTriggerMemory();
+        }
+
+
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
             Game.Instance.MonoGameInstance.Exit();
